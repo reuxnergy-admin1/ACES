@@ -1,5 +1,6 @@
 'use client';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 export function Contours() {
   useEffect(() => {
@@ -18,10 +19,10 @@ export function Contours() {
   }, []);
 
   return (
-    <div className="contour-host" aria-hidden="true">
-      <img className="contour-layer" src="/contours.svg" alt="" />
-      <img className="contour-layer" style={{opacity:0.10}} src="/contours-tight.svg" alt="" />
-      <img className="contour-layer" style={{opacity:0.06}} src="/contours.svg" alt="" />
+    <div className="contour-host relative" aria-hidden="true">
+      <Image className="contour-layer" src="/contours.svg" alt="" fill priority sizes="100vw" />
+      <Image className="contour-layer" src="/contours-tight.svg" alt="" fill sizes="100vw" style={{opacity:0.10}} />
+      <Image className="contour-layer" src="/contours.svg" alt="" fill sizes="100vw" style={{opacity:0.06}} />
     </div>
   );
 }
