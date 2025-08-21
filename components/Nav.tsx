@@ -76,6 +76,7 @@ export function Nav() {
 
   // Desktop dropdown open state
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [panelShow, setPanelShow] = useState(false);
   // Hover-intent: keep menu open while moving between trigger and panel
   const closeTimer = useRef<number | null>(null);
   const cancelClose = useCallback(() => {
@@ -86,8 +87,19 @@ export function Nav() {
   }, []);
   const scheduleClose = useCallback(() => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    closeTimer.current = window.setTimeout(() => setOpenMenu(null), 200);
+    closeTimer.current = window.setTimeout(() => setOpenMenu(null), 280);
   }, []);
+
+  // Animate desktop panel on mount
+  useEffect(() => {
+    if (openMenu) {
+      setPanelShow(false);
+      const raf = requestAnimationFrame(() => setPanelShow(true));
+      return () => cancelAnimationFrame(raf);
+    } else {
+      setPanelShow(false);
+    }
+  }, [openMenu]);
   // Mobile accordion state
   const [mobileOpen, setMobileOpen] = useState<Record<string, boolean>>({});
   const toggleMobile = useCallback((id: string) => {
@@ -137,7 +149,7 @@ export function Nav() {
     return () => el.removeEventListener('mouseleave', handler);
   }, [moveHover]);
   return (
-    <header
+  <header
       className={clsx(
         'fixed top-0 left-0 right-0 z-header transition-transform duration-300 motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm',
         scrolled ? 'bg-black/60' : 'bg-transparent',
@@ -145,7 +157,7 @@ export function Nav() {
       )}
     >
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
-      <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
+  <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
         <div className="container-row">
           {/* Desktop layout: 3-column grid [logo][flex gap][cta], nav centered within the middle column */}
           <div className="hidden md:grid md:grid-cols-[auto_1fr_auto] md:items-center">
@@ -264,6 +276,8 @@ export function Nav() {
           aria-label="Submenu"
           className={clsx(
             'hidden md:block absolute left-0 right-0 top-full z-header bg-black/90 border-t border-white/10 supports-[backdrop-filter]:backdrop-blur-md',
+            'transition-[opacity,transform] duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none',
+            panelShow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
           )}
           onMouseEnter={cancelClose}
           onMouseLeave={scheduleClose}
