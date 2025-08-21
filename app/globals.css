@@ -207,3 +207,9 @@ a, button, [role="button"], [role="link"], input, select, textarea, label, summa
 @media (prefers-reduced-motion) {
   .page-fade, .fade-stagger > * { animation: none; }
 }
+
+/* Utility: show only when pointer is fine (e.g., mouse); default hidden */
+.show-on-pointer-fine { display: none; }
+@media (pointer: fine) {
+  .show-on-pointer-fine { display: inline; }
+}

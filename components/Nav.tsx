@@ -5,7 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState, useId } from 'react';
 import clsx from 'clsx';
 
-type NavItem = { href: string; label: string };
+type NavChild = { href: string; label: string };
+type NavItem = { id: string; href: string; label: string; children?: NavChild[] };
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -46,13 +47,35 @@ export function Nav() {
   }, []);
 
   const items: NavItem[] = useMemo(() => ([
-    { href: '/about/history/', label: 'ABOUT' },
-    { href: '/products/', label: 'PRODUCTS' },
-    { href: '/services/', label: 'SERVICES' },
-    { href: '/blog/', label: 'BLOG' },
-    { href: '/signin/', label: 'SIGN IN' },
-    { href: '/order/', label: 'ORDER' },
+    {
+      id: 'about',
+      href: '/about/history/',
+      label: 'ABOUT',
+      children: [
+        { href: '/about/history/', label: 'History' },
+        { href: '/about/industries/', label: 'Industries' },
+        { href: '/about/philosophy/', label: 'Philosophy' },
+        { href: '/about/quality/', label: 'Quality' },
+      ],
+    },
+    {
+      id: 'products',
+      href: '/products/',
+      label: 'PRODUCTS',
+      children: [
+        { href: '/products/aircraft/', label: 'Aircraft Transparencies' },
+        { href: '/products/helicopters/', label: 'Helicopter Transparencies' },
+        { href: '/products/motorsport/', label: 'Motorsport Components' },
+      ],
+    },
+    { id: 'services', href: '/services/', label: 'SERVICES' },
+    { id: 'blog', href: '/blog/', label: 'BLOG' },
+    { id: 'signin', href: '/signin/', label: 'SIGN IN' },
+    { id: 'order', href: '/order/', label: 'ORDER' },
   ]), []);
+
+  // Desktop dropdown open state
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   // Desktop hover background pill refs/state
   const hoverRef = useRef<HTMLDivElement | null>(null);
@@ -112,7 +135,8 @@ export function Nav() {
             <Link href="/" aria-label="ACES home" className="flex items-center">
               <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
             </Link>
-            <nav className="hidden md:flex items-center gap-4 justify-self-center" aria-label="Primary">
+      <nav className="hidden md:flex items-center gap-4 justify-self-center" aria-label="Primary"
+        onMouseLeave={() => setOpenMenu(null)}>
               <div
                 ref={containerRef}
                 className="relative flex items-center gap-2 py-1"
@@ -124,21 +148,25 @@ export function Nav() {
               className="absolute top-1/2 left-0 -translate-y-1/2 h-[34px] rounded-full bg-white/10 supports-[backdrop-filter]:backdrop-blur-sm"
               style={{ width: 0, transform: 'translate(0px, -50%)', transition: 'transform 320ms var(--ease-premium), width 320ms var(--ease-premium), opacity 220ms var(--ease-premium)', opacity: 0 }}
             />
-            {items.map((item) => {
+              {items.map((item) => {
               const active = pathname?.startsWith(item.href);
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  ref={(el) => { linkRefs.current[item.href] = el; }}
-                  onMouseEnter={() => moveHover(item.href)}
-                  onFocus={() => moveHover(item.href)}
-                  className={clsx('relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors',
-                    active ? 'text-white' : 'text-white/80 hover:text-white')}
-                  aria-current={active ? 'page' : undefined}
-                >
-                  {item.label}
-                </Link>
+                  <div key={item.id} className="relative">
+                    <Link
+                      href={item.href}
+                      ref={(el) => { linkRefs.current[item.href] = el; }}
+                      onMouseEnter={() => { moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
+                      onFocus={() => { moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
+                      className={clsx('group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors',
+                        active ? 'text-white' : 'text-white/80 hover:text-white')}
+                      aria-current={active ? 'page' : undefined}
+                      aria-haspopup={item.children ? 'menu' : undefined}
+                      aria-expanded={item.children ? (openMenu === item.id) : undefined}
+                    >
+                      {item.label}
+                      {item.children ? <span className="hidden ml-1 pointer-events-none show-on-pointer-fine">+</span> : null}
+                    </Link>
+                  </div>
               );
             })}
               </div>
@@ -176,6 +204,38 @@ export function Nav() {
           <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-colors px-4 py-2 uc tracking-[0.08em]">REQUEST A QUOTE</Link>
         </div>
       </div>
+      {/* Dropdown panel (desktop) */}
+      {openMenu && (
+        <div
+          role="menu"
+          tabIndex={0}
+          aria-label="Submenu"
+          className={clsx(
+            'hidden md:block absolute left-0 right-0 top-full z-header bg-black/90 border-t border-white/10 supports-[backdrop-filter]:backdrop-blur-md',
+          )}
+          onMouseLeave={() => setOpenMenu(null)}
+          onKeyDown={(e) => { if (e.key === 'Escape') setOpenMenu(null); }}
+        >
+          <div className="grid-shell">
+            <div className="container-row grid-12 py-6">
+      {items.filter(i => i.id === openMenu && i.children).map((parent) => (
+                <div key={parent.id} className="col-span-12 md:col-span-8">
+                  <div className="text-white/60 uc tracking-[0.08em] text-xs">{parent.label}</div>
+                  <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+        {(parent.children ?? []).map((c) => (
+                      <li key={c.href}>
+                        <Link href={c.href} className="link-underline text-white/90 hover:text-white">
+                          {c.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
