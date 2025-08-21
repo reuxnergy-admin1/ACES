@@ -13,8 +13,9 @@ const NavLink = ({ href, children }:{href:string; children:React.ReactNode}) => 
 export function Nav() {
   const [open, setOpen] = useState(false);
   return (
-    <header className="fixed top-0 left-0 right-0 z-40">
-      <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-40 supports-[backdrop-filter]:backdrop-blur-sm bg-black/40">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 to-transparent" aria-hidden="true" />
+      <div className="relative mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
         <Link href="/" aria-label="ACES home" className="flex items-center">
           <Image
             src="/aces-logo.svg"
