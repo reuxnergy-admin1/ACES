@@ -76,6 +76,11 @@ export function Nav() {
 
   // Desktop dropdown open state
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  // Mobile accordion state
+  const [mobileOpen, setMobileOpen] = useState<Record<string, boolean>>({});
+  const toggleMobile = useCallback((id: string) => {
+    setMobileOpen(prev => ({ ...prev, [id]: !prev[id] }));
+  }, []);
 
   // Desktop hover background pill refs/state
   const hoverRef = useRef<HTMLDivElement | null>(null);
@@ -192,16 +197,47 @@ export function Nav() {
         </div>
   </div>
   <div id={menuId} className={clsx('md:hidden fixed inset-0 z-30 bg-black/95 backdrop-blur', open ? 'block' : 'hidden')}>
-        <div className="grid-shell pt-24 pb-12 space-y-4">
-          {items.map((item) => {
-            const active = pathname?.startsWith(item.href);
-            return (
-              <Link key={item.href} href={item.href} className={clsx('link-underline px-3 py-2 text-lg tracking-[0.08em] text-white/80 hover:text-white uc', active && 'is-active text-white')}>
-                {item.label}
-              </Link>
-            );
-          })}
-          <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-colors px-4 py-2 uc tracking-[0.08em]">REQUEST A QUOTE</Link>
+        <div className="grid-shell pt-24 pb-12">
+          <div className="container-row space-y-3">
+            {items.map((item) => {
+              const active = pathname?.startsWith(item.href);
+              const panelId = `${menuId}-${item.id}`;
+              if (item.children && item.children.length > 0) {
+                const expanded = !!mobileOpen[item.id];
+                return (
+                  <div key={item.id} className="border-b border-white/10 pb-2">
+                    <button
+                      type="button"
+                      className={clsx('w-full flex items-center justify-between px-3 py-2 text-lg tracking-[0.08em] uc transition-colors', active ? 'text-white' : 'text-white/80 hover:text-white')}
+                      aria-controls={panelId}
+                      aria-expanded={expanded}
+                      onClick={() => toggleMobile(item.id)}
+                    >
+                      <span>{item.label}</span>
+                      <span aria-hidden="true" className="ml-2">{expanded ? '−' : '+'}</span>
+                    </button>
+                    <section
+                      id={panelId}
+                      aria-label={`${item.label} submenu`}
+                      className={clsx('grid grid-cols-1 gap-1 pl-3 pr-3', expanded ? 'mt-1' : 'hidden')}
+                    >
+                      {(item.children ?? []).map((c) => (
+                        <Link key={c.href} href={c.href} className="link-underline py-1 text-white/80 hover:text-white">
+                          {c.label}
+                        </Link>
+                      ))}
+                    </section>
+                  </div>
+                );
+              }
+              return (
+                <Link key={item.id} href={item.href} className={clsx('link-underline block px-3 py-2 text-lg tracking-[0.08em] text-white/80 hover:text-white uc', active && 'is-active text-white')}>
+                  {item.label}
+                </Link>
+              );
+            })}
+            <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-colors px-4 py-2 uc tracking-[0.08em]">REQUEST A QUOTE</Link>
+          </div>
         </div>
       </div>
       {/* Dropdown panel (desktop) */}
