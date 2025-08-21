@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import clsx from 'clsx';
 
@@ -14,8 +15,16 @@ export function Nav() {
   return (
     <header className="fixed top-0 left-0 right-0 z-40">
       <div className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-light tracking-[0.2em]">ACES</Link>
-        <button aria-label="Menu" className="md:hidden px-3 py-2" onClick={() => setOpen(!open)}>
+        <Link href="/" aria-label="ACES home" className="flex items-center">
+          <Image
+            src="/aces-logo.svg"
+            alt="ACES Aerodynamics"
+            width={82}
+            height={24}
+            priority
+          />
+        </Link>
+  <button type="button" aria-label="Menu" className="md:hidden px-3 py-2" onClick={() => setOpen(!open)}>
           <span className="sr-only">Toggle menu</span>
           <div className="w-6 h-px bg-white mb-1"></div>
           <div className="w-6 h-px bg-white"></div>

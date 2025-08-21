@@ -8,7 +8,8 @@ const nextConfig = {
   trailingSlash: true,
   outputFileTracingRoot: '/Users/jonathanbotha/Downloads/aces-aerodynamics',
   turbopack: {
-    // Enable turbopack for faster builds in Next.js 15
+  // Optional: configure Turbopack here. Zero-config is fine.
+  // Example aliases or extensions can go here if needed.
   }
 };
 
