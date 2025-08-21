@@ -16,7 +16,7 @@ export function Nav() {
     <header className="fixed top-0 left-0 right-0 z-40 supports-[backdrop-filter]:backdrop-blur-sm bg-black/40">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 to-transparent" aria-hidden="true" />
       <div className="relative mx-auto max-w-7xl px-4 py-4 flex items-center justify-between">
-        <Link href="/" aria-label="ACES home" className="flex items-center">
+        <Link href="/" aria-label="ACES home" className="flex items-center group/logo relative">
           <Image
             src="/aces-logo.svg"
             alt="ACES Aerodynamics"
@@ -24,6 +24,20 @@ export function Nav() {
             height={24}
             priority
           />
+          <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0 group-hover/logo:opacity-100 transition-opacity duration-300">
+            <span className="absolute -inset-2 translate-x-[-120%] group-hover/logo:translate-x-[120%] transition-transform duration-700 ease-out"
+                  style={{
+                    background: 'linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%)',
+                    WebkitMaskImage: 'url(/aces-logo.svg)',
+                    maskImage: 'url(/aces-logo.svg)',
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                    WebkitMaskPosition: 'center',
+                    maskPosition: 'center'
+                  }} />
+          </span>
         </Link>
   <button type="button" aria-label="Menu" className="md:hidden px-3 py-2" onClick={() => setOpen(!open)}>
           <span className="sr-only">Toggle menu</span>

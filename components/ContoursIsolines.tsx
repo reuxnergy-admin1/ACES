@@ -34,6 +34,9 @@ uniform float u_sigma;
 uniform float u_lineOpacity;
 uniform float u_dotR;
 uniform float u_dotFeather;
+uniform vec2  u_rippleCenter;
+uniform float u_rippleT;
+uniform float u_rippleActive;
 
 float gauss(vec2 uv, vec2 c, float s){
   float r = distance(uv,c); return exp(- (r*r) / (2.0*s*s));
@@ -93,6 +96,15 @@ void main(){
   }
 
   float a = max(line * u_lineOpacity, dotA);
+  // Click ripple ring
+  if (u_rippleActive > 0.5) {
+    float r = distance(uv, u_rippleCenter);
+    float r0 = u_rippleT * 0.35; // expanding radius over time
+    float thickness = 0.008;
+    float ring = 1.0 - smoothstep(0.0, thickness, abs(r - r0));
+    float fade = smoothstep(0.8, 0.0, u_rippleT);
+    a = max(a, ring * 0.12 * fade);
+  }
   gl_FragColor = vec4(vec3(a > 0.0 ? 1.0 : 0.0), a);
 }
 `;
@@ -120,7 +132,10 @@ function FullscreenQuad(props: Props) {
     u_sigma:       { value: props.sigma },
     u_lineOpacity: { value: props.lineOpacity ?? 0.10 },
     u_dotR:        { value: props.dotRadiusUV ?? 0.010 },
-    u_dotFeather:  { value: props.dotFeatherUV ?? 0.006 }
+  u_dotFeather:  { value: props.dotFeatherUV ?? 0.006 },
+  u_rippleCenter:{ value: new THREE.Vector2(-1, -1) },
+  u_rippleT:     { value: 0 },
+  u_rippleActive:{ value: 0 },
   }), [size, gl, props]);
 
   const material = useMemo(() => new THREE.ShaderMaterial({
@@ -137,6 +152,7 @@ function FullscreenQuad(props: Props) {
     const coarse = window.matchMedia?.('(pointer: coarse)').matches;
     const showDot = props.showDotContinuously || !coarse;
     let hideTO: ReturnType<typeof setTimeout> | undefined;
+    const isReduced = window.matchMedia?.('(prefers-reduced-motion)').matches;
 
     const onMove = (e: PointerEvent) => {
       last.current.x = e.clientX;
@@ -155,6 +171,16 @@ function FullscreenQuad(props: Props) {
         if (hideTO) clearTimeout(hideTO);
         hideTO = setTimeout(() => setVisibleDot(false), 1200);
       }
+      if (!isReduced) {
+        const u = material.uniforms;
+        const rectW = size.width;
+        const rectH = size.height;
+        (u.u_rippleCenter.value as THREE.Vector2).set(
+          last.current.x / rectW,
+          1 - last.current.y / rectH
+        );
+        u.u_rippleActive.value = 1;
+      }
     };
     const onLeave = () => { if (showDot) setVisibleDot(false); };
 
@@ -166,20 +192,69 @@ function FullscreenQuad(props: Props) {
       window.removeEventListener('pointerdown', onDown);
       window.removeEventListener('pointerleave', onLeave);
     };
-  }, [props.showDotContinuously]);
+  }, [props.showDotContinuously, size.width, size.height, material.uniforms]);
+
+  // Track magnetic hover target
+  const magnetRef = useRef<{active:boolean; cx:number; cy:number}>({active:false, cx:0, cy:0});
+  useEffect(() => {
+    const isReduced = window.matchMedia?.('(prefers-reduced-motion)').matches;
+    if (isReduced) return;
+    const onOverMove = (e: PointerEvent) => {
+      const t = e.target as HTMLElement | null;
+      const hit = t?.closest?.('a,button,[role="button"]');
+      if (hit) {
+        const r = (hit as HTMLElement).getBoundingClientRect();
+        magnetRef.current = { active:true, cx: r.left + r.width/2, cy: r.top + r.height/2 };
+      } else {
+        magnetRef.current.active = false;
+      }
+    };
+    window.addEventListener('pointermove', onOverMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onOverMove);
+  }, []);
 
   useFrame(({ clock, size, gl }) => {
     const dpr = gl.getPixelRatio();
-  material.uniforms.u_time.value = clock.getElapsedTime();
-  material.uniforms.u_resolution.value.set(size.width * dpr, size.height * dpr);
+    const tsec = clock.getElapsedTime();
+    material.uniforms.u_time.value = tsec;
+    material.uniforms.u_resolution.value.set(size.width * dpr, size.height * dpr);
     // Smooth mouse easing
     const u = material.uniforms.u_mouse.value as THREE.Vector2;
     const lastX = last.current.x ?? size.width / 2;
     const lastY = last.current.y ?? size.height / 2;
-    u.lerp(visibleDot ? new THREE.Vector2(
-      lastX / size.width,
-      1 - lastY / size.height
-    ) : new THREE.Vector2(-1, -1), 0.12);
+    let targetX = lastX;
+    let targetY = lastY;
+    if (magnetRef.current.active) {
+      // Nudge pointer toward center of hovered interactive element (max 12px)
+      const vx = magnetRef.current.cx - lastX;
+      const vy = magnetRef.current.cy - lastY;
+      const len = Math.hypot(vx, vy) || 1;
+      const maxOffset = 12; // px
+      const k = Math.min(maxOffset, len) / len;
+      targetX = lastX + vx * k * 0.5; // half-strength toward center
+      targetY = lastY + vy * k * 0.5;
+    }
+    const targetUV = visibleDot ? new THREE.Vector2(
+      targetX / size.width,
+      1 - targetY / size.height
+    ) : new THREE.Vector2(-1, -1);
+    u.lerp(targetUV, 0.12);
+
+    // Ripple time update and auto-deactivate
+    type RippleUniforms = {
+      u_rippleActive: { value: number };
+      u_rippleT: { value: number };
+    };
+    const uRip = material.uniforms as RippleUniforms;
+    if (uRip.u_rippleActive.value > 0.5) {
+      // Estimate elapsed since activation using u_time and encoded start in u_rippleT when activated
+      // We store absolute time in u_rippleT as negative to indicate start; if small implementation, just accumulate
+      uRip.u_rippleT.value += 1/60; // approximate; sufficient for visual
+      if (uRip.u_rippleT.value > 1.0) {
+        uRip.u_rippleActive.value = 0;
+        uRip.u_rippleT.value = 0;
+      }
+    }
   });
 
   // Track last pointer position cheaply
