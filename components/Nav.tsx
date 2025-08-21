@@ -76,6 +76,18 @@ export function Nav() {
 
   // Desktop dropdown open state
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  // Hover-intent: keep menu open while moving between trigger and panel
+  const closeTimer = useRef<number | null>(null);
+  const cancelClose = useCallback(() => {
+    if (closeTimer.current) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  }, []);
+  const scheduleClose = useCallback(() => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    closeTimer.current = window.setTimeout(() => setOpenMenu(null), 200);
+  }, []);
   // Mobile accordion state
   const [mobileOpen, setMobileOpen] = useState<Record<string, boolean>>({});
   const toggleMobile = useCallback((id: string) => {
@@ -141,7 +153,8 @@ export function Nav() {
               <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
             </Link>
       <nav className="hidden md:flex items-center gap-4 justify-self-center" aria-label="Primary"
-        onMouseLeave={() => setOpenMenu(null)}>
+        onMouseEnter={cancelClose}
+        onMouseLeave={scheduleClose}>
               <div
                 ref={containerRef}
                 className="relative flex items-center gap-2 py-1"
@@ -160,8 +173,8 @@ export function Nav() {
                     <Link
                       href={item.href}
                       ref={(el) => { linkRefs.current[item.href] = el; }}
-                      onMouseEnter={() => { moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
-                      onFocus={() => { moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
+                      onMouseEnter={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
+                      onFocus={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
                       className={clsx('group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors',
                         active ? 'text-white' : 'text-white/80 hover:text-white')}
                       aria-current={active ? 'page' : undefined}
@@ -219,10 +232,13 @@ export function Nav() {
                     <section
                       id={panelId}
                       aria-label={`${item.label} submenu`}
-                      className={clsx('grid grid-cols-1 gap-1 pl-3 pr-3', expanded ? 'mt-1' : 'hidden')}
+                      className={clsx(
+                        'grid grid-cols-1 gap-1 pl-3 pr-3 overflow-hidden transition-[max-height,opacity] duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none',
+                        expanded ? 'mt-1 max-h-96 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'
+                      )}
                     >
                       {(item.children ?? []).map((c) => (
-                        <Link key={c.href} href={c.href} className="link-underline py-1 text-white/80 hover:text-white">
+                        <Link key={c.href} href={c.href} tabIndex={expanded ? 0 : -1} className="link-underline py-1 text-white/80 hover:text-white">
                           {c.label}
                         </Link>
                       ))}
@@ -249,7 +265,8 @@ export function Nav() {
           className={clsx(
             'hidden md:block absolute left-0 right-0 top-full z-header bg-black/90 border-t border-white/10 supports-[backdrop-filter]:backdrop-blur-md',
           )}
-          onMouseLeave={() => setOpenMenu(null)}
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
           onKeyDown={(e) => { if (e.key === 'Escape') setOpenMenu(null); }}
         >
           <div className="grid-shell">
