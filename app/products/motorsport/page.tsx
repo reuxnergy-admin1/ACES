@@ -1,6 +1,8 @@
 export default function Page(){
-  return (<section className='mx-auto max-w-6xl px-4 pt-36 pb-24'>
-    <h1 className='text-4xl md:text-5xl font-light'>Motorsport</h1>
-    <p className='mt-6 text-white/70'>Placeholder catalogue and engineering notes for motorsport. Supply product IDs to enable ordering.</p>
+  return (<section className='grid-shell pt-36 pb-24'>
+    <div className='container-row grid-12'>
+      <h1 className='text-4xl md:text-5xl font-light col-span-12 md:col-span-8'>Motorsport</h1>
+      <p className='mt-6 text-white/70 col-span-12 md:col-span-8'>Placeholder catalogue and engineering notes for motorsport. Supply product IDs to enable ordering.</p>
+    </div>
   </section>);
 }

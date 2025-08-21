@@ -96,14 +96,22 @@ void main(){
   }
 
   float a = max(line * u_lineOpacity, dotA);
-  // Click ripple ring
+  // Click ripple rings (radar-like), computed in pixel space for perfect circles
   if (u_rippleActive > 0.5) {
-    float r = distance(uv, u_rippleCenter);
-    float r0 = u_rippleT * 0.35; // expanding radius over time
-    float thickness = 0.008;
-    float ring = 1.0 - smoothstep(0.0, thickness, abs(r - r0));
-    float fade = smoothstep(0.8, 0.0, u_rippleT);
-    a = max(a, ring * 0.12 * fade);
+    vec2 centerPx = u_rippleCenter * u_resolution;
+    float dpx = distance(gl_FragCoord.xy, centerPx);
+    float baseR = u_rippleT * 280.0; // expanding base radius in px
+    float fade = smoothstep(1.0, 0.0, u_rippleT);
+    float ringA = 0.0;
+    // three concentric rings with slight offsets
+    for (int i = 0; i < 3; i++) {
+      float offset = float(i) * 22.0;
+      float thickness = 2.5;
+      float rr = baseR + offset;
+      float ring = 1.0 - smoothstep(0.0, thickness, abs(dpx - rr));
+      ringA = max(ringA, ring * (0.21 - 0.045*float(i)));
+    }
+    a = max(a, ringA * fade);
   }
   gl_FragColor = vec4(vec3(a > 0.0 ? 1.0 : 0.0), a);
 }
@@ -279,8 +287,8 @@ function FullscreenQuad(props: Props) {
 
 export default function ContoursIsolines(props: Props) {
   return (
-    <Canvas gl={{ antialias: true, alpha: true }} dpr={[1,2]}
-            className="w-full h-full pointer-events-none">
+  <Canvas gl={{ antialias: true, alpha: true }} dpr={[1,2]}
+      className="w-full h-full pointer-events-none">
       <FullscreenQuad {...props} />
     </Canvas>
   );

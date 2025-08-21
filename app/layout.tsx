@@ -1,8 +1,11 @@
 import './globals.css';
 import type { ReactNode } from 'react';
+import { useId } from 'react';
 import { Nav } from '@/components/Nav';
 import ResponsiveContours from '@/components/ResponsiveContours';
 import { Footer } from '@/components/Footer';
+import CursorDotOverlay from '@/components/CursorDotOverlay';
+import PageTransition from '@/components/PageTransition';
 
 export const metadata = {
   metadataBase: new URL('https://www.acesaerodynamics.com'),
@@ -19,20 +22,29 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const mainId = useId();
   return (
     <html lang="en">
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/szi2mge.css" />
+  <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
+  <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
       </head>
-  <body className="bg-black text-white antialiased" style={{ cursor: 'none' }}>
+  <body className="bg-black text-white antialiased min-h-dvh grid grid-rows-[auto_1fr_auto]" style={{ cursor: 'none' }}>
+  <a href={`#${mainId}`} className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-overlay focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
         <ResponsiveContours />
-        <div className="relative z-10">
+        <div className="relative z-header row-start-1 row-end-2">
           <Nav />
-          <div className="relative z-10">
+        </div>
+        <PageTransition>
+          <main id={mainId} className="relative z-content fade-stagger row-start-2 row-end-3">
             {children}
-          </div>
+          </main>
+        </PageTransition>
+        <div className="relative z-content row-start-3 row-end-4">
           <Footer />
         </div>
+        <CursorDotOverlay />
       </body>
     </html>
   );

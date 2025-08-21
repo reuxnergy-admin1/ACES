@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef } from 'react';
 
-export default function StaggerReveal({ children, selector = '> *', delay = 80 }:{
+export default function StaggerReveal({ children, selector = ':scope > *', delay = 80 }:{
   children: React.ReactNode;
   selector?: string;
   delay?: number;
@@ -11,7 +11,24 @@ export default function StaggerReveal({ children, selector = '> *', delay = 80 }
     const root = ref.current;
     if (!root) return;
     if (window.matchMedia('(prefers-reduced-motion)').matches) return;
-    const items = Array.from(root.querySelectorAll<HTMLElement>(selector));
+    // Normalize selectors like '> *' to ':scope > *' and add robust fallbacks
+    let sel = selector;
+    if (/^\s*>/.test(sel)) sel = `:scope ${sel}`;
+    let items: HTMLElement[] = [];
+    try {
+      items = Array.from(root.querySelectorAll<HTMLElement>(sel));
+    } catch {
+      // Fallbacks for environments that don't support :scope or invalid selectors
+      if (sel.includes(':scope')) {
+        // Best-effort immediate children fallback
+        items = Array.from(root.children) as unknown as HTMLElement[];
+      } else {
+        // Generic fallback: filter direct children
+        items = Array.from(root.querySelectorAll<HTMLElement>('*')).filter(
+          (el) => el.parentElement === root
+        );
+      }
+    }
     items.forEach((el) => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(8px)';

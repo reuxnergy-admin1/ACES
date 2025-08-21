@@ -1,15 +1,14 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
-  output: 'export',
+  ...(isProd ? { output: 'export' } : {}),
   reactStrictMode: true,
   images: { 
     unoptimized: true 
   },
   trailingSlash: true,
-  outputFileTracingRoot: '/Users/jonathanbotha/Downloads/aces-aerodynamics',
   turbopack: {
-  // Optional: configure Turbopack here. Zero-config is fine.
-  // Example aliases or extensions can go here if needed.
+    // Optional: configure Turbopack here.
   }
 };
 
