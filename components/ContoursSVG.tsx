@@ -1,4 +1,3 @@
-'use client';
 export default function ContoursSVG() {
   return (
   <svg className="w-full h-full pointer-events-none"
