@@ -33,8 +33,8 @@ export function Nav() {
           const y = window.scrollY || 0;
           setScrolled(y > 8);
           const delta = y - lastY.current;
-          // Threshold to avoid jitter
-          const threshold = 6;
+          // Threshold to avoid jitter but remain responsive
+          const threshold = 3;
           if (y > 80 && delta > threshold) setHidden(true);
           else if (delta < -threshold || y < 10) setHidden(false);
           lastY.current = y;
@@ -233,12 +233,12 @@ export function Nav() {
   return (
   <header
       className={clsx(
-  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm',
+  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm header-interactive',
         scrolled ? 'bg-black/60' : 'bg-transparent',
         hidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
+  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
   <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
         <div className="container-row">
           {/* Desktop layout: 3-column grid [logo][flex gap][cta], nav centered within the middle column */}

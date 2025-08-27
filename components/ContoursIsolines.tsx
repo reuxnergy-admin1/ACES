@@ -1,7 +1,23 @@
 'use client';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+
+declare global {
+  interface Window {
+    __bg?: {
+      lastX?: number;
+      lastY?: number;
+      uMouseX?: number;
+      uMouseY?: number;
+      rippleActive?: number;
+      mode?: string;
+      allowGL?: boolean;
+      canUseGL?: boolean;
+    };
+  __BG_DEBUG_ONCE?: number;
+  }
+}
 
 type Props = Readonly<{
   density: number;
@@ -24,102 +40,95 @@ precision highp float;
 #ifdef GL_OES_standard_derivatives
 #extension GL_OES_standard_derivatives : enable
 #endif
+
 uniform vec2  u_resolution;
 uniform float u_time;
-uniform vec2  u_mouse;
-uniform float u_density;
-uniform float u_width;
-uniform float u_intensity;
-uniform float u_sigma;
-uniform float u_lineOpacity;
-uniform float u_dotR;
-uniform float u_dotFeather;
-uniform vec2  u_rippleCenter;
-uniform float u_rippleT;
-uniform float u_rippleActive;
+uniform vec2  u_mouse;        // in [0,1] with origin at bottom-left
+uniform float u_density;      // contour density (lines per unit)
+uniform float u_width;        // line half-width in [0,0.5]
+uniform float u_intensity;    // mouse bump intensity
+uniform float u_sigma;        // mouse bump sigma (in field space)
+uniform float u_lineOpacity;  // alpha for contour lines
+uniform float u_dotR;         // dot radius in UV units
+uniform float u_dotFeather;   // feather in UV units
+uniform vec2  u_rippleCenter; // [0,1]
+uniform float u_rippleT;      // [0..1]
+uniform float u_rippleActive; // 0/1
 
-float gauss(vec2 uv, vec2 c, float s){
-  float r = distance(uv,c); return exp(- (r*r) / (2.0*s*s));
+float gauss(vec2 a, vec2 c, float s) {
+  float r = distance(a, c);
+  return exp(- (r*r) / (2.0 * s * s));
 }
+
 void main(){
   vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-  vec2 p  = (uv - 0.5) * vec2(u_resolution.x/u_resolution.y, 1.0);
+  float aspect = u_resolution.x / u_resolution.y;
+  vec2 p  = (uv - 0.5) * vec2(aspect, 1.0);
 
   float t = u_time * 0.08;
-  // Subtle directional drift
   vec2 drift = 0.03 * vec2(sin(t * 0.15), cos(t * 0.11));
   vec2 pd = p + drift;
 
-  // Graceful directional contours: diagonal base + mild curvature
   vec2 dir = normalize(vec2(0.85, 0.53));
   float base = dot(pd, dir);
-  float curve = 0.015 * sin((pd.x*1.7 - pd.y*1.3) + t*0.6);
+  float curve = 0.012 * sin((pd.x*1.7 - pd.y*1.3) + t*0.6);
+  float n = 0.45 * sin(pd.x * 1.21 + t * 0.22) + 0.45 * sin(pd.y * 1.34 - t * 0.18);
+  float field = base + curve + 0.020 * n;
 
-  // Subtle curl-like modulation from scalar noise derivatives
-  float n = 0.5 * sin(pd.x * 1.21 + t * 0.22) + 0.5 * sin(pd.y * 1.34 - t * 0.18);
-#if defined(GL_OES_standard_derivatives) || __VERSION__ >= 300
-  float curl = dFdx(n) - dFdy(n);
-#else
-  float curl = 0.0;
-#endif
-  float field = base + curve + 0.025 * curl;
-
+  // Cursor-driven bump
   if (u_mouse.x >= 0.0) {
-    vec2 mp = (u_mouse - 0.5) * vec2(u_resolution.x/u_resolution.y, 1.0);
-    float bump = gauss(p*0.9, mp, u_sigma);
-    field += u_intensity * (-0.35 * bump);
+    vec2 mp = (u_mouse - 0.5) * vec2(aspect, 1.0);
+  float bump = gauss(p, mp, u_sigma);
+  field += u_intensity * (-0.25 * bump);
   }
 
   float v = fract(field * u_density);
-  
 #if defined(GL_OES_standard_derivatives) || __VERSION__ >= 300
   float aa = fwidth(v) * 0.9;
 #else
   float aa = 0.001;
 #endif
   float band = min(v, 1.0 - v);
-  float line = smoothstep(u_width+aa, u_width, band);
-  line *= (0.96 + 0.04 * sin(t * 2.1));
+  float line = smoothstep(u_width + aa, u_width - aa, band);
+  line *= (0.97 + 0.03 * sin(t * 2.1));
+  float a = line * u_lineOpacity;
 
-  float dotA = 0.0;
+  // Cursor dot (in pixel space for perfect roundness)
   if (u_mouse.x >= 0.0) {
-    // Compute distance in pixel space to keep the dot perfectly circular
     vec2 mpx = u_mouse * u_resolution;
     float dpx = distance(gl_FragCoord.xy, mpx);
-    float radiusPx = u_dotR * min(u_resolution.x, u_resolution.y);
-    float featherPx = u_dotFeather * min(u_resolution.x, u_resolution.y);
-    if (u_dotFeather <= 1e-5) {
-      dotA = 1.0 - step(radiusPx, dpx);
-    } else {
-      dotA = smoothstep(radiusPx, radiusPx - featherPx, dpx);
-    }
+    float m = min(u_resolution.x, u_resolution.y);
+    float radiusPx = u_dotR * m;
+    float featherPx = u_dotFeather * m;
+    float dotA = (u_dotFeather <= 1e-5)
+      ? (1.0 - step(radiusPx, dpx))
+      : smoothstep(radiusPx, radiusPx - featherPx, dpx);
+    a = max(a, dotA);
   }
 
-  float a = max(line * u_lineOpacity, dotA);
-  // Click ripple rings (radar-like), computed in pixel space for perfect circles
+  // Click ripple rings
   if (u_rippleActive > 0.5) {
     vec2 centerPx = u_rippleCenter * u_resolution;
     float dpx = distance(gl_FragCoord.xy, centerPx);
-    float baseR = u_rippleT * 280.0; // expanding base radius in px
+    float baseR = u_rippleT * 280.0;
     float fade = smoothstep(1.0, 0.0, u_rippleT);
     float ringA = 0.0;
-    // three concentric rings with slight offsets
     for (int i = 0; i < 3; i++) {
       float offset = float(i) * 22.0;
       float thickness = 2.5;
       float rr = baseR + offset;
       float ring = 1.0 - smoothstep(0.0, thickness, abs(dpx - rr));
-      ringA = max(ringA, ring * (0.21 - 0.045*float(i)));
+      ringA = max(ringA, ring * (0.21 - 0.045 * float(i)));
     }
     a = max(a, ringA * fade);
   }
+
   gl_FragColor = vec4(vec3(a > 0.0 ? 1.0 : 0.0), a);
 }
 `;
 
 function FullscreenQuad(props: Props) {
   const { size, gl } = useThree();
-  const [visibleDot, setVisibleDot] = useState(false);
   const last = useRef({ x: size.width / 2, y: size.height / 2 });
   const { scene } = useThree();
 
@@ -140,11 +149,11 @@ function FullscreenQuad(props: Props) {
     u_sigma:       { value: props.sigma },
     u_lineOpacity: { value: props.lineOpacity ?? 0.10 },
     u_dotR:        { value: props.dotRadiusUV ?? 0.010 },
-  u_dotFeather:  { value: props.dotFeatherUV ?? 0.006 },
-  u_rippleCenter:{ value: new THREE.Vector2(-1, -1) },
-  u_rippleT:     { value: 0 },
-  u_rippleActive:{ value: 0 },
-  }), [size, gl, props]);
+    u_dotFeather:  { value: props.dotFeatherUV ?? 0.006 },
+    u_rippleCenter:{ value: new THREE.Vector2(-1, -1) },
+    u_rippleT:     { value: 0 },
+    u_rippleActive:{ value: 0 },
+  }), [size.width, size.height, gl, props.density, props.lineWidth, props.intensity, props.sigma, props.lineOpacity, props.dotRadiusUV, props.dotFeatherUV]);
 
   const material = useMemo(() => new THREE.ShaderMaterial({
     vertexShader: VERT,
@@ -155,30 +164,33 @@ function FullscreenQuad(props: Props) {
     uniforms
   }), [uniforms]);
 
-  // Pointer handling (fine vs. coarse)
+  // Pointer handling
   useEffect(() => {
-    const coarse = window.matchMedia?.('(pointer: coarse)').matches;
-    const showDot = props.showDotContinuously || !coarse;
-    let hideTO: ReturnType<typeof setTimeout> | undefined;
     const isReduced = window.matchMedia?.('(prefers-reduced-motion)').matches;
 
-    const onMove = (e: PointerEvent) => {
-      last.current.x = e.clientX;
-      last.current.y = e.clientY;
-      if (!showDot) {
-        setVisibleDot(true);
-        if (hideTO) clearTimeout(hideTO);
-        hideTO = setTimeout(() => setVisibleDot(false), 1200);
-      } else setVisibleDot(true);
+    const updateLast = (x: number, y: number) => {
+      last.current.x = x;
+      last.current.y = y;
     };
-    const onDown = (e: PointerEvent) => {
-      last.current.x = e.clientX;
-      last.current.y = e.clientY;
-      if (!showDot) {
-        setVisibleDot(true);
-        if (hideTO) clearTimeout(hideTO);
-        hideTO = setTimeout(() => setVisibleDot(false), 1200);
+
+    const onPointerMove = (e: PointerEvent) => {
+      updateLast(e.clientX, e.clientY);
+      if (process.env.NODE_ENV !== 'production' && window.__BG_DEBUG_ONCE !== 1) {
+        // eslint-disable-next-line no-console
+        console.log('[BG] pointermove');
+        window.__BG_DEBUG_ONCE = 1;
       }
+    };
+    const onMouseMove = (e: MouseEvent) => updateLast(e.clientX, e.clientY);
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches && e.touches.length > 0) {
+        const t = e.touches[0];
+        updateLast(t.clientX, t.clientY);
+      }
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      updateLast(e.clientX, e.clientY);
       if (!isReduced) {
         const u = material.uniforms;
         const rectW = size.width;
@@ -188,19 +200,47 @@ function FullscreenQuad(props: Props) {
           1 - last.current.y / rectH
         );
         u.u_rippleActive.value = 1;
+        u.u_rippleT.value = 0;
       }
     };
-    const onLeave = () => { if (showDot) setVisibleDot(false); };
+    const onMouseDown = (e: MouseEvent) => onPointerDown(e as unknown as PointerEvent);
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches && e.touches.length > 0) {
+        const t = e.touches[0];
+        updateLast(t.clientX, t.clientY);
+        if (!isReduced) {
+          const u = material.uniforms;
+          const rectW = size.width;
+          const rectH = size.height;
+          (u.u_rippleCenter.value as THREE.Vector2).set(
+            last.current.x / rectW,
+            1 - last.current.y / rectH
+          );
+          u.u_rippleActive.value = 1;
+          u.u_rippleT.value = 0;
+        }
+      }
+    };
+    const onLeave = () => { /* keep last position; dot visibility handled in shader */ };
 
-    window.addEventListener('pointermove', onMove, { passive: true });
-    window.addEventListener('pointerdown', onDown, { passive: true });
+  const opts: AddEventListenerOptions = { passive: true, capture: true };
+  window.addEventListener('pointermove', onPointerMove, opts);
+  window.addEventListener('pointerdown', onPointerDown, opts);
+  window.addEventListener('mousemove', onMouseMove, opts);
+  window.addEventListener('mousedown', onMouseDown, opts);
+  window.addEventListener('touchmove', onTouchMove, opts);
+  window.addEventListener('touchstart', onTouchStart, opts);
     window.addEventListener('pointerleave', onLeave);
     return () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchstart', onTouchStart);
       window.removeEventListener('pointerleave', onLeave);
     };
-  }, [props.showDotContinuously, size.width, size.height, material.uniforms]);
+  }, [size.width, size.height, material]);
 
   // Track magnetic hover target
   const magnetRef = useRef<{active:boolean; cx:number; cy:number}>({active:false, cx:0, cy:0});
@@ -242,22 +282,30 @@ function FullscreenQuad(props: Props) {
       targetX = lastX + vx * k * 0.5; // half-strength toward center
       targetY = lastY + vy * k * 0.5;
     }
-    const targetUV = visibleDot ? new THREE.Vector2(
+    const targetUV = new THREE.Vector2(
       targetX / size.width,
       1 - targetY / size.height
-    ) : new THREE.Vector2(-1, -1);
+    );
     u.lerp(targetUV, 0.12);
 
+    // Debug publish
+    if (typeof window !== 'undefined') {
+      window.__bg = window.__bg || {};
+      window.__bg.lastX = last.current.x;
+      window.__bg.lastY = last.current.y;
+      window.__bg.uMouseX = u.x;
+      window.__bg.uMouseY = u.y;
+      const uRip = material.uniforms as unknown as { u_rippleActive: { value: number } };
+      window.__bg.rippleActive = uRip.u_rippleActive.value;
+    }
+
     // Ripple time update and auto-deactivate
-    type RippleUniforms = {
+    const uRip = material.uniforms as unknown as {
       u_rippleActive: { value: number };
       u_rippleT: { value: number };
     };
-    const uRip = material.uniforms as RippleUniforms;
     if (uRip.u_rippleActive.value > 0.5) {
-      // Estimate elapsed since activation using u_time and encoded start in u_rippleT when activated
-      // We store absolute time in u_rippleT as negative to indicate start; if small implementation, just accumulate
-      uRip.u_rippleT.value += 1/60; // approximate; sufficient for visual
+      uRip.u_rippleT.value += 1.0 / 60.0; // approx per-frame advance
       if (uRip.u_rippleT.value > 1.0) {
         uRip.u_rippleActive.value = 0;
         uRip.u_rippleT.value = 0;
@@ -287,8 +335,7 @@ function FullscreenQuad(props: Props) {
 
 export default function ContoursIsolines(props: Props) {
   return (
-  <Canvas gl={{ antialias: true, alpha: true }} dpr={[1,2]}
-      className="w-full h-full pointer-events-none">
+    <Canvas gl={{ antialias: true, alpha: true }} dpr={[1, 2]} className="w-full h-full pointer-events-none">
       <FullscreenQuad {...props} />
     </Canvas>
   );
