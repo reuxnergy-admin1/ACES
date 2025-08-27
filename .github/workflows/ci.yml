@@ -22,3 +22,6 @@ jobs:
       - name: Typecheck and Build
         run: |
           pnpm -s build
+      - name: Lighthouse CI (collect + assert)
+        run: |
+          pnpm -s lh:ci
