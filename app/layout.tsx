@@ -4,7 +4,8 @@ import { useId } from 'react';
 import { Nav } from '@/components/Nav';
 import ResponsiveContours from '@/components/ResponsiveContours';
 import { Footer } from '@/components/Footer';
-import CursorDotOverlay from '@/components/CursorDotOverlay';
+import CursorOverlayGate from '@/components/CursorOverlayGate';
+import ContoursSVG from '@/components/ContoursSVG';
 import PageTransition from '@/components/PageTransition';
 
 export const metadata = {
@@ -32,6 +33,10 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       </head>
   <body className="bg-black text-white antialiased min-h-dvh grid grid-rows-[auto_1fr_auto]" style={{ cursor: 'none' }}>
   <a href={`#${mainId}`} className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-overlay focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
+        {/* Immediate paint: server SVG fallback, then ResponsiveContours upgrades lazily */}
+        <div aria-hidden className="fixed inset-0 z-0 pointer-events-none">
+          <ContoursSVG />
+        </div>
         <ResponsiveContours />
         <div className="relative z-header row-start-1 row-end-2">
           <Nav />
@@ -44,7 +49,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <div data-app-content className="relative z-content row-start-3 row-end-4">
           <Footer />
         </div>
-        <CursorDotOverlay />
+  <CursorOverlayGate />
       </body>
     </html>
   );
