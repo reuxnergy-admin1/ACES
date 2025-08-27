@@ -31,6 +31,9 @@ html, body {
   overflow-x: hidden; /* guard against horizontal scroll from animated tracks */
 }
 
+/* Hide the system cursor only when overlay gate enables it */
+body.cursor-hidden { cursor: none; }
+
 h1, h2 { text-transform: uppercase; }
 h1 { letter-spacing: 0.08em; line-height: 1.14; }
 h2 { letter-spacing: 0.06em; line-height: 1.18; }
@@ -115,10 +118,7 @@ a, button {
   }
 }
 
-/* Ensure native pointer cursor never shows on interactive elements */
-a, button, [role="button"], [role="link"], input, select, textarea, label, summary {
-  cursor: none;
-}
+/* Cursor will be hidden globally via body.cursor-hidden; don't force-hide on all interactive elements */
 
 /* Accessible focus-visible ring */
 *:focus-visible {
