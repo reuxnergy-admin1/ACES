@@ -9,8 +9,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "export": "next build"
+  "lint": "next lint",
+  "export": "next build",
+  "lh:ci": "npx @lhci/cli collect --config=./lighthouserc.json && npx @lhci/cli assert --config=./lighthouserc.json"
   },
   "dependencies": {
     "@react-three/fiber": "^9.3.0",
