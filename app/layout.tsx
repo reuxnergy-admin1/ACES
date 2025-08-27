@@ -37,11 +37,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <Nav />
         </div>
         <PageTransition>
-          <main id={mainId} className="relative z-content fade-stagger row-start-2 row-end-3">
+          <main id={mainId} data-app-content className="relative z-content fade-stagger row-start-2 row-end-3">
             {children}
           </main>
         </PageTransition>
-        <div className="relative z-content row-start-3 row-end-4">
+        <div data-app-content className="relative z-content row-start-3 row-end-4">
           <Footer />
         </div>
         <CursorDotOverlay />

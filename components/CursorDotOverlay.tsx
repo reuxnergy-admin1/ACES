@@ -36,11 +36,12 @@ export default function CursorDotOverlay() {
       <div
         className="rounded-full"
         style={{
-          width: 10,
-          height: 10,
-          background: 'white',
+          width: 12,
+          height: 12,
+          background: '#000',
+          boxShadow: '0 0 0 1px rgba(255,255,255,0.5)',
           opacity: visible ? 1 : 0,
-          transition: 'opacity 200ms ease',
+          transition: 'opacity 500ms cubic-bezier(0.22, 1, 0.36, 1)',
           willChange: 'transform, opacity',
         }}
       />

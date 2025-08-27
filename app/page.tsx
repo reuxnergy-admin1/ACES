@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import SheenCard from '@/components/SheenCard';
+import ClientCarousel from '@/components/ClientCarousel';
 
 export default function Page() {
   return (
-    <section className="grid-shell pt-36 pb-24">
+  <section className="grid-shell pt-36 pb-24">
   <div className="container-row grid-12 items-end">
         <div className="md:col-span-7 col-span-12">
           <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc">
@@ -15,7 +17,7 @@ export default function Page() {
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
             <Link href="/contact/" className="button-primary">Request a Quote</Link>
-            <Link href="/contact/?type=specialist" className="wipe-link px-5 py-3">Speak to a Specialist</Link>
+            <Link href="/contact/?type=specialist" className="wipe-link px-5 py-3 uc">Speak to a Specialist</Link>
           </div>
   </div>
   <div className="md:col-span-5 col-span-12 text-white/60 md:text-right">
@@ -23,17 +25,22 @@ export default function Page() {
         </div>
     </div>
 
+  {/* Client carousel directly after hero */}
+  <ClientCarousel className="mt-6 md:mt-10" />
+
   <div className="container-row mt-24 grid-12">
         {[
           {title:'Aerospace Transparencies', href:'/products/aircraft/'},
           {title:'Helicopter Transparencies', href:'/products/helicopters/'},
           {title:'Motorsport Components', href:'/products/motorsport/'},
         ].map((c) => (
-      <Link key={c.href} href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors md:col-span-4 col-span-12">
-            <div className="text-xl">{c.title}</div>
-            <div className="mt-2 text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
-            <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
-          </Link>
+          <SheenCard key={c.href} className="md:col-span-4 col-span-12">
+            <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+              <div className="text-xl">{c.title}</div>
+              <div className="mt-2 text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
+              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
+            </Link>
+          </SheenCard>
         ))}
       </div>
     </section>
