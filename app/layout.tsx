@@ -27,11 +27,11 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
   return (
     <html lang="en">
       <head>
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
+        <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
         <link rel="stylesheet" href="https://use.typekit.net/szi2mge.css" />
-  <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
-  <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
       </head>
-  <body className="bg-black text-white antialiased min-h-dvh grid grid-rows-[auto_1fr_auto]" style={{ cursor: 'none' }}>
+  <body className="bg-black text-white antialiased min-h-dvh grid grid-rows-[auto_1fr_auto]">
   <a href={`#${mainId}`} className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-overlay focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
         {/* Immediate paint: server SVG fallback, then ResponsiveContours upgrades lazily */}
         <div aria-hidden className="fixed inset-0 z-0 pointer-events-none">

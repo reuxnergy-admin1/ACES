@@ -14,7 +14,10 @@ export default function CursorOverlayGate() {
     const isReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
     const fine = window.matchMedia?.('(pointer: fine)')?.matches;
     // Only enable on fine pointers and when motion is not reduced
-    setEnabled(Boolean(fine && !isReduced));
+  const ok = Boolean(fine && !isReduced);
+  setEnabled(ok);
+  document.body.classList.toggle('cursor-hidden', ok);
+  return () => document.body.classList.remove('cursor-hidden');
   }, []);
   if (!enabled) return null;
   return <DynamicCursorOverlay />;
