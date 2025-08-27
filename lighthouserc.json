@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "staticDistDir": "out",
-      "url": ["/"],
+      "url": ["/", "/products/", "/services/", "/blog/"],
       "settings": {
         "preset": "desktop"
       }
