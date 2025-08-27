@@ -39,7 +39,7 @@ This document catalogs routes, components, CSS tokens, and highlights issues/opp
 
 | ID | Title | Area | Sev | Effort | Rationale | Proposed Fix | Links |
 |---|---|---|---|---|---|---|---|
-| P1-001 | Reduce unnecessary client components | Perf | P1 | M | Many components are marked `use client` without needing state/effects | Convert `ContoursSVG`, potentially `SheenCard`, `ClientCarousel`, `Footer` to Server. Keep Nav/overlays as client. | [RSC docs](https://nextjs.org/docs/app/building-your-application/rendering/server-components) |
+| P1-001 | Reduce unnecessary client components | Perf | P1 | M | Many components are marked `use client` without needing state/effects | Convert `ContoursSVG`, potentially `SheenCard`, `Footer` to Server. Keep Nav/overlays as client. | [RSC docs](https://nextjs.org/docs/app/building-your-application/rendering/server-components) |
 | P1-002 | Confirm background lazy-load path | Perf | P1 | S | WebGL is lazy via dynamic import and idle scheduling; ensure SVG path is Server for zero-JS first paint | Make `ContoursSVG` a Server Component | [Lazy loading](https://nextjs.org/docs/app/building-your-application/optimizing/lazy-loading) |
 | P1-003 | Horizontal overflow from marquee/cards | UX | P1 | S | Fixed now by `overflow-x:hidden`, container max, `min-width:0` on grid children | Keep guards; write regression test (axe/pa11y/lighthouse) |  |
 | P1-004 | Dialog a11y parity | A11y | P1 | M | Nav dialog has aria-modal, focus restore, inert; verify keyboard order, Escape, tabindex on hidden accordions | Add axe checks; manual QA | [APG Dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/) |
