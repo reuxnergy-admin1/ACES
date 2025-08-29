@@ -1,14 +1,22 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 function genNonce(bytes = 16) {
-  // crypto.getRandomValues is available in edge runtime
-  const arr = new Uint8Array(bytes);
-  crypto.getRandomValues(arr);
-  // Convert to base64url for header friendliness without padding
-  let str = '';
-  for (const n of arr) str += String.fromCharCode(n);
-  const b64 = btoa(str);
-  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  try {
+    if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+      const arr = new Uint8Array(bytes);
+      crypto.getRandomValues(arr);
+      let hex = '';
+      for (let i = 0; i < arr.length; i++) hex += arr[i].toString(16).padStart(2, '0');
+      return hex;
+    }
+  } catch { /* fall through */ }
+  // Dev fallback (non-cryptographic) to avoid 500s if web crypto is unavailable in local runtime
+  if (process.env.NODE_ENV !== 'production') {
+    let hex = '';
+    for (let i = 0; i < bytes; i++) hex += Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+    return hex;
+  }
+  throw new Error('Secure random unavailable');
 }
 
 export function middleware(_: NextRequest) {
@@ -16,27 +24,29 @@ export function middleware(_: NextRequest) {
   const nonce = genNonce(16);
   const isProd = process.env.NODE_ENV === 'production';
 
+  if (!isProd) {
+    // In development, skip CSP to avoid interfering with Next.js dev server, HMR and source maps.
+    // Keep a few useful security headers but omit CSP.
+    res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.headers.set('X-Frame-Options', 'DENY');
+    res.headers.set('X-Content-Type-Options', 'nosniff');
+    res.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+    return res;
+  }
+
   // Expose nonce to the app (can be read in server components via headers())
   res.headers.set('x-nonce', nonce);
 
-  // Build a CSP that supports Next.js scripts with nonces and strict-dynamic
-  // Note: Avoid 'unsafe-inline' for scripts; styles may still need it due to SSR/style tags.
   const directives: string[] = [
     "default-src 'self'",
     "base-uri 'self'",
     "frame-ancestors 'none'",
     "object-src 'none'",
-    // Allow images from self, data, blob
     "img-src 'self' data: blob:",
-    // Fonts and styles from Adobe Typekit and self; allow inline styles for Next's style tags
     "font-src 'self' https://use.typekit.net https://p.typekit.net",
     "style-src 'self' 'unsafe-inline' https://use.typekit.net",
-    // Script policy: nonce + strict-dynamic so Next's injected scripts are allowed without whitelisting origins
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isProd ? '' : "'unsafe-eval'"} https: http:`.trim(),
-    // Network connections
+    `script-src 'self' 'nonce-${nonce}' ${isProd ? '' : "'unsafe-eval' 'unsafe-inline'"} https: http:`.trim(),
     isProd ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
-    // Upgrade insecure if needed (optional)
-    // 'upgrade-insecure-requests'
   ];
   const csp = directives.join('; ');
 

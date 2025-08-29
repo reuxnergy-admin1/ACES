@@ -6,6 +6,10 @@ const DynamicTrail = dynamic(() => import('./CursorTrailOverlay'), {
   ssr: false,
   loading: () => null,
 });
+const DynamicDot = dynamic(() => import('./CursorDotOverlay'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function CursorTrailGate() {
   const [enabled, setEnabled] = useState(false);
@@ -31,5 +35,8 @@ export default function CursorTrailGate() {
     };
   }, []);
   if (!enabled) return null;
-  return <DynamicTrail />;
+  return <>
+    <DynamicTrail />
+    <DynamicDot />
+  </>;
 }

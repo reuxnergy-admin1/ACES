@@ -1,8 +1,15 @@
+import ContainerRow from '@/components/layout/ContainerRow';
+import { Grid12, Span } from '@/components/layout/Grid12';
+
 export default function Page() {
-  return (<section className='grid-shell pt-36 pb-24'>
-    <div className='container-row grid-12'>
-      <h1 className='text-4xl md:text-5xl font-light col-span-12 md:col-span-8'>Quality</h1>
-      <p className='mt-6 text-white/70 col-span-12 md:col-span-8'>Quality is engineered in, not inspected at the end. We operate to aviation-grade process control with documented traceability, optical inspection (VLT/defect mapping), and mechanical validation on representative coupons. Our goal: repeatable flight-worthy outcomes.</p>
-    </div>
-  </section>);
+  return (
+    <section className='grid-shell section-band pt-28'>
+      <ContainerRow>
+        <Grid12 data-reveal-blur-stagger>
+          <Span cols={8}><h1 className='text-4xl md:text-5xl font-light'>Quality</h1></Span>
+          <Span cols={8}><p className='mt-6 text-white/70'>Quality is engineered in, not inspected at the end. We operate to aviation-grade process control with documented traceability, optical inspection (VLT/defect mapping), and mechanical validation on representative coupons. Our goal: repeatable flight-worthy outcomes.</p></Span>
+        </Grid12>
+      </ContainerRow>
+    </section>
+  );
 }

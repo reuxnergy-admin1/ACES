@@ -8,3 +8,4 @@ export async function getRequestNonce() {
     return undefined;
   }
 }
+

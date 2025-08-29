@@ -75,12 +75,15 @@ export default function CursorTrailOverlay() {
   // Removed unused lastTime variable
 
     const render = () => {
-  const now = performance.now();      
+      // Respect page transition cursor hide
+      const wipeHide = document.body.classList.contains('cursor-hide-transition');
+      const now = performance.now();      
       // drop old points
-      pointsRef.current = pointsRef.current.filter((p) => now - p.t <= maxTrailMs);
+      pointsRef.current = wipeHide ? [] : pointsRef.current.filter((p) => now - p.t <= maxTrailMs);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (visible && lastRef.current) {
+      const invertOn = document.documentElement.classList.contains('cursor-invert-on');
+      if (!wipeHide && visible && lastRef.current) {
         // Trail: draw tiny faded segments from oldest to newest (extremely short)
         const pts = pointsRef.current;
         for (let i = 1; i < pts.length; i++) {
@@ -101,21 +104,22 @@ export default function CursorTrailOverlay() {
           ctx.stroke();
         }
 
-        // Head: crisp, solid circle (no glow)
-        const { x, y } = lastRef.current;
-        const r = 5.0; // slightly smaller for a more uniform relationship with trail
-        ctx.fillStyle = 'rgba(255,255,255,0.94)';
-  // Align to device pixels a bit to reduce AA fuzz at edges
-  const ax = Math.round(x * dpr) / dpr;
-  const ay = Math.round(y * dpr) / dpr;
-  ctx.beginPath();
-  ctx.arc(ax, ay, r, 0, Math.PI * 2);
-        ctx.fill();
+        // Head: draw only when not in invert-on state to avoid conflict
+        if (!invertOn) {
+          const { x, y } = lastRef.current;
+          const r = 5.0;
+          ctx.fillStyle = 'rgba(255,255,255,0.94)';
+          const ax = Math.round(x * dpr) / dpr;
+          const ay = Math.round(y * dpr) / dpr;
+          ctx.beginPath();
+          ctx.arc(ax, ay, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       // Pause rAF if we have nothing to render to save CPU and match display cadence
-      if (activeRef.current || pointsRef.current.length) {
-    rafRef.current = requestAnimationFrame(render); // Restart render loop on pointer movement
+      if (!wipeHide && (activeRef.current || pointsRef.current.length)) {
+        rafRef.current = requestAnimationFrame(render); // Restart render loop on pointer movement
       } else {
         rafRef.current = null;
       }

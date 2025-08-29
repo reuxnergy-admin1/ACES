@@ -1,13 +1,11 @@
 /** @type {import('next').NextConfig} */
 const path = require('path');
-const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
   // Ensure Next selects this folder as the workspace root in monorepos or when multiple lockfiles exist
   outputFileTracingRoot: path.join(__dirname),
-  ...(isProd ? { output: 'export' } : {}),
   reactStrictMode: true,
-  images: { 
-    unoptimized: true 
+  images: {
+    // Use Next Image optimizer in server/edge runtime
   },
   trailingSlash: true,
   turbopack: {

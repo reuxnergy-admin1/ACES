@@ -1,3 +1,4 @@
+'use client';
 import clsx from 'clsx';
 
 type Logo = {
@@ -15,7 +16,7 @@ const logos: Logo[] = [
   { name: 'Cessna' },
 ];
 
-function PlaceholderLogo({ label }: { label: string }) {
+function PlaceholderLogo({ label }: Readonly<{ label: string }>) {
   return (
     <svg
       aria-hidden="true"
@@ -41,7 +42,7 @@ function PlaceholderLogo({ label }: { label: string }) {
   );
 }
 
-export default function ClientCarousel({ className }: { className?: string }) {
+export default function ClientCarousel({ className, reveal = false }: Readonly<{ className?: string; reveal?: boolean }>) {
   // Duplicate with stable ids for seamless looping without index keys
   const looped = [
     ...logos.map((l) => ({ ...l, id: `${l.name}-a` })),
@@ -51,7 +52,7 @@ export default function ClientCarousel({ className }: { className?: string }) {
     ['--marquee-duration']: '36s',
   };
   return (
-    <section aria-label="Client partnerships" className={clsx('container-row w-full', className)}>
+    <section aria-label="Client partnerships" className={clsx('container-wide w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
       {/* Animated marquee with no backdrop; floats over site background */}
       <div className="overflow-hidden py-3 md:py-4">
         <div className="marquee" aria-hidden="true">

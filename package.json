@@ -11,7 +11,13 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next build",
-    "lh:ci": "npx @lhci/cli collect --config=./lighthouserc.json && npx @lhci/cli assert --config=./lighthouserc.json"
+    "lh:ci": "npx @lhci/cli collect --config=./lighthouserc.json && npx @lhci/cli assert --config=./lighthouserc.json",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
+    "test:reference": "playwright test tests/external-audit.spec.ts",
+    "test:e2e:install": "playwright install --with-deps",
+    "guard:bg": "node ./scripts/bg-guard.mjs verify",
+    "guard:bg:update": "node ./scripts/bg-guard.mjs update"
   },
   "dependencies": {
     "@react-three/fiber": "^9.3.0",
@@ -22,11 +28,12 @@
     "three": "^0.179.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "4.1.12",
     "@tailwindcss/typography": "0.5.16",
     "@types/node": "24.3.0",
-    "@types/react": "19.1.11",
-    "@types/react-dom": "^19.1.8",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "^19.1.9",
     "@types/three": "^0.179.0",
     "autoprefixer": "10.4.21",
     "eslint": "9.34.0",

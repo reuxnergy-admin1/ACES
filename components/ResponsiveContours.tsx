@@ -1,3 +1,6 @@
+// IMPORTANT: Background rendering stack (responsive SVG→WebGL). This file is performance- and stability-sensitive.
+// Please avoid edits without reviewing with the code owner. If you must change it, run `npm run guard:bg:update` to refresh
+// the background integrity hashes after the change, and manually verify in the browser. See scripts/bg-guard.mjs.
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -46,7 +49,7 @@ export default function ResponsiveContours() {
       return;
     }
     const fine = typeof window !== 'undefined' && window.matchMedia?.('(pointer: fine)')?.matches;
-    // Always allow GL for background animation, but only start chunk load on idle; pointer type gates mouse interactivity
+    // Allow GL and enable cursor-driven interactivity on fine pointers
     setCanUseGL(Boolean(fine));
 
   const w = window as unknown as { requestIdleCallback?: (cb: () => void) => number; cancelIdleCallback?: (h: number) => void };
@@ -104,12 +107,8 @@ export default function ResponsiveContours() {
 
   if (mode === 'webgl-high') {
     // Disable shader dot by default; only enable when debug UI is on
-    let dotR = 0.0;
-    let dotF = 0.0;
-    if (canUseGL && debugOn) {
-      dotR = 0.020;
-      dotF = 0.010;
-    }
+    const dotR = 0.0; // keep shader dot disabled to avoid double-cursor
+    const dotF = 0.0;
     return (
       <BackgroundPortal>
         <DynamicIsolines
@@ -120,18 +119,14 @@ export default function ResponsiveContours() {
   lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
     dotRadiusUV={dotR}
     dotFeatherUV={dotF}
-        showDotContinuously={debugOn}
+        showDotContinuously={false}
         />
       </BackgroundPortal>
     );
   }
   // Disable shader dot by default in low mode as well
-  let dotR = 0.0;
-  let dotF = 0.0;
-  if (canUseGL && debugOn) {
-    dotR = 0.020;
-    dotF = 0.010;
-  }
+  const dotR = 0.0;
+  const dotF = 0.0;
   return (
     <BackgroundPortal>
       <DynamicIsolines
@@ -142,7 +137,7 @@ export default function ResponsiveContours() {
   lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
     dotRadiusUV={dotR}
     dotFeatherUV={dotF}
-      showDotContinuously={debugOn}
+      showDotContinuously={false}
       />
     </BackgroundPortal>
   );
