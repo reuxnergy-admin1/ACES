@@ -7,6 +7,7 @@ import ContoursSVG from '@/components/ContoursSVG';
 import PageTransition from '@/components/PageTransition';
 import CursorTrailGate from '@/components/CursorTrailGate';
 import InViewReveals from '@/components/InViewReveals';
+import MotionProvider from '@/app/motion-provider';
 
 export const metadata = {
   metadataBase: new URL('https://www.acesaerodynamics.com'),
@@ -38,20 +39,22 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <ContoursSVG />
         </div>
         <ResponsiveContours />
-        <div className="relative z-header row-start-1 row-end-2">
-          <Nav />
-        </div>
-        <PageTransition>
-          <main id={mainId} data-app-content className="relative z-content fade-stagger row-start-2 row-end-3">
-            {children}
-          </main>
-        </PageTransition>
-        <InViewReveals />
-  <div data-app-content className="relative z-content row-start-3 row-end-4">
-          <Footer />
-        </div>
-  {/* Crisp cursor with very short trail for fine pointers */}
-  <CursorTrailGate />
+        <MotionProvider>
+          <div className="relative z-header row-start-1 row-end-2">
+            <Nav />
+          </div>
+          <PageTransition>
+            <main id={mainId} data-app-content className="relative z-content fade-stagger row-start-2 row-end-3">
+              {children}
+            </main>
+          </PageTransition>
+          <InViewReveals />
+    <div data-app-content className="relative z-content row-start-3 row-end-4">
+            <Footer />
+          </div>
+        </MotionProvider>
+    {/* Crisp cursor with very short trail for fine pointers */}
+    <CursorTrailGate />
       </body>
     </html>
   );
