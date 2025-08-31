@@ -19,7 +19,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   const ring2Ref = useRef<SVGCircleElement>(null);
   const ring3Ref = useRef<SVGCircleElement>(null);
   const dimRef = useRef<SVGRectElement>(null);
-  const [isActive, setIsActive] = useState(false);
+  const [, setIsActive] = useState(false);
   const animId = useRef(0);
   const clickPos = useRef<Coords | null>(null);
   const pendingColour = useRef<string>('#ffffff');

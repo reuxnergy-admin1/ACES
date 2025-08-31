@@ -35,12 +35,12 @@ export function Tooltip({ label, children, placement = "top", delayMs = 120 }: T
   // Clone the child and attach ARIA + event handlers directly to it to avoid nested interactive content
   const child = cloneElement(children, {
     'aria-describedby': open ? id : undefined,
-    onMouseEnter: (e: any) => { children.props?.onMouseEnter?.(e); show(); },
-    onMouseLeave: (e: any) => { children.props?.onMouseLeave?.(e); hide(); },
-    onFocus: (e: any) => { children.props?.onFocus?.(e); show(); },
-    onBlur: (e: any) => { children.props?.onBlur?.(e); hide(); },
-    onKeyDown: (e: any) => { children.props?.onKeyDown?.(e); if (e.key === 'Escape') hide(); },
-  });
+    onMouseEnter: () => show(),
+    onMouseLeave: () => hide(),
+    onFocus: () => show(),
+    onBlur: () => hide(),
+    onKeyDown: (e: React.KeyboardEvent) => { if (e.key === 'Escape') hide(); },
+  } as React.Attributes & Record<string, unknown>);
   return (
     <span ref={wrapRef} className="relative inline-flex">
       {child}

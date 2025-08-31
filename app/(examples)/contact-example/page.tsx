@@ -1,3 +1,4 @@
+"use client";
 import ContainerRow from '@/components/layout/ContainerRow';
 import SectionBand from '@/components/layout/SectionBand';
 import { useId } from 'react';

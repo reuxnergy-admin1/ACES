@@ -1,7 +1,8 @@
 import type { ReactNode, ElementType } from 'react';
 
-type Props = Readonly<{ children: ReactNode; className?: string; as?: ElementType }>;
+type Props = { children: ReactNode; className?: string; as?: ElementType };
 
 export default function ContainerFluid({ children, className = '', as: Tag = 'div' }: Props) {
-  return <Tag className={`container-fluid ${className}`}>{children}</Tag>;
+  const Component = Tag as React.ComponentType<{ className?: string; children?: ReactNode }>;
+  return <Component className={`container-fluid ${className}`}>{children}</Component>;
 }
