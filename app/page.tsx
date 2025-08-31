@@ -6,6 +6,9 @@ import ContainerRow from '@/components/layout/ContainerRow';
 import ContainerWide from '@/components/layout/ContainerWide';
 import { Grid12, Span } from '@/components/layout/Grid12';
 import Prose from '@/components/layout/Prose';
+import RevealGroup from '@/components/reveal/RevealGroup';
+import Reveal from '@/components/reveal/Reveal';
+import PinReveal from '@/components/sections/PinReveal';
 
 export default function Page() {
   return (
@@ -14,22 +17,32 @@ export default function Page() {
   <ContainerWide>
         <Grid12 className="items-start md:items-end">
           <Span cols={8}>
-            <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-full">
-              Precision transparencies.<br/>
-              <span className="text-white/70">Aerospace & motorsport.</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-white/70">
-              SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and
-              non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-3 items-center">
-              <Link href="/contact/" className="button-primary h-11">Request a Quote</Link>
-              {/* Match visual height to primary button for cleaner baseline alignment */}
-              <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">Speak to a Specialist</Link>
-            </div>
+            <RevealGroup stagger={0.08}>
+              <Reveal dir="up">
+                <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-full">
+                  Precision transparencies.<br/>
+                  <span className="text-white/70">Aerospace & motorsport.</span>
+                </h1>
+              </Reveal>
+              <Reveal dir="up" delay={0.02}>
+                <p className="mt-6 max-w-2xl text-white/70">
+                  SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and
+                  non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
+                </p>
+              </Reveal>
+              <Reveal dir="up" delay={0.04}>
+                <div className="mt-10 flex flex-wrap gap-3 items-center">
+                  <Link href="/contact/" className="button-primary h-11">Request a Quote</Link>
+                  {/* Match visual height to primary button for cleaner baseline alignment */}
+                  <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">Speak to a Specialist</Link>
+                </div>
+              </Reveal>
+            </RevealGroup>
           </Span>
           <Span cols={4}>
-            <div className="text-sm">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
+            <Reveal dir="up" delay={0.1}>
+              <div className="text-sm">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
+            </Reveal>
           </Span>
         </Grid12>
       </ContainerWide>
@@ -58,24 +71,32 @@ export default function Page() {
   {/* Capabilities */}
   <SectionBand>
     <ContainerRow>
-      <Grid12 data-reveal-stagger>
-        <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Capabilities</h2></Span>
-        {[
-          {h:'Design & Engineering', p:'Reverse‑engineering, CAD/CAM, fixture design and DFMA consultation.'},
-          {h:'Tooling & CNC', p:'Patterns, matched dies, and precision trimming for consistent fit.'},
-          {h:'Thermoforming & Annealing', p:'Controlled forming and stress‑relief for optical stability.'},
-          {h:'Finishing & Drilling', p:'Edge finishing, drilling, and mount prep to spec tolerances.'},
-          {h:'Coatings', p:'Scratch‑resistant and anti‑fog coatings via approved processes.'},
-          {h:'QA & Documentation', p:'Traceability, VLT/haze mapping, and release documentation.'},
-        ].map((x) => (
-          <SheenCard key={x.h} className="md:col-span-4" data-reveal>
-            <div className="block border border-white/10 rounded-2xl p-7">
-              <div className="text-xl">{x.h}</div>
-              <div className="mt-2 text-white/60">{x.p}</div>
-            </div>
-          </SheenCard>
-        ))}
-      </Grid12>
+      <RevealGroup stagger={0.08}>
+        <Grid12>
+          <Span cols={12}>
+            <Reveal dir="up">
+              <h2 className="text-2xl uc tracking-[0.08em]">Capabilities</h2>
+            </Reveal>
+          </Span>
+          {[
+            {h:'Design & Engineering', p:'Reverse‑engineering, CAD/CAM, fixture design and DFMA consultation.'},
+            {h:'Tooling & CNC', p:'Patterns, matched dies, and precision trimming for consistent fit.'},
+            {h:'Thermoforming & Annealing', p:'Controlled forming and stress‑relief for optical stability.'},
+            {h:'Finishing & Drilling', p:'Edge finishing, drilling, and mount prep to spec tolerances.'},
+            {h:'Coatings', p:'Scratch‑resistant and anti‑fog coatings via approved processes.'},
+            {h:'QA & Documentation', p:'Traceability, VLT/haze mapping, and release documentation.'},
+          ].map((x) => (
+            <SheenCard key={x.h} className="md:col-span-4">
+              <Reveal dir="up">
+                <div className="block border border-white/10 rounded-2xl p-7">
+                  <div className="text-xl">{x.h}</div>
+                  <div className="mt-2 text-white/60">{x.p}</div>
+                </div>
+              </Reveal>
+            </SheenCard>
+          ))}
+        </Grid12>
+      </RevealGroup>
     </ContainerRow>
   </SectionBand>
 
@@ -128,27 +149,40 @@ export default function Page() {
   </SectionBand>
 
   {/* Process */}
-  <SectionBand>
-    <ContainerRow>
-      <Grid12 data-reveal-stagger>
-        <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Process</h2></Span>
-        {[
-          ['01','Scope','Define requirements, constraints, and acceptance criteria.'],
-          ['02','Design','CAD/CAM and fixtures for repeatable outcomes.'],
-          ['03','Tooling','Patterns and matched dies to tolerance.'],
-          ['04','Forming','Controlled thermoforming and annealing.'],
-          ['05','Finishing','Edges, drilling, coatings as specified.'],
-          ['06','QA & Docs','Optical checks and release documentation.'],
-        ].map(([n,t,d]) => (
-          <div key={n} className="md:col-span-2 border-t border-white/10 pt-4">
-            <div className="text-white/50 text-sm uc tracking-[0.12em]">{n}</div>
-            <div className="mt-1 text-white">{t}</div>
-            <div className="mt-1 text-white/60 text-sm">{d}</div>
-          </div>
-        ))}
-      </Grid12>
-    </ContainerRow>
-  </SectionBand>
+  <PinReveal>
+    <div className="min-h-screen flex items-center">
+      <ContainerRow>
+        <Grid12>
+          <Span cols={12}>
+            <h2 data-step="1" className="text-4xl uc tracking-[0.08em] mb-12">Our Process</h2>
+          </Span>
+          <Span cols={8}>
+            <div data-step="2" className="text-xl text-white/80 mb-8">
+              Six stages from concept to delivery, ensuring precision at every step.
+            </div>
+          </Span>
+          <Span cols={12}>
+            <div data-step="3" className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                ['01','Scope','Define requirements, constraints, and acceptance criteria.'],
+                ['02','Design','CAD/CAM and fixtures for repeatable outcomes.'],
+                ['03','Tooling','Patterns and matched dies to tolerance.'],
+                ['04','Forming','Controlled thermoforming and annealing.'],
+                ['05','Finishing','Edges, drilling, coatings as specified.'],
+                ['06','QA & Docs','Optical checks and release documentation.'],
+              ].map(([n,t,d]) => (
+                <div key={n} className="border-t border-white/10 pt-4">
+                  <div className="text-white/50 text-sm uc tracking-[0.12em]">{n}</div>
+                  <div className="mt-1 text-white text-lg">{t}</div>
+                  <div className="mt-1 text-white/60 text-sm">{d}</div>
+                </div>
+              ))}
+            </div>
+          </Span>
+        </Grid12>
+      </ContainerRow>
+    </div>
+  </PinReveal>
 
   {/* Insights */}
   <SectionBand>

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState, useId } from 'react';
 import clsx from 'clsx';
+import MotionToggle from '@/components/MotionToggle';
 
 type NavChild = { href: string; label: string };
 type NavItem = { id: string; href: string; label: string; children?: NavChild[] };
@@ -327,7 +328,8 @@ export function Nav() {
             })}
               </div>
             </nav>
-              <div className="hidden md:flex md:col-span-2 justify-self-end">
+              <div className="hidden md:flex md:col-span-2 justify-self-end items-center gap-3">
+                <MotionToggle />
                 <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-all duration-700 px-4 py-2 uc tracking-[0.08em] hover:rounded-xl">REQUEST A QUOTE</Link>
               </div>
             </div>
