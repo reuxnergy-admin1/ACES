@@ -50,22 +50,26 @@ export default function Page() {
   {/* Client carousel directly after hero */}
   <ClientCarousel className="mt-10 md:mt-16" reveal />
 
-  <ContainerRow className="section-band pt-0" data-reveal-stagger>
-        <Grid12>
-        {[
-          {title:'Aerospace Transparencies', href:'/products/aircraft/'},
-          {title:'Helicopter Transparencies', href:'/products/helicopters/'},
-          {title:'Motorsport Components', href:'/products/motorsport/'},
-        ].map((c) => (
-          <SheenCard key={c.href} className="md:col-span-4" data-reveal>
-            <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
-              <div className="text-xl">{c.title}</div>
-              <div className="mt-2 text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
-              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
-            </Link>
-          </SheenCard>
-        ))}
-        </Grid12>
+  <ContainerRow className="section-band pt-0">
+        <RevealGroup stagger={0.06}>
+          <Grid12>
+          {[
+            {title:'Aerospace Transparencies', href:'/products/aircraft/'},
+            {title:'Helicopter Transparencies', href:'/products/helicopters/'},
+            {title:'Motorsport Components', href:'/products/motorsport/'},
+          ].map((c) => (
+            <SheenCard key={c.href} className="md:col-span-4">
+              <Reveal dir="up">
+                <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
+                  <div className="text-xl">{c.title}</div>
+                  <div className="mt-2 text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
+                  <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
+                </Link>
+              </Reveal>
+            </SheenCard>
+          ))}
+          </Grid12>
+        </RevealGroup>
       </ContainerRow>
 
   {/* Capabilities */}
@@ -103,48 +107,60 @@ export default function Page() {
   {/* Compliance & QA */}
   <SectionBand>
     <ContainerRow>
-      <Grid12 data-reveal-stagger>
-        <Span cols={8}>
-          <Prose>
-            <h2>Compliance & QA</h2>
-            <p>SACAA‑approved (MP39). Documented process control with full traceability and optical inspection. Our release documentation accompanies every shipment.</p>
-          </Prose>
-        </Span>
-        <Span cols={4}>
-          <div className="grid grid-cols-1 gap-2">
-            {[ 'VLT ≥ 90%*', 'Haze ≤ 2.0%*', 'Scratch‑resist. per spec', 'Traceability docs', 'QA release per lot' ].map((b) => (
-              <div key={b} className="surface surface-90 surface-strong radius-md elevate-sm px-4 py-3 text-white/80">{b}</div>
-            ))}
-            <div className="text-[11px] text-white/40">*Representative; per material system and thickness. See release docs.</div>
-          </div>
-        </Span>
-      </Grid12>
+      <RevealGroup stagger={0.08}>
+        <Grid12>
+          <Span cols={8}>
+            <Reveal dir="up">
+              <Prose>
+                <h2>Compliance & QA</h2>
+                <p>SACAA‑approved (MP39). Documented process control with full traceability and optical inspection. Our release documentation accompanies every shipment.</p>
+              </Prose>
+            </Reveal>
+          </Span>
+          <Span cols={4}>
+            <Reveal dir="up" delay={0.02}>
+              <div className="grid grid-cols-1 gap-2">
+                {[ 'VLT ≥ 90%*', 'Haze ≤ 2.0%*', 'Scratch‑resist. per spec', 'Traceability docs', 'QA release per lot' ].map((b) => (
+                  <div key={b} className="surface surface-90 surface-strong radius-md elevate-sm px-4 py-3 text-white/80">{b}</div>
+                ))}
+                <div className="text-[11px] text-white/40">*Representative; per material system and thickness. See release docs.</div>
+              </div>
+            </Reveal>
+          </Span>
+        </Grid12>
+      </RevealGroup>
     </ContainerRow>
   </SectionBand>
 
   {/* Sectors We Serve */}
   <SectionBand>
     <ContainerRow>
-      <Grid12 data-reveal-stagger>
-        <Span cols={8}>
-          <h2 className="text-2xl uc tracking-[0.08em]">Sectors We Serve</h2>
-          <ul className="mt-4 space-y-2 text-white/70">
-            <li><strong className="text-white/90">AMOs/Heli AMOs:</strong> predictable lead‑times, repeatability, and full documentation.</li>
-            <li><strong className="text-white/90">Flight Schools/Commercial:</strong> durable transparencies, lifecycle value, quick turnaround.</li>
-            <li><strong className="text-white/90">HEMS/Rescue & Police:</strong> clarity in adverse conditions, coatings for mission readiness.</li>
-            <li><strong className="text-white/90">Motorsport:</strong> low mass, high rigidity, surface quality under heat and load.</li>
-          </ul>
-        </Span>
-        <Span cols={4}>
-          <div className="surface surface-90 surface-strong radius-md p-5">
-            <div className="text-white/80">Speak to our engineers about your application.</div>
-            <div className="mt-4 flex gap-3">
-              <Link href="/contact/" className="button-primary h-11">Request a Quote</Link>
-              <Link href="/contact/?type=specialist" className="wipe-link h-11 inline-flex items-center uc px-4">Specialist Call</Link>
-            </div>
-          </div>
-        </Span>
-      </Grid12>
+      <RevealGroup stagger={0.08}>
+        <Grid12>
+          <Span cols={8}>
+            <Reveal dir="up">
+              <h2 className="text-2xl uc tracking-[0.08em]">Sectors We Serve</h2>
+              <ul className="mt-4 space-y-2 text-white/70">
+                <li><strong className="text-white/90">AMOs/Heli AMOs:</strong> predictable lead‑times, repeatability, and full documentation.</li>
+                <li><strong className="text-white/90">Flight Schools/Commercial:</strong> durable transparencies, lifecycle value, quick turnaround.</li>
+                <li><strong className="text-white/90">HEMS/Rescue & Police:</strong> clarity in adverse conditions, coatings for mission readiness.</li>
+                <li><strong className="text-white/90">Motorsport:</strong> low mass, high rigidity, surface quality under heat and load.</li>
+              </ul>
+            </Reveal>
+          </Span>
+          <Span cols={4}>
+            <Reveal dir="up" delay={0.02}>
+              <div className="surface surface-90 surface-strong radius-md p-5">
+                <div className="text-white/80">Speak to our engineers about your application.</div>
+                <div className="mt-4 flex gap-3">
+                  <Link href="/contact/" className="button-primary h-11">Request a Quote</Link>
+                  <Link href="/contact/?type=specialist" className="wipe-link h-11 inline-flex items-center uc px-4">Specialist Call</Link>
+                </div>
+              </div>
+            </Reveal>
+          </Span>
+        </Grid12>
+      </RevealGroup>
     </ContainerRow>
   </SectionBand>
 
@@ -187,22 +203,30 @@ export default function Page() {
   {/* Insights */}
   <SectionBand>
     <ContainerRow>
-      <Grid12>
-        <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Insights</h2></Span>
-        {[
-          {title:'Choosing coatings for clarity and durability', href:'/blog/'},
-          {title:'Avoiding forming defects in acrylic', href:'/blog/'},
-          {title:'QA metrics that matter (VLT, haze)', href:'/blog/'},
-        ].map((p) => (
-          <SheenCard key={p.title} className="md:col-span-4" data-reveal>
-            <Link href={p.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
-              <div className="text-xl">{p.title}</div>
-              <div className="mt-2 text-white/60">Short engineering notes from our team.</div>
-              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Read →</div>
-            </Link>
-          </SheenCard>
-        ))}
-      </Grid12>
+      <RevealGroup stagger={0.06}>
+        <Grid12>
+          <Span cols={12}>
+            <Reveal dir="up">
+              <h2 className="text-2xl uc tracking-[0.08em]">Insights</h2>
+            </Reveal>
+          </Span>
+          {[
+            {title:'Choosing coatings for clarity and durability', href:'/blog/'},
+            {title:'Avoiding forming defects in acrylic', href:'/blog/'},
+            {title:'QA metrics that matter (VLT, haze)', href:'/blog/'},
+          ].map((p) => (
+            <SheenCard key={p.title} className="md:col-span-4">
+              <Reveal dir="up">
+                <Link href={p.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
+                  <div className="text-xl">{p.title}</div>
+                  <div className="mt-2 text-white/60">Short engineering notes from our team.</div>
+                  <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Read →</div>
+                </Link>
+              </Reveal>
+            </SheenCard>
+          ))}
+        </Grid12>
+      </RevealGroup>
     </ContainerRow>
   </SectionBand>
     </section>
