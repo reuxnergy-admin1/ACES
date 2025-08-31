@@ -12,7 +12,7 @@ export default function Page() {
   <section className="grid-shell section-band pt-28">
   {/* Use wide container so hero aligns with product cards below */}
   <ContainerWide>
-        <Grid12 className="items-start md:items-end" data-reveal-stagger>
+        <Grid12 className="items-start md:items-end">
           <Span cols={8}>
             <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-full">
               Precision transparencies.<br/>
@@ -23,9 +23,9 @@ export default function Page() {
               non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
             </p>
             <div className="mt-10 flex flex-wrap gap-3 items-center">
-              <Link href="/contact/" className="button-solid">REQUEST A QUOTE</Link>
+              <Link href="/contact/" className="button-primary h-11">Request a Quote</Link>
               {/* Match visual height to primary button for cleaner baseline alignment */}
-              <Link href="/contact/?type=specialist" className="button-ghost uc arrow-shift button--md">Speak to a <span className="btn-tail"><span>Specialist</span> <span className="arrow" aria-hidden>→</span></span></Link>
+              <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">Speak to a Specialist</Link>
             </div>
           </Span>
           <Span cols={4}>
@@ -37,27 +37,27 @@ export default function Page() {
   {/* Client carousel directly after hero */}
   <ClientCarousel className="mt-10 md:mt-16" reveal />
 
-  <ContainerWide className="section-band pt-0">
-        <Grid12 data-reveal-blur-stagger>
+  <ContainerRow className="section-band pt-0" data-reveal-stagger>
+        <Grid12>
         {[
           {title:'Aerospace Transparencies', href:'/products/aircraft/'},
           {title:'Helicopter Transparencies', href:'/products/helicopters/'},
           {title:'Motorsport Components', href:'/products/motorsport/'},
         ].map((c) => (
-          <SheenCard key={c.href} className="md:col-span-4" data-reveal-blur>
-            <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift">
+          <SheenCard key={c.href} className="md:col-span-4" data-reveal>
+            <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
               <div className="text-xl">{c.title}</div>
               <div className="mt-2 text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
-              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore <span className="btn-tail"><span className="arrow" aria-hidden>→</span></span></div>
+              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
             </Link>
           </SheenCard>
         ))}
         </Grid12>
-      </ContainerWide>
+      </ContainerRow>
 
   {/* Capabilities */}
   <SectionBand>
-    <ContainerWide>
+    <ContainerRow>
       <Grid12 data-reveal-stagger>
         <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Capabilities</h2></Span>
         {[
@@ -68,7 +68,7 @@ export default function Page() {
           {h:'Coatings', p:'Scratch‑resistant and anti‑fog coatings via approved processes.'},
           {h:'QA & Documentation', p:'Traceability, VLT/haze mapping, and release documentation.'},
         ].map((x) => (
-          <SheenCard key={x.h} className="md:col-span-4" data-reveal-blur>
+          <SheenCard key={x.h} className="md:col-span-4" data-reveal>
             <div className="block border border-white/10 rounded-2xl p-7">
               <div className="text-xl">{x.h}</div>
               <div className="mt-2 text-white/60">{x.p}</div>
@@ -76,12 +76,12 @@ export default function Page() {
           </SheenCard>
         ))}
       </Grid12>
-    </ContainerWide>
+    </ContainerRow>
   </SectionBand>
 
   {/* Compliance & QA */}
   <SectionBand>
-    <ContainerWide>
+    <ContainerRow>
       <Grid12 data-reveal-stagger>
         <Span cols={8}>
           <Prose>
@@ -98,12 +98,12 @@ export default function Page() {
           </div>
         </Span>
       </Grid12>
-    </ContainerWide>
+    </ContainerRow>
   </SectionBand>
 
   {/* Sectors We Serve */}
   <SectionBand>
-    <ContainerWide>
+    <ContainerRow>
       <Grid12 data-reveal-stagger>
         <Span cols={8}>
           <h2 className="text-2xl uc tracking-[0.08em]">Sectors We Serve</h2>
@@ -118,13 +118,13 @@ export default function Page() {
           <div className="surface surface-90 surface-strong radius-md p-5">
             <div className="text-white/80">Speak to our engineers about your application.</div>
             <div className="mt-4 flex gap-3">
-              <Link href="/contact/" className="button-solid arrow-shift">REQUEST A <span className="btn-tail"><span>QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
-              <Link href="/contact/?type=specialist" className="button-ghost inline-flex items-center uc arrow-shift button--md">Specialist <span className="btn-tail"><span>Call</span> <span className="arrow" aria-hidden>→</span></span></Link>
+              <Link href="/contact/" className="button-primary h-11">Request a Quote</Link>
+              <Link href="/contact/?type=specialist" className="wipe-link h-11 inline-flex items-center uc px-4">Specialist Call</Link>
             </div>
           </div>
         </Span>
       </Grid12>
-    </ContainerWide>
+    </ContainerRow>
   </SectionBand>
 
   {/* Process */}
@@ -152,7 +152,7 @@ export default function Page() {
 
   {/* Insights */}
   <SectionBand>
-    <ContainerWide>
+    <ContainerRow>
       <Grid12>
         <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Insights</h2></Span>
         {[
@@ -160,16 +160,16 @@ export default function Page() {
           {title:'Avoiding forming defects in acrylic', href:'/blog/'},
           {title:'QA metrics that matter (VLT, haze)', href:'/blog/'},
         ].map((p) => (
-          <SheenCard key={p.title} className="md:col-span-4" data-reveal-blur>
-            <Link href={p.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift">
+          <SheenCard key={p.title} className="md:col-span-4" data-reveal>
+            <Link href={p.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
               <div className="text-xl">{p.title}</div>
               <div className="mt-2 text-white/60">Short engineering notes from our team.</div>
-              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Read <span className="btn-tail"><span className="arrow" aria-hidden>→</span></span></div>
+              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Read →</div>
             </Link>
           </SheenCard>
         ))}
       </Grid12>
-    </ContainerWide>
+    </ContainerRow>
   </SectionBand>
     </section>
   );

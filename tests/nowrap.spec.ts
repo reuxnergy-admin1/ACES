@@ -4,7 +4,7 @@ test.describe('No-wrap controls', () => {
   test('hero CTA does not overflow at 360px (may wrap)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto('/');
-    const cta = page.getByRole('link', { name: 'Request a Quote' });
+    const cta = page.locator('main#main-content').getByRole('link', { name: 'Request a Quote' }).first();
     await expect(cta).toBeVisible();
     // Should not horizontally overflow its own box
     const ok = await cta.evaluate((el) => (el as HTMLElement).scrollWidth <= (el as HTMLElement).clientWidth + 1);

@@ -18,8 +18,6 @@ export function Nav() {
   const lastY = useRef(0);
   const ticking = useRef(false);
   const scrollYRef = useRef(0);
-  const headerRef = useRef<HTMLElement | null>(null);
-  const sheenRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-close mobile menu on route change
   useEffect(() => {
@@ -186,7 +184,8 @@ export function Nav() {
     setMobileOpen(prev => ({ ...prev, [id]: !prev[id] }));
   }, []);
 
-  // Desktop menubar refs/state
+  // Desktop hover background pill refs/state
+  const hoverRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const activeParent = useMemo(() => {
@@ -194,6 +193,43 @@ export function Nav() {
     return found ?? null;
   }, [items, openMenu]);
 
+  const moveHover = useCallback((href: string | null) => {
+    const pill = hoverRef.current;
+    const container = containerRef.current;
+    if (!pill || !container) return;
+    const targetHref = href ?? items.find(i => pathname?.startsWith(i.href))?.href ?? null;
+    const targetEl = targetHref ? linkRefs.current[targetHref] : null;
+    const contRect = container.getBoundingClientRect();
+    if (targetEl) {
+      const r = targetEl.getBoundingClientRect();
+      const pad = 8; // little horizontal breathing room
+      const x = r.left - contRect.left - pad / 2;
+      const w = r.width + pad;
+      pill.style.opacity = '1';
+      pill.style.transform = `translate(${x}px, -50%)`;
+      pill.style.width = `${w}px`;
+    } else {
+      // Hide when no active target
+      pill.style.opacity = '0';
+      pill.style.width = '0px';
+    }
+  }, [items, pathname]);
+
+  useEffect(() => {
+    moveHover(null);
+    const onResize = () => moveHover(null);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [moveHover]);
+
+  // Hide/revert indicator to active item when pointer leaves the group (attached via DOM to avoid a11y lint on JSX)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handler = () => moveHover(null);
+    el.addEventListener('mouseleave', handler);
+    return () => el.removeEventListener('mouseleave', handler);
+  }, [moveHover]);
 
   // Keyboard navigation inside submenu panel
   const onSubmenuKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -228,73 +264,15 @@ export function Nav() {
     if (e.key === 'End') nextIdx = anchors.length - 1;
     anchors[nextIdx]?.focus();
   }, [items]);
-  // Premium header sheen: subtle radial highlight that follows the cursor across the page
-  useEffect(() => {
-    const header = headerRef.current;
-    const sheen = sheenRef.current;
-    if (!header || !sheen) return;
-
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const pointerFine = window.matchMedia('(pointer: fine)');
-    if (media.matches || !pointerFine.matches) {
-      sheen.style.opacity = '0';
-      return;
-    }
-
-    let raf = 0;
-    let latestX = 0, latestY = 0;
-    let inside = false;
-
-    const update = () => {
-      const rect = header.getBoundingClientRect();
-      const x = Math.max(0, Math.min(latestX - rect.left, rect.width));
-      const y = Math.max(0, Math.min(latestY - rect.top, rect.height));
-      // Update root so other sections (e.g., footer) can reference the same pointer vars
-      document.documentElement.style.setProperty('--nav-x', `${x}px`);
-      document.documentElement.style.setProperty('--nav-y', `${y}px`);
-      sheen.style.opacity = inside ? '1' : '0';
-      raf = 0;
-    };
-
-    const onMove = (e: PointerEvent | MouseEvent) => {
-      latestX = (e as PointerEvent).clientX ?? (e as MouseEvent).clientX;
-      latestY = (e as PointerEvent).clientY ?? (e as MouseEvent).clientY;
-      const rect = header.getBoundingClientRect();
-      inside = latestX >= rect.left && latestX <= rect.right && latestY >= rect.top && latestY <= rect.bottom;
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-    const onScrollOrResize = () => { if (!raf) raf = requestAnimationFrame(update); };
-
-    window.addEventListener('pointermove', onMove, { passive: true });
-    window.addEventListener('scroll', onScrollOrResize, { passive: true });
-    window.addEventListener('resize', onScrollOrResize);
-
-    // Initial compute
-    const rect = header.getBoundingClientRect();
-    document.documentElement.style.setProperty('--nav-x', `${rect.width / 2}px`);
-    document.documentElement.style.setProperty('--nav-y', `${rect.height + 40}px`);
-    sheen.style.opacity = '0';
-
-    return () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('scroll', onScrollOrResize);
-      window.removeEventListener('resize', onScrollOrResize);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-
   return (
   <header
-      ref={headerRef}
       className={clsx(
   'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm header-interactive',
         scrolled ? 'bg-black/60' : 'bg-transparent',
         hidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >
-  {/* Subtle gradient wash + interactive sheen */}
   <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
-  <div ref={sheenRef} className="nav-sheen" aria-hidden="true" />
   <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
         <div className="container-wide">
           {/* Desktop layout: wrapper hidden on mobile; inner uses our 12-col grid. Avoid conflict between hidden and grid-12. */}
@@ -317,6 +295,13 @@ export function Nav() {
                 tabIndex={0}
         onKeyDown={onMenubarKeyDown}
               >
+            {/* Sliding hover background pill */}
+            <div
+              ref={hoverRef}
+              aria-hidden
+              className="absolute top-1/2 left-0 -translate-y-1/2 h-[34px] rounded-full bg-white/10 supports-[backdrop-filter]:backdrop-blur-sm"
+              style={{ width: 0, transform: 'translate(0px, -50%)', transition: 'transform 700ms var(--ease-premium), width 700ms var(--ease-premium), opacity 420ms var(--ease-premium)', opacity: 0 }}
+            />
               {items.map((item) => {
               const active = pathname?.startsWith(item.href);
               return (
@@ -324,8 +309,8 @@ export function Nav() {
                     <Link
                       href={item.href}
                       ref={(el) => { linkRefs.current[item.href] = el; }}
-                      onMouseEnter={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
-                      onFocus={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
+                      onMouseEnter={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
+                      onFocus={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
                       className={clsx('group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors link-underline',
                         active ? 'text-white' : 'text-white/80 hover:text-white')}
                       aria-current={active ? 'page' : undefined}
@@ -342,21 +327,8 @@ export function Nav() {
             })}
               </div>
             </nav>
-              <div className="hidden md:flex md:col-span-2 justify-self-end items-center gap-3 overflow-visible">
-                <a
-                  href="https://wa.me/27600000000"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="button-wa shrink-0"
-                  aria-label="Talk on WhatsApp"
-                >
-                  {/* WhatsApp icon */}
-                  <svg aria-hidden xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.62-6.003C.122 5.281 5.403 0 12.057 0c3.181 0 6.167 1.24 8.413 3.488a11.79 11.79 0 013.49 8.414c-.002 6.653-5.283 11.934-11.938 11.934a11.95 11.95 0 01-6.002-1.619L.057 24zm6.597-3.807c1.741 1.035 3.276 1.666 5.392 1.666 5.448 0 9.886-4.434 9.889-9.877.003-5.462-4.415-9.89-9.881-9.894-5.452 0-9.89 4.434-9.894 9.888 0 2.225.651 3.891 1.746 5.634l-.999 3.648 3.747-.965zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.03-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.173.198-.297.297-.495.099-.198.05-.372-.025-.521-.075-.149-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413z"/>
-                  </svg>
-                  <span className="wa-label">TALK ON WHATSAPP</span>
-                </a>
-                <Link href="/contact/" className="button-solid arrow-shift shrink-0 no-wrap">REQUEST A <span className="btn-tail"><span>QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
+              <div className="hidden md:flex md:col-span-2 justify-self-end">
+                <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-all duration-700 px-4 py-2 uc tracking-[0.08em] hover:rounded-xl">REQUEST A QUOTE</Link>
               </div>
             </div>
           </div>

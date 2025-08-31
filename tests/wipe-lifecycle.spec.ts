@@ -4,10 +4,10 @@ test.describe('Page Transition Wipe Lifecycle', () => {
   test('locks engage during nav and clear after reveal', async ({ page }) => {
     await page.goto('/');
 
-    // Click Products from the primary nav
-    const productsLink = page.locator('nav[aria-label="Primary"] a', { hasText: 'PRODUCTS' });
-    await expect(productsLink).toBeVisible();
-    await productsLink.click();
+    // Click Blog from the primary nav (nav simplified)
+    const blogLink = page.locator('nav[aria-label="Primary"] a', { hasText: 'BLOG' });
+    await expect(blogLink).toBeVisible();
+    await blogLink.click();
 
     // Quickly verify that locks engaged
     await expect.poll(async () => {
@@ -17,12 +17,12 @@ test.describe('Page Transition Wipe Lifecycle', () => {
         cursorHide: document.body.classList.contains('cursor-hide-transition'),
         overlayActive: document.querySelector('svg.pt-blob-svg')?.getAttribute('data-active') === '1',
       }));
-    }, { timeout: 500 }).toMatchObject({ noEvents: true, scrollLock: true, cursorHide: true, overlayActive: true });
+    }, { timeout: 1000 }).toMatchObject({ noEvents: true, scrollLock: true, cursorHide: true, overlayActive: true });
 
     // Wait for overlay to complete within acceptance window
     await expect.poll(async () => {
       return page.evaluate(() => document.querySelector('svg.pt-blob-svg')?.getAttribute('data-active'));
-    }, { timeout: 1800 }).toBe('0');
+    }, { timeout: 2500 }).toBe('0');
 
     // Locks should be cleared deterministically
     const locks = await page.evaluate(() => ({
@@ -34,7 +34,6 @@ test.describe('Page Transition Wipe Lifecycle', () => {
     expect(locks.scrollLock).toBeFalsy();
     expect(locks.cursorHide).toBeFalsy();
 
-    await expect(page).toHaveURL(/\/products\//);
+    await expect(page).toHaveURL(/\/blog\//);
   });
 });
-

@@ -1,17 +1,33 @@
+"use client";
 import Link from 'next/link';
 import { Tooltip } from './Tooltip';
 import { Span } from '@/components/layout/Grid12';
+import { useEffect, useRef } from 'react';
 
 export function Footer() {
+  const ref = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onMove = (e: PointerEvent) => {
+      const y = e.clientY;
+      const bottomDist = Math.max(0, window.innerHeight - y);
+      const thresh = 240;
+      const alpha = Math.max(0, Math.min(1, (thresh - bottomDist) / thresh));
+      document.documentElement.style.setProperty('--footer-alpha', String(alpha));
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onMove);
+  }, []);
   return (
-    <footer className="relative border-t border-white/10 mt-24">
+    <footer ref={ref} className="relative border-t border-white/10 mt-24">
       {/* Subtle top sheen inspired by Chronicle */}
       <div className="footer-sheen" aria-hidden />
       <div className="grid-shell">
         {/* Engagement strip */}
         <div className="container-wide py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10" data-reveal>
           <div className="text-lg md:text-xl text-white/90 uc tracking-[0.08em]">Work with ACES</div>
-          <Link href="/contact/" className="button-solid arrow-shift">REQUEST A <span className="btn-tail"><span>QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
+          <Link href="/contact/" className="button-solid arrow-shift button--md">REQUEST A <span className="btn-tail"><span>QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
         </div>
         <div className="container-wide py-16 grid-12 gutter text-sm text-white/70">
           <Span cols={4}>
@@ -70,11 +86,7 @@ export function Footer() {
             </Tooltip>
           </div>
           </Span>
-          <Span cols={12}>
-            <div className="mt-8">
-              <Link href="/contact/" className="button-ghost arrow-shift">REQUEST A <span className="btn-tail"><span>QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
-            </div>
-          </Span>
+          {/* Removed lower redundant CTA to focus hierarchy */}
           <Span cols={12}>
             <div className="mt-10 flex flex-wrap items-center justify-between gap-3 text-white/50">
               <div className="flex items-center gap-3">

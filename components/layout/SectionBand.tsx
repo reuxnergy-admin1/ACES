@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, ElementType } from 'react';
 
-type Props = Readonly<{ children: ReactNode; className?: string }>;
+type Props = Readonly<{ children: ReactNode; className?: string; as?: ElementType }>;
 
-export default function SectionBand({ children, className = '' }: Props) {
-  return <section className={`section-band ${className}`}>{children}</section>;
+export default function SectionBand({ children, className = '', as: Tag = 'section' }: Props) {
+  return <Tag className={`section-band ${className}`}>{children}</Tag>;
 }

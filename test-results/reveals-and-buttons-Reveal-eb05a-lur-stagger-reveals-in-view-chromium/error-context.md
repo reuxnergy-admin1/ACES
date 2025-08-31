@@ -1,0 +1,329 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2]:
+    - /url: "#main-content"
+  - generic:
+    - img
+  - generic:
+    - banner:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - link "ACES home" [ref=e3]:
+                - /url: /
+                - img "ACES Aerodynamics" [ref=e4]
+              - navigation "Primary":
+                - menubar "Main menu" [ref=e5]:
+                  - menuitem "BLOG" [ref=e7]
+                  - menuitem "SIGN IN" [ref=e9]
+                  - menuitem "ORDER" [ref=e11]
+              - generic:
+                - link "Talk on WhatsApp" [ref=e12]:
+                  - /url: https://wa.me/27600000000
+                  - img [ref=e13]
+                  - generic: TALK ON WHATSAPP
+                - link "REQUEST A QUOTE" [ref=e15]:
+                  - /url: /contact/
+                  - text: REQUEST A
+                  - generic [ref=e16]:
+                    - generic [ref=e17]: QUOTE
+                    - generic [ref=e18]: →
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - generic [ref=e24]:
+          - heading "Precision transparencies. Aerospace & motorsport." [level=1] [ref=e25]:
+            - text: Precision transparencies.
+            - generic [ref=e26]: Aerospace & motorsport.
+          - paragraph [ref=e27]: SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
+          - generic [ref=e28]:
+            - link "REQUEST A QUOTE" [ref=e29]:
+              - /url: /contact/
+              - text: REQUEST A
+              - generic [ref=e30]:
+                - generic [ref=e31]: QUOTE
+                - generic [ref=e32]: →
+            - link "Speak to a Specialist" [ref=e33]:
+              - /url: /contact/?type=specialist
+              - text: Speak to a
+              - generic [ref=e34]:
+                - generic [ref=e35]: Specialist
+                - generic [ref=e36]: →
+        - generic [ref=e38]: Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.
+      - region "Client partnerships" [ref=e39]:
+        - list [ref=e42]:
+          - listitem [ref=e43]:
+            - img [ref=e44]:
+              - generic [ref=e46]: AIRBUS
+          - listitem [ref=e47]:
+            - img [ref=e48]:
+              - generic [ref=e50]: DENEL
+          - listitem [ref=e51]:
+            - img [ref=e52]:
+              - generic [ref=e54]: CSIR
+          - listitem [ref=e55]:
+            - img [ref=e56]:
+              - generic [ref=e58]: SAFAIR
+          - listitem [ref=e59]:
+            - img [ref=e60]:
+              - generic [ref=e62]: SAA
+          - listitem [ref=e63]:
+            - img [ref=e64]:
+              - generic [ref=e66]: PARAMOUNT
+          - listitem [ref=e67]:
+            - img [ref=e68]:
+              - generic [ref=e70]: NAC
+          - listitem [ref=e71]:
+            - img [ref=e72]:
+              - generic [ref=e74]: CESSNA
+          - listitem [ref=e75]:
+            - img [ref=e76]:
+              - generic [ref=e78]: AIRBUS
+          - listitem [ref=e79]:
+            - img [ref=e80]:
+              - generic [ref=e82]: DENEL
+          - listitem [ref=e83]:
+            - img [ref=e84]:
+              - generic [ref=e86]: CSIR
+          - listitem [ref=e87]:
+            - img [ref=e88]:
+              - generic [ref=e90]: SAFAIR
+          - listitem [ref=e91]:
+            - img [ref=e92]:
+              - generic [ref=e94]: SAA
+          - listitem [ref=e95]:
+            - img [ref=e96]:
+              - generic [ref=e98]: PARAMOUNT
+          - listitem [ref=e99]:
+            - img [ref=e100]:
+              - generic [ref=e102]: NAC
+          - listitem [ref=e103]:
+            - img [ref=e104]:
+              - generic [ref=e106]: CESSNA
+        - list [ref=e107]:
+          - listitem [ref=e108]: Airbus
+          - listitem [ref=e109]: Denel
+          - listitem [ref=e110]: CSIR
+          - listitem [ref=e111]: Safair
+          - listitem [ref=e112]: SAA
+          - listitem [ref=e113]: Paramount
+          - listitem [ref=e114]: NAC
+          - listitem [ref=e115]: Cessna
+      - generic [ref=e117]:
+        - link "Aerospace Transparencies Design, tooling, thermoforming, finishing, coatings, QA. Explore" [ref=e119]:
+          - /url: /products/aircraft/
+          - generic [ref=e120]: Aerospace Transparencies
+          - generic [ref=e121]: Design, tooling, thermoforming, finishing, coatings, QA.
+          - generic [ref=e122]:
+            - text: Explore
+            - generic [ref=e124]: →
+        - link "Helicopter Transparencies Design, tooling, thermoforming, finishing, coatings, QA. Explore" [ref=e126]:
+          - /url: /products/helicopters/
+          - generic [ref=e127]: Helicopter Transparencies
+          - generic [ref=e128]: Design, tooling, thermoforming, finishing, coatings, QA.
+          - generic [ref=e129]:
+            - text: Explore
+            - generic [ref=e131]: →
+        - link "Motorsport Components Design, tooling, thermoforming, finishing, coatings, QA. Explore" [ref=e133]:
+          - /url: /products/motorsport/
+          - generic [ref=e134]: Motorsport Components
+          - generic [ref=e135]: Design, tooling, thermoforming, finishing, coatings, QA.
+          - generic [ref=e136]:
+            - text: Explore
+            - generic [ref=e138]: →
+      - generic [ref=e141]:
+        - heading "Capabilities" [level=2] [ref=e143]
+        - generic [ref=e145]:
+          - generic [ref=e146]: Design & Engineering
+          - generic [ref=e147]: Reverse‑engineering, CAD/CAM, fixture design and DFMA consultation.
+        - generic [ref=e149]:
+          - generic [ref=e150]: Tooling & CNC
+          - generic [ref=e151]: Patterns, matched dies, and precision trimming for consistent fit.
+        - generic [ref=e153]:
+          - generic [ref=e154]: Thermoforming & Annealing
+          - generic [ref=e155]: Controlled forming and stress‑relief for optical stability.
+        - generic [ref=e157]:
+          - generic [ref=e158]: Finishing & Drilling
+          - generic [ref=e159]: Edge finishing, drilling, and mount prep to spec tolerances.
+        - generic [ref=e161]:
+          - generic [ref=e162]: Coatings
+          - generic [ref=e163]: Scratch‑resistant and anti‑fog coatings via approved processes.
+        - generic [ref=e165]:
+          - generic [ref=e166]: QA & Documentation
+          - generic [ref=e167]: Traceability, VLT/haze mapping, and release documentation.
+      - generic [ref=e170]:
+        - generic [ref=e172]:
+          - heading "Compliance & QA" [level=2] [ref=e173]
+          - paragraph [ref=e174]: SACAA‑approved (MP39). Documented process control with full traceability and optical inspection. Our release documentation accompanies every shipment.
+        - generic [ref=e176]:
+          - generic [ref=e177]: VLT ≥ 90%*
+          - generic [ref=e178]: Haze ≤ 2.0%*
+          - generic [ref=e179]: Scratch‑resist. per spec
+          - generic [ref=e180]: Traceability docs
+          - generic [ref=e181]: QA release per lot
+          - generic [ref=e182]: "*Representative; per material system and thickness. See release docs."
+      - generic [ref=e185]:
+        - generic [ref=e186]:
+          - heading "Sectors We Serve" [level=2] [ref=e187]
+          - list [ref=e188]:
+            - listitem [ref=e189]:
+              - strong [ref=e190]: "AMOs/Heli AMOs:"
+              - text: predictable lead‑times, repeatability, and full documentation.
+            - listitem [ref=e191]:
+              - strong [ref=e192]: "Flight Schools/Commercial:"
+              - text: durable transparencies, lifecycle value, quick turnaround.
+            - listitem [ref=e193]:
+              - strong [ref=e194]: "HEMS/Rescue & Police:"
+              - text: clarity in adverse conditions, coatings for mission readiness.
+            - listitem [ref=e195]:
+              - strong [ref=e196]: "Motorsport:"
+              - text: low mass, high rigidity, surface quality under heat and load.
+        - generic [ref=e198]:
+          - generic [ref=e199]: Speak to our engineers about your application.
+          - generic [ref=e200]:
+            - link "REQUEST A QUOTE" [ref=e201]:
+              - /url: /contact/
+              - text: REQUEST A
+              - generic [ref=e202]:
+                - generic [ref=e203]: QUOTE
+                - generic [ref=e204]: →
+            - link "Specialist Call" [ref=e205]:
+              - /url: /contact/?type=specialist
+              - text: Specialist
+              - generic [ref=e206]:
+                - generic [ref=e207]: Call
+                - generic [ref=e208]: →
+      - generic [ref=e211]:
+        - heading "Process" [level=2] [ref=e213]
+        - generic [ref=e214]:
+          - generic [ref=e215]: "01"
+          - generic [ref=e216]: Scope
+          - generic [ref=e217]: Define requirements, constraints, and acceptance criteria.
+        - generic [ref=e218]:
+          - generic [ref=e219]: "02"
+          - generic [ref=e220]: Design
+          - generic [ref=e221]: CAD/CAM and fixtures for repeatable outcomes.
+        - generic [ref=e222]:
+          - generic [ref=e223]: "03"
+          - generic [ref=e224]: Tooling
+          - generic [ref=e225]: Patterns and matched dies to tolerance.
+        - generic [ref=e226]:
+          - generic [ref=e227]: "04"
+          - generic [ref=e228]: Forming
+          - generic [ref=e229]: Controlled thermoforming and annealing.
+        - generic [ref=e230]:
+          - generic [ref=e231]: "05"
+          - generic [ref=e232]: Finishing
+          - generic [ref=e233]: Edges, drilling, coatings as specified.
+        - generic [ref=e234]:
+          - generic [ref=e235]: "06"
+          - generic [ref=e236]: QA & Docs
+          - generic [ref=e237]: Optical checks and release documentation.
+      - generic [ref=e240]:
+        - heading "Insights" [level=2] [ref=e242]
+        - link "Choosing coatings for clarity and durability Short engineering notes from our team. Read" [ref=e244]:
+          - /url: /blog/
+          - generic [ref=e245]: Choosing coatings for clarity and durability
+          - generic [ref=e246]: Short engineering notes from our team.
+          - generic [ref=e247]:
+            - text: Read
+            - generic [ref=e249]: →
+        - link "Avoiding forming defects in acrylic Short engineering notes from our team. Read" [ref=e251]:
+          - /url: /blog/
+          - generic [ref=e252]: Avoiding forming defects in acrylic
+          - generic [ref=e253]: Short engineering notes from our team.
+          - generic [ref=e254]:
+            - text: Read
+            - generic [ref=e256]: →
+        - link "QA metrics that matter (VLT, haze) Short engineering notes from our team. Read" [ref=e258]:
+          - /url: /blog/
+          - generic [ref=e259]: QA metrics that matter (VLT, haze)
+          - generic [ref=e260]: Short engineering notes from our team.
+          - generic [ref=e261]:
+            - text: Read
+            - generic [ref=e263]: →
+  - img
+  - contentinfo [ref=e265]:
+    - generic [ref=e266]:
+      - generic [ref=e267]:
+        - generic [ref=e268]: Work with ACES
+        - link "REQUEST A QUOTE" [ref=e269]:
+          - /url: /contact/
+          - text: REQUEST A
+          - generic [ref=e270]:
+            - generic [ref=e271]: QUOTE
+            - generic [ref=e272]: →
+      - generic [ref=e273]:
+        - generic [ref=e274]:
+          - generic [ref=e275]: ACES Aerodynamics
+          - generic [ref=e276]: SACAA-approved fabrication | MP39
+          - link "info@acesaerodynamics.com" [ref=e278]:
+            - /url: mailto:info@acesaerodynamics.com
+          - generic [ref=e279]:
+            - text: "WhatsApp:"
+            - link "+27 60 000 0000" [ref=e280]:
+              - /url: https://wa.me/27600000000
+          - generic [ref=e281]: Pretoria, Gauteng, South Africa
+        - generic [ref=e283]:
+          - generic [ref=e284]:
+            - generic [ref=e285]: Company
+            - generic [ref=e286]:
+              - link "About" [ref=e287]:
+                - /url: /about/history/
+              - link "Blog" [ref=e288]:
+                - /url: /blog/
+          - generic [ref=e289]:
+            - generic [ref=e290]: Legal
+            - generic [ref=e291]:
+              - link "Privacy" [ref=e292]:
+                - /url: /legal/privacy/
+              - link "Cookies" [ref=e293]:
+                - /url: /legal/cookies/
+        - generic [ref=e294]:
+          - generic [ref=e295]: Follow
+          - generic [ref=e296]:
+            - generic [ref=e297]:
+              - link "LinkedIn" [ref=e298]:
+                - /url: https://www.linkedin.com/company/aces-aerodynamics
+                - generic [ref=e299]: LinkedIn
+                - img [ref=e300]
+              - tooltip: LinkedIn
+            - generic [ref=e302]:
+              - link "Facebook" [ref=e303]:
+                - /url: https://www.facebook.com/acesaerodynamics
+                - generic [ref=e304]: Facebook
+                - img [ref=e305]
+              - tooltip: Facebook
+            - generic [ref=e307]:
+              - link "Instagram" [ref=e308]:
+                - /url: https://www.instagram.com/acesaerodynamics
+                - generic [ref=e309]: Instagram
+                - img [ref=e310]
+              - tooltip: Instagram
+            - generic [ref=e312]:
+              - link "WhatsApp" [ref=e313]:
+                - /url: https://wa.me/27600000000
+                - generic [ref=e314]: WhatsApp
+                - img [ref=e315]
+              - tooltip: WhatsApp
+        - generic [ref=e317]:
+          - generic [ref=e318]:
+            - generic [ref=e320]: SACAA MP39
+            - generic [ref=e322]:
+              - link "Products" [ref=e323]:
+                - /url: /products/
+              - generic [ref=e324]: •
+              - link "Services" [ref=e325]:
+                - /url: /services/
+              - generic [ref=e326]: •
+              - link "Back to top" [ref=e327]:
+                - /url: "#main-content"
+          - generic [ref=e328]: © 2025 ACES Aerodynamics
+  - status
+  - button "Open Next.js Dev Tools" [ref=e334] [cursor=pointer]:
+    - img [ref=e335] [cursor=pointer]
+  - alert [ref=e338]
+```
