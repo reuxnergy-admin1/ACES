@@ -1,4 +1,6 @@
 name: ci
+permissions:
+  contents: read
 on:
   pull_request:
     branches: [ main ]
@@ -12,11 +14,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
-          run_install: true
+          cache: pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm@10
+      - name: Verify pnpm
+        run: pnpm -v
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
       - name: Lint
         run: pnpm lint
       - name: Typecheck and Build

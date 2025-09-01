@@ -1,29 +1,71 @@
+"use client";
 import Link from 'next/link';
 import { Tooltip } from './Tooltip';
+import { Span } from '@/components/layout/Grid12';
+import { useEffect, useRef } from 'react';
 
 export function Footer() {
+  const ref = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onMove = (e: PointerEvent) => {
+      const y = e.clientY;
+      const bottomDist = Math.max(0, window.innerHeight - y);
+      const thresh = 240;
+      const alpha = Math.max(0, Math.min(1, (thresh - bottomDist) / thresh));
+      document.documentElement.style.setProperty('--footer-alpha', String(alpha));
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => window.removeEventListener('pointermove', onMove);
+  }, []);
   return (
-    <footer className="border-t border-white/10 mt-24">
-  <div className="grid-shell container-row py-12 grid grid-cols-12 gap-y-10 gap-x-8 text-sm text-white/60">
-        <div className="col-span-12 md:col-span-4">
-          <div className="text-white/80 uc tracking-wider">ACES Aerodynamics</div>
-          <div className="mt-2">SACAA-approved fabrication | MP39</div>
-          <div className="mt-2"><a href="mailto:info@acesaerodynamics.com" className="link-underline text-white/80 hover:text-white">info@acesaerodynamics.com</a></div>
+    <footer ref={ref} className="relative border-t border-white/10 mt-24">
+      {/* Subtle top sheen inspired by Chronicle */}
+      <div className="footer-sheen" aria-hidden />
+      <div className="grid-shell">
+        {/* Engagement strip */}
+        <div className="container-wide py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10" data-reveal>
+          <div className="text-lg md:text-xl text-white/90 uc tracking-[0.08em]">Work with ACES</div>
+          <Link href="/contact/" className="button-primary h-11 px-5">
+            <span aria-hidden="true" className="reveal-line h top" />
+            <span aria-hidden="true" className="reveal-line h bottom" />
+            <span aria-hidden="true" className="reveal-line v left" />
+            <span aria-hidden="true" className="reveal-line v right" />
+            <span className="sr-only">Request a Quote</span>
+            <span aria-hidden>Request a Quote</span>
+          </Link>
         </div>
-        <div className="col-span-12 md:col-span-4 grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Link className="link-underline text-white/80 hover:text-white uc tracking-wide" href="/about/history/">About</Link><br/>
-            <Link className="link-underline text-white/80 hover:text-white uc tracking-wide" href="/products/">Products</Link><br/>
-            <Link className="link-underline text-white/80 hover:text-white uc tracking-wide" href="/services/">Services</Link>
-          </div>
-          <div className="space-y-2">
-            <Link className="link-underline text-white/80 hover:text-white uc tracking-wide" href="/blog/">Blog</Link><br/>
-            <Link className="link-underline text-white/80 hover:text-white uc tracking-wide" href="/legal/privacy/">Privacy</Link><br/>
-            <Link className="link-underline text-white/80 hover:text-white uc tracking-wide" href="/legal/cookies/">Cookies</Link>
-          </div>
-        </div>
-        <div className="col-span-12 md:col-span-4">
-          <div className="uc tracking-wider text-white/80">Follow</div>
+        <div className="container-wide py-16 grid-12 gutter text-sm text-white/70">
+          <Span cols={4}>
+            <div className="text-white uc tracking-wider">ACES Aerodynamics</div>
+            <div className="mt-2 text-white/70">SACAA-approved fabrication | MP39</div>
+            <div className="mt-2">
+              <a href="mailto:info@acesaerodynamics.com" className="link-underline text-white/80 hover:text-white">info@acesaerodynamics.com</a>
+            </div>
+            <div className="mt-1 text-white/70">WhatsApp: <a className="link-underline text-white/80 hover:text-white" href="https://wa.me/27600000000" target="_blank" rel="noopener noreferrer">+27 60 000 0000</a></div>
+            <div className="mt-1 text-white/70">Pretoria, Gauteng, South Africa</div>
+          </Span>
+          <Span cols={4}>
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <div className="uc tracking-wider text-white/60 text-xs">Company</div>
+                <div className="mt-2 space-y-2">
+                  <Link className="link-underline text-white/85 hover:text-white" href="/about/history/">About</Link><br/>
+                  <Link className="link-underline text-white/85 hover:text-white" href="/blog/">Blog</Link>
+                </div>
+              </div>
+              <div>
+                <div className="uc tracking-wider text-white/60 text-xs">Legal</div>
+                <div className="mt-2 space-y-2">
+                  <Link className="link-underline text-white/85 hover:text-white" href="/legal/privacy/">Privacy</Link><br/>
+                  <Link className="link-underline text-white/85 hover:text-white" href="/legal/cookies/">Cookies</Link>
+                </div>
+              </div>
+            </div>
+          </Span>
+          <Span cols={4}>
+          <div className="uc tracking-wider text-white/60 text-xs">Follow</div>
           <div className="mt-3 flex items-center gap-3">
             <Tooltip label="LinkedIn">
               <a className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition-colors" href="https://www.linkedin.com/company/aces-aerodynamics" target="_blank" rel="noopener noreferrer">
@@ -50,9 +92,23 @@ export function Footer() {
               </a>
             </Tooltip>
           </div>
-        </div>
-  <div className="col-span-12 md:col-span-12 md:text-left">
-          <div className="text-white/40">© {new Date().getFullYear()} ACES Aerodynamics</div>
+          </Span>
+          {/* Removed lower redundant CTA to focus hierarchy */}
+          <Span cols={12}>
+            <div className="mt-10 flex flex-wrap items-center justify-between gap-3 text-white/50">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex items-center gap-2"><span className="inline-block w-2 h-2 rounded-full bg-white/60" aria-hidden /> SACAA MP39</span>
+              </div>
+              <div className="hidden md:block">
+                <Link href="/products/" className="link-underline text-white/70 hover:text-white">Products</Link>
+                <span className="mx-3">•</span>
+                <Link href="/services/" className="link-underline text-white/70 hover:text-white">Services</Link>
+                <span className="mx-3">•</span>
+                <Link href="#main-content" className="link-underline text-white/70 hover:text-white">Back to top</Link>
+              </div>
+            </div>
+            <div className="mt-3 text-white/40">© {new Date().getFullYear()} ACES Aerodynamics</div>
+          </Span>
         </div>
       </div>
     </footer>

@@ -3,7 +3,8 @@ export const prefersReducedMotion =
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
 
 export function detectRenderer(): 'svg' | 'webgl-low' | 'webgl-high' {
-  if (prefersReducedMotion) return 'svg';
+  // Do NOT force SVG for reduced motion; we'll tone down animations elsewhere.
+  // Still respect Data Saver below by returning SVG.
 
   // Data saver detection (Network Information API is experimental)
   let saveData = false;
@@ -11,7 +12,8 @@ export function detectRenderer(): 'svg' | 'webgl-low' | 'webgl-high' {
     const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
     saveData = !!connection?.saveData;
   }
-  if (saveData) return 'svg';
+  // If Data Saver is on, prefer a lighter WebGL profile instead of disabling interactivity.
+  if (saveData) return 'webgl-low';
 
   const coarse = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
   let mem = 4;

@@ -1,3 +1,5 @@
+// IMPORTANT: Static SVG fallback used for instant paint and as a safety net if WebGL is disabled.
+// Do not change geometry or attributes lightly; subtle tweaks can affect perceived contrast and performance.
 export default function ContoursSVG() {
   return (
   <svg className="w-full h-full pointer-events-none"

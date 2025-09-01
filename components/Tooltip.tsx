@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, cloneElement } from "react";
 import clsx from "clsx";
 
 type TooltipProps = {
@@ -32,24 +32,24 @@ export function Tooltip({ label, children, placement = "top", delayMs = 120 }: T
     : placement === "left" ? `right-full top-1/2 -translate-y-1/2 mr-[${offset}px]`
     : `left-full top-1/2 -translate-y-1/2 ml-[${offset}px]`;
 
+  // Clone the child and attach ARIA + event handlers directly to it to avoid nested interactive content
+  const child = cloneElement(children, {
+    'aria-describedby': open ? id : undefined,
+    onMouseEnter: (e: any) => { children.props?.onMouseEnter?.(e); show(); },
+    onMouseLeave: (e: any) => { children.props?.onMouseLeave?.(e); hide(); },
+    onFocus: (e: any) => { children.props?.onFocus?.(e); show(); },
+    onBlur: (e: any) => { children.props?.onBlur?.(e); hide(); },
+    onKeyDown: (e: any) => { children.props?.onKeyDown?.(e); if (e.key === 'Escape') hide(); },
+  });
   return (
     <span ref={wrapRef} className="relative inline-flex">
-      <button
-        type="button"
-        aria-describedby={open ? id : undefined}
-        className="contents"
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        onFocus={show}
-        onBlur={hide}
-      >
-        {children}
-      </button>
+      {child}
       <span
         id={id}
         role="tooltip"
+  aria-hidden={open ? undefined : true}
         className={clsx(
-          "pointer-events-none absolute z-overlay surface surface--sm surface-90 elevate rounded px-2 py-1 text-[11px] uc tracking-wide text-white/90 border border-white/12",
+          "pointer-events-none absolute z-overlay surface surface--sm surface-90 surface-strong elevate radius-sm px-2 py-1 text-[11px] uc tracking-wide text-white/90",
           "transition-[opacity,transform] duration-300 ease-[var(--ease-premium)]",
           open ? "opacity-100 scale-100" : "opacity-0 scale-95",
           posClass

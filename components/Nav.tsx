@@ -18,6 +18,8 @@ export function Nav() {
   const lastY = useRef(0);
   const ticking = useRef(false);
   const scrollYRef = useRef(0);
+  const headerRef = useRef<HTMLElement | null>(null);
+  const sheenRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-close mobile menu on route change
   useEffect(() => {
@@ -33,8 +35,8 @@ export function Nav() {
           const y = window.scrollY || 0;
           setScrolled(y > 8);
           const delta = y - lastY.current;
-          // Threshold to avoid jitter
-          const threshold = 6;
+          // Threshold to avoid jitter but remain responsive
+          const threshold = 3;
           if (y > 80 && delta > threshold) setHidden(true);
           else if (delta < -threshold || y < 10) setHidden(false);
           lastY.current = y;
@@ -123,28 +125,6 @@ export function Nav() {
   }, [open]);
 
   const items: NavItem[] = useMemo(() => ([
-    {
-      id: 'about',
-      href: '/about/history/',
-      label: 'ABOUT',
-      children: [
-        { href: '/about/history/', label: 'History' },
-        { href: '/about/industries/', label: 'Industries' },
-        { href: '/about/philosophy/', label: 'Philosophy' },
-        { href: '/about/quality/', label: 'Quality' },
-      ],
-    },
-    {
-      id: 'products',
-      href: '/products/',
-      label: 'PRODUCTS',
-      children: [
-        { href: '/products/aircraft/', label: 'Aircraft Transparencies' },
-        { href: '/products/helicopters/', label: 'Helicopter Transparencies' },
-        { href: '/products/motorsport/', label: 'Motorsport Components' },
-      ],
-    },
-    { id: 'services', href: '/services/', label: 'SERVICES' },
     { id: 'blog', href: '/blog/', label: 'BLOG' },
     { id: 'signin', href: '/signin/', label: 'SIGN IN' },
     { id: 'order', href: '/order/', label: 'ORDER' },
@@ -184,82 +164,98 @@ export function Nav() {
     setMobileOpen(prev => ({ ...prev, [id]: !prev[id] }));
   }, []);
 
-  // Desktop hover background pill refs/state
-  const hoverRef = useRef<HTMLDivElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  // Desktop link refs for roving focus
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const activeParent = useMemo(() => {
     const found = items.find((i) => i.id === openMenu && Array.isArray(i.children) && i.children.length > 0);
     return found ?? null;
   }, [items, openMenu]);
 
-  const moveHover = useCallback((href: string | null) => {
-    const pill = hoverRef.current;
-    const container = containerRef.current;
-    if (!pill || !container) return;
-    const targetHref = href ?? items.find(i => pathname?.startsWith(i.href))?.href ?? null;
-    const targetEl = targetHref ? linkRefs.current[targetHref] : null;
-    const contRect = container.getBoundingClientRect();
-    if (targetEl) {
-      const r = targetEl.getBoundingClientRect();
-      const pad = 8; // little horizontal breathing room
-      const x = r.left - contRect.left - pad / 2;
-      const w = r.width + pad;
-      pill.style.opacity = '1';
-      pill.style.transform = `translate(${x}px, -50%)`;
-      pill.style.width = `${w}px`;
-    } else {
-      // Hide when no active target
-      pill.style.opacity = '0';
-      pill.style.width = '0px';
-    }
-  }, [items, pathname]);
+  // Keyboard navigation inside submenu panel
+  const onSubmenuKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    const container = e.currentTarget;
+    const links = Array.from(container.querySelectorAll<HTMLAnchorElement>('a[href]'));
+    if (links.length === 0) return;
+  const idx = links.indexOf(document.activeElement as HTMLAnchorElement);
+    let next = idx;
+    if (e.key === 'ArrowDown') next = (idx + 1 + links.length) % links.length;
+    if (e.key === 'ArrowUp') next = (idx - 1 + links.length) % links.length;
+    if (e.key === 'Home') next = 0;
+    if (e.key === 'End') next = links.length - 1;
+    links[next]?.focus();
+  }, []);
+
+  // Roving focus across top-level menu items on desktop (ArrowLeft/Right, Home/End)
+  const onMenubarKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    const order = items.map(i => i.href);
+    const anchors = order.map(h => linkRefs.current[h]).filter(Boolean) as HTMLAnchorElement[];
+    const active = document.activeElement as HTMLElement | null;
+  const idx = active ? anchors.indexOf(active as HTMLAnchorElement) : -1;
+    let nextIdx = idx;
+    if (e.key === 'ArrowRight') nextIdx = (idx + 1 + anchors.length) % anchors.length;
+    if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + anchors.length) % anchors.length;
+    if (e.key === 'Home') nextIdx = 0;
+    if (e.key === 'End') nextIdx = anchors.length - 1;
+    anchors[nextIdx]?.focus();
+  }, [items]);
+  // Feature flag check: only enable sheen interaction when html has .feature-chronicle-ui
+  const chronicleOn = typeof document !== 'undefined' ? document.documentElement.classList.contains('feature-chronicle-ui') : false;
 
   useEffect(() => {
-    moveHover(null);
-    const onResize = () => moveHover(null);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [moveHover]);
+    if (!chronicleOn) return;
+    const header = headerRef.current;
+    const sheen = sheenRef.current;
+    if (!header || !sheen) return;
+    const onMove = (e: PointerEvent) => {
+      const r = header.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / Math.max(1, r.width)) * 100;
+      const y = ((e.clientY - r.top) / Math.max(1, r.height)) * 100;
+      sheen.style.setProperty('--x', `${x}%`);
+      sheen.style.setProperty('--y', `${y}%`);
+    };
+    header.addEventListener('pointermove', onMove, { passive: true });
+    return () => header.removeEventListener('pointermove', onMove);
+  }, [chronicleOn]);
 
-  // Hide/revert indicator to active item when pointer leaves the group (attached via DOM to avoid a11y lint on JSX)
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const handler = () => moveHover(null);
-    el.addEventListener('mouseleave', handler);
-    return () => el.removeEventListener('mouseleave', handler);
-  }, [moveHover]);
   return (
   <header
+      ref={headerRef}
       className={clsx(
-  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm',
+  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm header-interactive',
         scrolled ? 'bg-black/60' : 'bg-transparent',
         hidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
+  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
   <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
-        <div className="container-row">
-          {/* Desktop layout: 3-column grid [logo][flex gap][cta], nav centered within the middle column */}
-          <div className="hidden md:grid md:grid-cols-[auto_1fr_auto] md:items-center">
-            <Link href="/" aria-label="ACES home" className="flex items-center">
+        <div className="container-wide">
+          {/* Chronicle-style nav sheen overlay (feature flagged) */}
+          <div ref={sheenRef} className="nav-sheen" aria-hidden="true" />
+          {/* Desktop layout: wrapper hidden on mobile; inner uses our 12-col grid. Avoid conflict between hidden and grid-12. */}
+          <div className="hidden md:block">
+            <div className="grid-12 gutter items-center">
+            <div className="md:col-span-2 flex items-center">
+              <Link href="/" aria-label="ACES home" className="flex items-center">
               <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
-            </Link>
-      <nav className="hidden md:flex items-center gap-4 justify-self-center" aria-label="Primary"
+              </Link>
+            </div>
+            <nav className="hidden md:flex items-center gap-4 md:col-span-8 justify-self-start" aria-label="Primary"
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}>
-              <div
-                ref={containerRef}
-                className="relative flex items-center gap-2 py-1"
+      <div
+    className="relative flex items-center gap-2 py-1"
+        role="menubar"
+        aria-label="Main menu"
+                aria-orientation="horizontal"
+                tabIndex={0}
+        onKeyDown={onMenubarKeyDown}
               >
-            {/* Sliding hover background pill */}
-            <div
-              ref={hoverRef}
-              aria-hidden
-              className="absolute top-1/2 left-0 -translate-y-1/2 h-[34px] rounded-full bg-white/10 supports-[backdrop-filter]:backdrop-blur-sm"
-              style={{ width: 0, transform: 'translate(0px, -50%)', transition: 'transform 700ms var(--ease-premium), width 700ms var(--ease-premium), opacity 420ms var(--ease-premium)', opacity: 0 }}
-            />
               {items.map((item) => {
               const active = pathname?.startsWith(item.href);
               return (
@@ -267,13 +263,15 @@ export function Nav() {
                     <Link
                       href={item.href}
                       ref={(el) => { linkRefs.current[item.href] = el; }}
-                      onMouseEnter={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
-                      onFocus={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
-                      className={clsx('group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors',
+                      onMouseEnter={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
+                      onFocus={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
+                      className={clsx('group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors link-underline',
                         active ? 'text-white' : 'text-white/80 hover:text-white')}
                       aria-current={active ? 'page' : undefined}
                       aria-haspopup={item.children ? 'menu' : undefined}
                       aria-expanded={item.children ? (openMenu === item.id) : undefined}
+                      role="menuitem"
+                      id={`menuitem-${item.id}`}
                     >
                       {item.label}
                       {item.children ? <span className="hidden ml-1 pointer-events-none show-on-pointer-fine">+</span> : null}
@@ -283,8 +281,16 @@ export function Nav() {
             })}
               </div>
             </nav>
-            <div className="hidden md:flex justify-self-end">
-              <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-all duration-700 px-4 py-2 uc tracking-[0.08em] hover:rounded-xl">REQUEST A QUOTE</Link>
+              <div className="hidden md:flex md:col-span-2 justify-self-end">
+                <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-4">
+                  <span aria-hidden="true" className="reveal-line h top" />
+                  <span aria-hidden="true" className="reveal-line h bottom" />
+                  <span aria-hidden="true" className="reveal-line v left" />
+                  <span aria-hidden="true" className="reveal-line v right" />
+                  <span className="sr-only">Request a Quote</span>
+                  <span aria-hidden="true">REQUEST A QUOTE</span>
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -309,7 +315,7 @@ export function Nav() {
   aria-modal="true"
         aria-labelledby={`${menuId}-title`}
         className={clsx(
-          'md:hidden fixed inset-0 z-overlay m-0 p-0 surface surface-opaque surface--sm border-t border-white/12',
+            'md:hidden fixed inset-0 z-overlay m-0 p-0 surface surface-opaque surface--sm surface-strong elevate border-t border-white/12',
           'transition-opacity duration-500 ease-[var(--ease-premium)]',
           open ? 'opacity-100' : 'opacity-0'
         )}
@@ -368,29 +374,43 @@ export function Nav() {
                 </Link>
               );
             })}
-            <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-colors duration-700 px-4 py-2 uc tracking-[0.08em]">REQUEST A QUOTE</Link>
+            <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-4">
+              <span aria-hidden="true" className="reveal-line h top" />
+              <span aria-hidden="true" className="reveal-line h bottom" />
+              <span aria-hidden="true" className="reveal-line v left" />
+              <span aria-hidden="true" className="reveal-line v right" />
+              <span className="sr-only">Request a Quote</span>
+              <span aria-hidden="true">REQUEST A QUOTE</span>
+            </Link>
           </div>
         </div>
       </dialog>
       {/* Dropdown panel (desktop) */}
-      {openMenu && (
+    {openMenu && (
         <div
           role="menu"
           tabIndex={0}
-          aria-label="Submenu"
+      aria-label="Submenu"
+      aria-labelledby={`menuitem-${openMenu}`}
           className={clsx(
-            'hidden md:block absolute left-0 right-0 top-full z-header surface surface-90 surface--md elevate border-t border-white/12',
+            'hidden md:block absolute left-0 right-0 top-full z-header surface surface-90 surface--md surface-strong elevate radius-lg border-t border-white/12',
             'transition-[opacity,transform] duration-700 ease-[var(--ease-premium)] motion-reduce:transition-none',
             panelShow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
           )}
           onMouseEnter={cancelClose}
           onMouseLeave={scheduleClose}
-          onKeyDown={(e) => { if (e.key === 'Escape') setOpenMenu(null); }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setOpenMenu(null);
+              return;
+            }
+            onSubmenuKeyDown(e);
+          }}
         >
           <div className="grid-shell">
-            <div className="container-row grid-12 py-6">
+            <div className="container-wide grid-12 gutter py-6">
               {activeParent && (
-                <div key={activeParent.id} className="col-span-12 md:col-span-8">
+                <div key={activeParent.id} className="md:col-span-8">
                   <div className="text-white/60 uc tracking-[0.08em] text-xs">{activeParent.label}</div>
                   <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {(activeParent.children ?? []).map((c) => (
