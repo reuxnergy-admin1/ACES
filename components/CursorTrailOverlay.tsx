@@ -82,7 +82,7 @@ export default function CursorTrailOverlay() {
       pointsRef.current = wipeHide ? [] : pointsRef.current.filter((p) => now - p.t <= maxTrailMs);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const invertOn = document.documentElement.classList.contains('cursor-invert-on');
+      const invertOn = document.documentElement.classList.contains('cursor-invert-on');
       if (!wipeHide && visible && lastRef.current) {
         // Trail: draw tiny faded segments from oldest to newest (extremely short)
         const pts = pointsRef.current;
@@ -90,7 +90,7 @@ export default function CursorTrailOverlay() {
           const p0 = pts[i - 1];
           const p1 = pts[i];
           const age = (now - p1.t) / maxTrailMs; // 0..1
-          const alpha = Math.max(0, 1 - age) * (invertOn ? 0.28 : 0.35); // slightly dim when invert is active
+          const alpha = Math.max(0, 1 - age) * 0.35; // very subtle
           ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
           ctx.lineWidth = 1.0; // slightly wider to be closer to head size
           // Align line segments to device pixels to reduce blur
@@ -104,7 +104,17 @@ export default function CursorTrailOverlay() {
           ctx.stroke();
         }
 
-  // Do not draw a filled head; DOM-based cursor dot handles the head (ring/core) to avoid double display
+        // Head: draw only when not in invert-on state to avoid conflict
+        if (!invertOn) {
+          const { x, y } = lastRef.current;
+          const r = 5.0;
+          ctx.fillStyle = 'rgba(255,255,255,0.94)';
+          const ax = Math.round(x * dpr) / dpr;
+          const ay = Math.round(y * dpr) / dpr;
+          ctx.beginPath();
+          ctx.arc(ax, ay, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       // Pause rAF if we have nothing to render to save CPU and match display cadence

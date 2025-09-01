@@ -1,4 +1,6 @@
 name: ci
+permissions:
+  contents: read
 on:
   pull_request:
     branches: [ main ]
@@ -12,7 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
+          cache: pnpm
       - name: Install pnpm
         run: npm install -g pnpm@10
       - name: Verify pnpm

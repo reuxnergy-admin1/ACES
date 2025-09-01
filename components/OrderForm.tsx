@@ -16,13 +16,18 @@ export function OrderForm({ products }: Readonly<{ products: readonly Product[] 
       {/* Hidden input ensures form compatibility if needed */}
       <Listbox name="product" options={opts} value={selected} onChange={setSelected} />
       <button
-        className="button-solid w-full arrow-shift button--md"
+        className="button-primary w-full h-11 px-5"
         type="button"
         onClick={() => {
           show('Ordering flow coming soon. We will contact you shortly.', { variant: 'success' });
         }}
       >
-        <span className="btn-tail"><span>Proceed</span> <span className="arrow" aria-hidden>→</span></span>
+        <span aria-hidden="true" className="reveal-line h top" />
+        <span aria-hidden="true" className="reveal-line h bottom" />
+        <span aria-hidden="true" className="reveal-line v left" />
+        <span aria-hidden="true" className="reveal-line v right" />
+        <span className="sr-only">Proceed</span>
+        <span aria-hidden>Proceed</span>
       </button>
     </form>
   );

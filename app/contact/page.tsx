@@ -1,7 +1,14 @@
 import ContainerRow from '@/components/layout/ContainerRow';
 import { Grid12, Span } from '@/components/layout/Grid12';
+import { useId } from 'react';
 
 export default function Page(){
+  const uid = useId();
+  const idName = `${uid}-name`;
+  const idCompany = `${uid}-company`;
+  const idEmail = `${uid}-email`;
+  const idPhone = `${uid}-phone`;
+  const idDetails = `${uid}-details`;
   return (<section className="grid-shell section-band pt-28">
     <ContainerRow>
       <Grid12 data-reveal-blur-stagger>
@@ -12,26 +19,35 @@ export default function Page(){
       <form method="post" action="mailto:info@acesaerodynamics.com" className="w-full" noValidate>
       <Grid12 data-reveal-blur-stagger>
         <Span cols={6}>
-          <label htmlFor="contact-name" className="sr-only">Full name</label>
-          <input id="contact-name" name="name" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Full name"/>
+          <label htmlFor={idName} className="sr-only">Full name</label>
+          <input id={idName} name="name" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Full name"/>
         </Span>
         <Span cols={6}>
-          <label htmlFor="contact-company" className="sr-only">Company</label>
-          <input id="contact-company" name="company" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Company"/>
+          <label htmlFor={idCompany} className="sr-only">Company</label>
+          <input id={idCompany} name="company" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Company"/>
         </Span>
         <Span cols={6}>
-          <label htmlFor="contact-email" className="sr-only">Email</label>
-          <input id="contact-email" name="email" required type="email" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Email"/>
+          <label htmlFor={idEmail} className="sr-only">Email</label>
+          <input id={idEmail} name="email" required type="email" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Email"/>
         </Span>
         <Span cols={6}>
-          <label htmlFor="contact-phone" className="sr-only">Phone</label>
-          <input id="contact-phone" name="phone" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Phone"/>
+          <label htmlFor={idPhone} className="sr-only">Phone</label>
+          <input id={idPhone} name="phone" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Phone"/>
         </Span>
         <Span cols={12}>
-          <label htmlFor="contact-details" className="sr-only">Project details</label>
-          <textarea id="contact-details" name="details" className="w-full bg-black border border-white/20 rounded px-4 py-3" rows={6} placeholder="Project details"></textarea>
+          <label htmlFor={idDetails} className="sr-only">Project details</label>
+          <textarea id={idDetails} name="details" className="w-full bg-black border border-white/20 rounded px-4 py-3" rows={6} placeholder="Project details"></textarea>
         </Span>
-        <Span cols={8}><button className="button-solid w-full md:w-auto arrow-shift button--md" type="submit"><span className="btn-tail"><span>Send</span> <span className="arrow" aria-hidden>→</span></span></button></Span>
+        <Span cols={8}>
+          <button className="button-primary w-full md:w-auto h-11 px-5" type="submit">
+            <span aria-hidden="true" className="reveal-line h top" />
+            <span aria-hidden="true" className="reveal-line h bottom" />
+            <span aria-hidden="true" className="reveal-line v left" />
+            <span aria-hidden="true" className="reveal-line v right" />
+            <span className="sr-only">Send</span>
+            <span aria-hidden>Send</span>
+          </button>
+        </Span>
       </Grid12>
       </form>
     </ContainerRow>

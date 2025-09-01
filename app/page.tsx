@@ -6,42 +6,36 @@ import ContainerRow from '@/components/layout/ContainerRow';
 import ContainerWide from '@/components/layout/ContainerWide';
 import { Grid12, Span } from '@/components/layout/Grid12';
 import Prose from '@/components/layout/Prose';
-import RevealGroup from '@/components/reveal/RevealGroup';
-import Reveal from '@/components/reveal/Reveal';
-import PinReveal from '@/components/sections/PinReveal';
 
 export default function Page() {
   return (
   <section className="grid-shell section-band pt-28">
   {/* Use wide container so hero aligns with product cards below */}
-      <ContainerWide>
-  <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
+  <ContainerWide>
+        <Grid12 className="items-start md:items-end">
           <Span cols={8}>
-            <RevealGroup stagger={0.08}>
-              <Reveal dir="up">
-                <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-full">
-                  Precision transparencies.<br/>
-                  <span className="text-white/70">Aerospace & motorsport.</span>
-                </h1>
-              </Reveal>
-              <Reveal dir="up" delay={0.02}>
-                <p className="mt-6 max-w-2xl text-white/70">
-                  SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and
-                  non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
-                </p>
-              </Reveal>
-              <Reveal dir="up" delay={0.04}>
-                <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-3 items-start sm:items-center">
-                  <Link href="/contact/" className="sheen button-solid arrow-shift button--md w-full sm:w-auto"><span className="btn-tail"><span>Request a Quote</span> <span className="arrow" aria-hidden>→</span></span></Link>
-                  <Link href="/contact/?type=specialist" className="sheen button-solid arrow-shift button--md w-full sm:w-auto"><span className="btn-tail"><span>Speak to a Specialist</span> <span className="arrow" aria-hidden>→</span></span></Link>
-                </div>
-              </Reveal>
-            </RevealGroup>
+            <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-full">
+              Aviation grade cast acrylic for clarity under pressure.
+            </h1>
+            <p className="mt-6 max-w-2xl text-white/70">
+              SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and
+              non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-3 items-center">
+              <Link href="/contact/" className="button-primary h-11 px-5">
+                <span aria-hidden="true" className="reveal-line h top" />
+                <span aria-hidden="true" className="reveal-line h bottom" />
+                <span aria-hidden="true" className="reveal-line v left" />
+                <span aria-hidden="true" className="reveal-line v right" />
+                <span className="sr-only">Request a Quote</span>
+                <span aria-hidden="true">Request a Quote</span>
+              </Link>
+              {/* Match visual height to primary button for cleaner baseline alignment */}
+              <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">Speak to a Specialist</Link>
+            </div>
           </Span>
           <Span cols={4}>
-            <Reveal dir="up" delay={0.06}>
-              <div className="text-sm">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
-            </Reveal>
+            <div className="text-sm">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
           </Span>
         </Grid12>
       </ContainerWide>
@@ -49,7 +43,7 @@ export default function Page() {
   {/* Client carousel directly after hero */}
   <ClientCarousel className="mt-10 md:mt-16" reveal />
 
-  <ContainerRow className="section-band pt-0" data-reveal-blur-stagger>
+  <ContainerRow className="section-band pt-0" data-reveal-stagger>
         <Grid12>
         {[
           {title:'Aerospace Transparencies', href:'/products/aircraft/'},
@@ -57,7 +51,7 @@ export default function Page() {
           {title:'Motorsport Components', href:'/products/motorsport/'},
         ].map((c) => (
           <SheenCard key={c.href} className="md:col-span-4" data-reveal>
-            <Link href={c.href} className="sheen group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
+            <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
               <div className="text-xl">{c.title}</div>
               <div className="mt-2 text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
               <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
@@ -129,10 +123,17 @@ export default function Page() {
         <Span cols={4}>
           <div className="surface surface-90 surface-strong radius-md p-5">
             <div className="text-white/80">Speak to our engineers about your application.</div>
-              <div className="mt-4 flex flex-col sm:flex-row gap-3">
-                <Link href="/contact/" className="sheen button-solid arrow-shift button--md w-full sm:w-auto"><span className="btn-tail"><span>Request a Quote</span> <span className="arrow" aria-hidden>→</span></span></Link>
-                <Link href="/contact/?type=specialist" className="sheen button-solid arrow-shift button--md w-full sm:w-auto"><span className="btn-tail"><span>Specialist Call</span> <span className="arrow" aria-hidden>→</span></span></Link>
-              </div>
+            <div className="mt-4 flex gap-3">
+              <Link href="/contact/" className="button-primary h-11 px-5">
+                <span aria-hidden="true" className="reveal-line h top" />
+                <span aria-hidden="true" className="reveal-line h bottom" />
+                <span aria-hidden="true" className="reveal-line v left" />
+                <span aria-hidden="true" className="reveal-line v right" />
+                <span className="sr-only">Request a Quote</span>
+                <span aria-hidden="true">Request a Quote</span>
+              </Link>
+              <Link href="/contact/?type=specialist" className="wipe-link h-11 inline-flex items-center uc px-4">Specialist Call</Link>
+            </div>
           </div>
         </Span>
       </Grid12>
@@ -162,25 +163,6 @@ export default function Page() {
     </ContainerRow>
   </SectionBand>
 
-  {/* Narrative pinned section (Chronicle-style) */}
-  <SectionBand>
-    <PinReveal>
-      <div className="grid-shell py-16">
-        <div className="container-row">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 md:col-span-6">
-              <h2 data-step="1" className="text-4xl">Remarkable storytelling</h2>
-              <p data-step="2" className="mt-4 max-w-prose text-white/70">Blocks with motion out of the box.</p>
-            </div>
-            <div data-step="3" className="col-span-12 md:col-span-6">
-              <div className="aspect-[16/9] rounded-2xl bg-neutral-900" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </PinReveal>
-  </SectionBand>
-
   {/* Insights */}
   <SectionBand>
     <ContainerRow>
@@ -192,7 +174,7 @@ export default function Page() {
           {title:'QA metrics that matter (VLT, haze)', href:'/blog/'},
         ].map((p) => (
           <SheenCard key={p.title} className="md:col-span-4" data-reveal>
-            <Link href={p.href} className="sheen group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
+            <Link href={p.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
               <div className="text-xl">{p.title}</div>
               <div className="mt-2 text-white/60">Short engineering notes from our team.</div>
               <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Read →</div>

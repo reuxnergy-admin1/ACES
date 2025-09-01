@@ -18,6 +18,8 @@ export function Nav() {
   const lastY = useRef(0);
   const ticking = useRef(false);
   const scrollYRef = useRef(0);
+  const headerRef = useRef<HTMLElement | null>(null);
+  const sheenRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-close mobile menu on route change
   useEffect(() => {
@@ -123,28 +125,6 @@ export function Nav() {
   }, [open]);
 
   const items: NavItem[] = useMemo(() => ([
-    {
-      id: 'about',
-      href: '/about/history/',
-      label: 'ABOUT',
-      children: [
-        { href: '/about/history/', label: 'History' },
-        { href: '/about/industries/', label: 'Industries' },
-        { href: '/about/philosophy/', label: 'Philosophy' },
-        { href: '/about/quality/', label: 'Quality' },
-      ],
-    },
-    {
-      id: 'products',
-      href: '/products/',
-      label: 'PRODUCTS',
-      children: [
-        { href: '/products/aircraft/', label: 'Aircraft Transparencies' },
-        { href: '/products/helicopters/', label: 'Helicopter Transparencies' },
-        { href: '/products/motorsport/', label: 'Motorsport Components' },
-      ],
-    },
-    { id: 'services', href: '/services/', label: 'SERVICES' },
     { id: 'blog', href: '/blog/', label: 'BLOG' },
     { id: 'signin', href: '/signin/', label: 'SIGN IN' },
     { id: 'order', href: '/order/', label: 'ORDER' },
@@ -184,67 +164,29 @@ export function Nav() {
     setMobileOpen(prev => ({ ...prev, [id]: !prev[id] }));
   }, []);
 
-  // Desktop proximity highlight refs/state
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  // Desktop link refs for roving focus
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const activeParent = useMemo(() => {
     const found = items.find((i) => i.id === openMenu && Array.isArray(i.children) && i.children.length > 0);
     return found ?? null;
   }, [items, openMenu]);
 
-  const updateProximityFromPoint = useCallback((x: number) => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const localX = x - rect.left;
-    // Write CSS var for highlight position and default opacity
-    el.style.setProperty('--nav-x', `${localX - 90}px`);
-    el.style.setProperty('--nav-opacity', '1');
-    // Compute per-link proximity for subtle scale/opacity
-  const links = Array.from(el.querySelectorAll('a[href]')).filter((n): n is HTMLElement => n instanceof HTMLElement);
-    // Track closest link for underline slider
-    let closest: { a: HTMLElement; dist: number } | null = null;
-    for (const a of links) {
-      const r = a.getBoundingClientRect();
-      const center = r.left + r.width / 2 - rect.left;
-      const dist = Math.abs(localX - center);
-      const prox = Math.max(0, 1 - dist / 220); // radius ~220px
-      a.style.setProperty('--prox-opacity', String(0.6 + prox * 0.4));
-      a.style.setProperty('--prox-scale', String(1 + prox * 0.04));
-      if (!closest || dist < closest.dist) closest = { a, dist };
-    }
-    // Position underline slider under closest link
-    try {
-  const target = closest?.a;
-      const ul = el.querySelector<HTMLElement>('.nav-underline');
-      if (target && ul) {
-        const tr = target.getBoundingClientRect();
-        const x = tr.left - rect.left;
-        el.style.setProperty('--ul-x', `${x}px`);
-        el.style.setProperty('--ul-w', `${tr.width}px`);
-        el.style.setProperty('--ul-o', '1');
-      }
-    } catch { /* noop */ }
+  // Keyboard navigation inside submenu panel
+  const onSubmenuKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    const container = e.currentTarget;
+    const links = Array.from(container.querySelectorAll<HTMLAnchorElement>('a[href]'));
+    if (links.length === 0) return;
+  const idx = links.indexOf(document.activeElement as HTMLAnchorElement);
+    let next = idx;
+    if (e.key === 'ArrowDown') next = (idx + 1 + links.length) % links.length;
+    if (e.key === 'ArrowUp') next = (idx - 1 + links.length) % links.length;
+    if (e.key === 'Home') next = 0;
+    if (e.key === 'End') next = links.length - 1;
+    links[next]?.focus();
   }, []);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const onMove = (e: MouseEvent) => updateProximityFromPoint(e.clientX);
-    const onLeave = () => {
-      el.style.setProperty('--nav-opacity', '0');
-  const links = Array.from(el.querySelectorAll('a[href]')).filter((n): n is HTMLElement => n instanceof HTMLElement);
-      for (const a of links) { a.style.removeProperty('--prox-opacity'); a.style.removeProperty('--prox-scale'); }
-      el.style.setProperty('--ul-o', '0');
-    };
-    el.addEventListener('mousemove', onMove);
-    el.addEventListener('mouseleave', onLeave);
-    window.addEventListener('resize', onLeave);
-    return () => { el.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave); window.removeEventListener('resize', onLeave); };
-  }, [updateProximityFromPoint]);
-  // No-op: pill removed
-
-  // Keyboard navigation inside submenu panel handled inline in JSX below
 
   // Roving focus across top-level menu items on desktop (ArrowLeft/Right, Home/End)
   const onMenubarKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -254,7 +196,7 @@ export function Nav() {
     const order = items.map(i => i.href);
     const anchors = order.map(h => linkRefs.current[h]).filter(Boolean) as HTMLAnchorElement[];
     const active = document.activeElement as HTMLElement | null;
-    const idx = active ? anchors.findIndex(a => a === active) : -1;
+  const idx = active ? anchors.indexOf(active as HTMLAnchorElement) : -1;
     let nextIdx = idx;
     if (e.key === 'ArrowRight') nextIdx = (idx + 1 + anchors.length) % anchors.length;
     if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + anchors.length) % anchors.length;
@@ -262,8 +204,28 @@ export function Nav() {
     if (e.key === 'End') nextIdx = anchors.length - 1;
     anchors[nextIdx]?.focus();
   }, [items]);
+  // Feature flag check: only enable sheen interaction when html has .feature-chronicle-ui
+  const chronicleOn = typeof document !== 'undefined' ? document.documentElement.classList.contains('feature-chronicle-ui') : false;
+
+  useEffect(() => {
+    if (!chronicleOn) return;
+    const header = headerRef.current;
+    const sheen = sheenRef.current;
+    if (!header || !sheen) return;
+    const onMove = (e: PointerEvent) => {
+      const r = header.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / Math.max(1, r.width)) * 100;
+      const y = ((e.clientY - r.top) / Math.max(1, r.height)) * 100;
+      sheen.style.setProperty('--x', `${x}%`);
+      sheen.style.setProperty('--y', `${y}%`);
+    };
+    header.addEventListener('pointermove', onMove, { passive: true });
+    return () => header.removeEventListener('pointermove', onMove);
+  }, [chronicleOn]);
+
   return (
   <header
+      ref={headerRef}
       className={clsx(
   'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm header-interactive',
         scrolled ? 'bg-black/60' : 'bg-transparent',
@@ -273,6 +235,8 @@ export function Nav() {
   <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
   <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
         <div className="container-wide">
+          {/* Chronicle-style nav sheen overlay (feature flagged) */}
+          <div ref={sheenRef} className="nav-sheen" aria-hidden="true" />
           {/* Desktop layout: wrapper hidden on mobile; inner uses our 12-col grid. Avoid conflict between hidden and grid-12. */}
           <div className="hidden md:block">
             <div className="grid-12 gutter items-center">
@@ -281,35 +245,28 @@ export function Nav() {
               <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
               </Link>
             </div>
-      <nav className="hidden md:flex items-center gap-4 md:col-span-8 justify-self-start" aria-label="Primary"
+            <nav className="hidden md:flex items-center gap-4 md:col-span-8 justify-self-start" aria-label="Primary"
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}>
       <div
-                ref={containerRef}
-        className="nav-prox nav-prox--header relative flex items-center gap-2 py-1 overflow-hidden"
+    className="relative flex items-center gap-2 py-1"
         role="menubar"
         aria-label="Main menu"
                 aria-orientation="horizontal"
                 tabIndex={0}
         onKeyDown={onMenubarKeyDown}
               >
-    {/* Cursor proximity highlight */}
-    <div aria-hidden="true" className="nav-prox__highlight" />
-  <div aria-hidden="true" className="nav-underline" />
               {items.map((item) => {
               const active = pathname?.startsWith(item.href);
               return (
                   <div key={item.id} className="relative">
-        <Link
+                    <Link
                       href={item.href}
                       ref={(el) => { linkRefs.current[item.href] = el; }}
-                      // Let global PageTransition handle navigation; keep href for a11y and middle-click
-                      onClick={undefined}
-            onMouseEnter={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
-            onFocus={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
-      className={clsx('sheen group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors link-underline',
-      active ? 'text-white is-active' : 'text-white/80 hover:text-white')}
-            data-prox
+                      onMouseEnter={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
+                      onFocus={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
+                      className={clsx('group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors link-underline',
+                        active ? 'text-white' : 'text-white/80 hover:text-white')}
                       aria-current={active ? 'page' : undefined}
                       aria-haspopup={item.children ? 'menu' : undefined}
                       aria-expanded={item.children ? (openMenu === item.id) : undefined}
@@ -317,6 +274,7 @@ export function Nav() {
                       id={`menuitem-${item.id}`}
                     >
                       {item.label}
+                      {item.children ? <span className="hidden ml-1 pointer-events-none show-on-pointer-fine">+</span> : null}
                     </Link>
                   </div>
               );
@@ -324,7 +282,14 @@ export function Nav() {
               </div>
             </nav>
               <div className="hidden md:flex md:col-span-2 justify-self-end">
-                <Link href="/contact/" className="sheen button-solid button--md arrow-shift"><span className="btn-tail"><span>REQUEST A QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
+                <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-4">
+                  <span aria-hidden="true" className="reveal-line h top" />
+                  <span aria-hidden="true" className="reveal-line h bottom" />
+                  <span aria-hidden="true" className="reveal-line v left" />
+                  <span aria-hidden="true" className="reveal-line v right" />
+                  <span className="sr-only">Request a Quote</span>
+                  <span aria-hidden="true">REQUEST A QUOTE</span>
+                </Link>
               </div>
             </div>
           </div>
@@ -404,12 +369,19 @@ export function Nav() {
                 );
               }
               return (
-                <Link key={item.id} href={item.href} className={clsx('sheen link-underline block px-3 py-2 text-lg tracking-[0.08em] text-white/80 hover:text-white uc', active && 'is-active text-white')}>
+                <Link key={item.id} href={item.href} className={clsx('link-underline block px-3 py-2 text-lg tracking-[0.08em] text-white/80 hover:text-white uc', active && 'is-active text-white')}>
                   {item.label}
                 </Link>
               );
             })}
-            <Link href="/contact/" className="sheen button-solid button--md arrow-shift"><span className="btn-tail"><span>REQUEST A QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
+            <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-4">
+              <span aria-hidden="true" className="reveal-line h top" />
+              <span aria-hidden="true" className="reveal-line h bottom" />
+              <span aria-hidden="true" className="reveal-line v left" />
+              <span aria-hidden="true" className="reveal-line v right" />
+              <span className="sr-only">Request a Quote</span>
+              <span aria-hidden="true">REQUEST A QUOTE</span>
+            </Link>
           </div>
         </div>
       </dialog>
@@ -432,19 +404,7 @@ export function Nav() {
               setOpenMenu(null);
               return;
             }
-            const keys = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
-            if (!keys.includes(e.key)) return;
-            e.preventDefault();
-            const container = e.currentTarget as HTMLElement;
-            const links = Array.from(container.querySelectorAll('a[href]')) as unknown as HTMLElement[];
-            if (links.length === 0) return;
-            const idx = links.findIndex((a) => a === document.activeElement);
-            let next = idx;
-            if (e.key === 'ArrowDown') next = (idx + 1 + links.length) % links.length;
-            if (e.key === 'ArrowUp') next = (idx - 1 + links.length) % links.length;
-            if (e.key === 'Home') next = 0;
-            if (e.key === 'End') next = links.length - 1;
-            links[next]?.focus();
+            onSubmenuKeyDown(e);
           }}
         >
           <div className="grid-shell">

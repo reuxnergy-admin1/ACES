@@ -6,23 +6,35 @@ function genNonce(bytes = 16) {
       const arr = new Uint8Array(bytes);
       crypto.getRandomValues(arr);
       let hex = '';
-      for (let i = 0; i < arr.length; i++) hex += arr[i].toString(16).padStart(2, '0');
+      for (const v of arr) {
+        hex += v.toString(16).padStart(2, '0');
+      }
       return hex;
     }
   } catch { /* fall through */ }
   // Dev fallback (non-cryptographic) to avoid 500s if web crypto is unavailable in local runtime
   if (process.env.NODE_ENV !== 'production') {
     let hex = '';
-    for (let i = 0; i < bytes; i++) hex += Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+    for (let i = 0; i < bytes; i++) {
+      hex += Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+    }
     return hex;
   }
   throw new Error('Secure random unavailable');
 }
 
-export function middleware(_: NextRequest) {
+export function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const nonce = genNonce(16);
   const isProd = process.env.NODE_ENV === 'production';
+
+  // Feature flag cookie for Chronicle UI controlled via ?ui=chronicle|default
+  const ui = req.nextUrl.searchParams.get('ui');
+  if (ui === 'chronicle') {
+    res.cookies.set('feature-chronicle-ui', '1', { path: '/', httpOnly: false, sameSite: 'lax' });
+  } else if (ui === 'default') {
+    res.cookies.delete('feature-chronicle-ui');
+  }
 
   if (!isProd) {
     // In development, skip CSP to avoid interfering with Next.js dev server, HMR and source maps.

@@ -46,7 +46,7 @@ export default function ToastProvider({ children }: Readonly<{ children: React.R
   }, [dismiss]);
 
   // Cleanup timers on unmount
-  useEffect(() => () => { timers.current.forEach((t) => window.clearTimeout(t)); timers.current.clear(); }, []);
+  useEffect(() => () => { timers.current.forEach((t) => { window.clearTimeout(t); }); timers.current.clear(); }, []);
 
   const api = useMemo<ToastAPI>(() => ({ show, dismiss }), [show, dismiss]);
 
@@ -54,19 +54,18 @@ export default function ToastProvider({ children }: Readonly<{ children: React.R
     <ToastCtx.Provider value={api}>
       {children}
       {/* Toast region */}
-      <div
+      <output
         className="toast-host fixed bottom-4 left-1/2 -translate-x-1/2 z-overlay"
-        role="status"
         aria-live="polite"
         aria-atomic="false"
       >
         {toasts.map((t) => (
-          <div key={t.id} className={`toast ${t.variant ? `toast--${t.variant}` : ''}`}>
+          <div key={t.id} className={"toast" + (t.variant ? ` toast--${t.variant}` : "")}>
             <div className="toast__body">{t.message}</div>
-            <button className="toast__close" aria-label="Dismiss" onClick={() => dismiss(t.id)}>×</button>
+    <button type="button" className="toast__close" aria-label="Dismiss" onClick={() => dismiss(t.id)}>×</button>
           </div>
         ))}
-      </div>
+  </output>
     </ToastCtx.Provider>
   );
 }

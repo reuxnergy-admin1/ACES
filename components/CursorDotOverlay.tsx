@@ -24,7 +24,7 @@ export default function CursorDotOverlay() {
     el.appendChild(core);
     document.body.appendChild(el);
 
-  const SELECTOR = 'a[href], button, [role="button"], .button-solid, .button-primary, .button-ghost, .sheen-card, .chip, [data-interactive], input, textarea, select, summary, .link-underline';
+  const SELECTOR = 'a[href], button, [role="button"], .button-primary, .button-solid, .button-ghost, .sheen-card, .chip, [data-interactive], input, textarea, select, summary, .link-underline';
 
     let lastX = 0, lastY = 0;
     const move = (e: PointerEvent) => {

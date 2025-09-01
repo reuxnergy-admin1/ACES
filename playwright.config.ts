@@ -12,10 +12,10 @@ export default defineConfig({
   viewport: { width: 1280, height: 900 },
   },
   webServer: {
-  command: 'npm run dev -- -p 3000',
-  url: 'http://localhost:3000',
-  reuseExistingServer: true,
-  timeout: 180_000,
+    command: 'pnpm dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: true,
+    timeout: 120_000,
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'], colorScheme: 'dark' } },
