@@ -9,16 +9,32 @@ import ContoursSVG from '@/components/ContoursSVG';
 import BackgroundPortal from '@/components/BackgroundPortal';
 
 // We'll decide at runtime whether to load WebGL chunk; start with null, then dynamic load when eligible
-const DynamicIsolines = dynamic(() => import('@/components/ContoursIsolines'), {
-  ssr: false,
-  loading: () => null,
-});
+const DynamicIsolines = dynamic(() => 
+  import('@/components/ContoursIsolines')
+    .then(mod => {
+      // Ensure we have a valid default export
+      if (!mod.default || typeof mod.default !== 'function') {
+        throw new Error('ContoursIsolines component not properly exported');
+      }
+      return { default: mod.default };
+    })
+    .catch(error => {
+      console.error('Failed to load ContoursIsolines:', error);
+      // Return a fallback component that just shows SVG
+      return { default: () => null };
+    }), 
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 
 export default function ResponsiveContours() {
   const [mode, setMode] = useState<'svg' | 'webgl-low' | 'webgl-high' | null>(null);
   const [allowGL, setAllowGL] = useState(false);
   const [canUseGL, setCanUseGL] = useState(false);
   const [debugOn, setDebugOn] = useState(false);
+  const [glError, setGlError] = useState(false);
   const idleHandle = useRef<number | null>(null);
 
   // Decide rendering mode quickly on mount, allow hash overrides for debugging
@@ -91,8 +107,8 @@ export default function ResponsiveContours() {
     } catch { setDebugOn(false); }
   }, []);
 
-  // Immediate SVG background until GL is allowed and ready
-  if (!allowGL || mode === 'svg' || mode === null) {
+  // Immediate SVG background until GL is allowed and ready, or if there's a GL error
+  if (!allowGL || mode === 'svg' || mode === null || glError) {
     return (
       <BackgroundPortal>
         <ContoursSVG />
@@ -109,36 +125,58 @@ export default function ResponsiveContours() {
     // Disable shader dot by default; only enable when debug UI is on
     const dotR = 0.0; // keep shader dot disabled to avoid double-cursor
     const dotF = 0.0;
-    return (
-      <BackgroundPortal>
-        <DynamicIsolines
-  density={debugOn ? 24 : 22}
-  lineWidth={debugOn ? 0.014 : 0.012}
-  intensity={debugOn ? 0.9 : 0.7}
-  sigma={debugOn ? 0.26 : 0.30}
-  lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
-    dotRadiusUV={dotR}
-    dotFeatherUV={dotF}
-        showDotContinuously={false}
-        />
-      </BackgroundPortal>
-    );
+    
+    try {
+      return (
+        <BackgroundPortal>
+          <DynamicIsolines
+    density={debugOn ? 24 : 22}
+    lineWidth={debugOn ? 0.014 : 0.012}
+    intensity={debugOn ? 0.9 : 0.7}
+    sigma={debugOn ? 0.26 : 0.30}
+    lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
+      dotRadiusUV={dotR}
+      dotFeatherUV={dotF}
+          showDotContinuously={false}
+          />
+        </BackgroundPortal>
+      );
+    } catch (error) {
+      console.error('WebGL high mode failed, falling back to SVG:', error);
+      setGlError(true);
+      return (
+        <BackgroundPortal>
+          <ContoursSVG />
+        </BackgroundPortal>
+      );
+    }
   }
   // Disable shader dot by default in low mode as well
   const dotR = 0.0;
   const dotF = 0.0;
-  return (
-    <BackgroundPortal>
-      <DynamicIsolines
-  density={debugOn ? 22 : 20}
-  lineWidth={debugOn ? 0.015 : 0.013}
-  intensity={debugOn ? 0.8 : 0.6}
-  sigma={debugOn ? 0.28 : 0.30}
-  lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
-    dotRadiusUV={dotR}
-    dotFeatherUV={dotF}
-      showDotContinuously={false}
-      />
-    </BackgroundPortal>
-  );
+  
+  try {
+    return (
+      <BackgroundPortal>
+        <DynamicIsolines
+    density={debugOn ? 22 : 20}
+    lineWidth={debugOn ? 0.015 : 0.013}
+    intensity={debugOn ? 0.8 : 0.6}
+    sigma={debugOn ? 0.28 : 0.30}
+    lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
+      dotRadiusUV={dotR}
+      dotFeatherUV={dotF}
+        showDotContinuously={false}
+        />
+      </BackgroundPortal>
+    );
+  } catch (error) {
+    console.error('WebGL low mode failed, falling back to SVG:', error);
+    setGlError(true);
+    return (
+      <BackgroundPortal>
+        <ContoursSVG />
+      </BackgroundPortal>
+    );
+  }
 }
