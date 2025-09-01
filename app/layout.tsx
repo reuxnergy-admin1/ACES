@@ -3,10 +3,15 @@ import type { ReactNode } from 'react';
 import { Nav } from '@/components/Nav';
 import ResponsiveContours from '@/components/ResponsiveContours';
 import { Footer } from '@/components/Footer';
+import FooterUnmask from '@/components/FooterUnmask';
 import ContoursSVG from '@/components/ContoursSVG';
 import PageTransition from '@/components/PageTransition';
+import ScrollResetOnLoad from '@/components/ScrollResetOnLoad';
 import CursorTrailGate from '@/components/CursorTrailGate';
 import InViewReveals from '@/components/InViewReveals';
+import MotionProvider from '@/app/motion-provider';
+import ToastProvider from '@/components/ui/ToastProvider';
+import DebugRibbon from '@/components/DebugRibbon';
 
 export const metadata = {
   metadataBase: new URL('https://www.acesaerodynamics.com'),
@@ -25,7 +30,7 @@ export const metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   const mainId = 'main-content';
   return (
-    <html lang="en">
+  <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
@@ -41,17 +46,25 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
         <div className="relative z-header row-start-1 row-end-2">
           <Nav />
         </div>
-        <PageTransition>
-          <main id={mainId} data-app-content className="relative z-content fade-stagger row-start-2 row-end-3">
-            {children}
-          </main>
-        </PageTransition>
+        <MotionProvider>
+          <ToastProvider>
+            <PageTransition>
+              <main id={mainId} data-app-content className="relative z-content fade-stagger row-start-2 row-end-3">
+                <ScrollResetOnLoad />
+                {children}
+              </main>
+            </PageTransition>
+          </ToastProvider>
+        </MotionProvider>
         <InViewReveals />
   <div data-app-content className="relative z-content row-start-3 row-end-4">
-          <Footer />
+          <FooterUnmask>
+            <Footer />
+          </FooterUnmask>
         </div>
   {/* Crisp cursor with very short trail for fine pointers */}
   <CursorTrailGate />
+  <DebugRibbon />
       </body>
     </html>
   );

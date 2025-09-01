@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+/* Tailwind Typography plugin configured via tailwind.config.ts */
 /* Theme tokens (moved from @theme to :root to avoid unknown at-rule warnings) */
 :root {
   color-scheme: dark;
@@ -14,6 +14,9 @@
   --duration-fast: 180ms;
   --duration-normal: 420ms;
   --duration-slow: 900ms;
+  /* Motion tokens aligned with Framer Motion defaults (emphasis curve) */
+  --ease-motion: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-motion: 480ms; /* matches motionDur.lg (0.48s) */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -28,7 +31,24 @@
   --container-pad: clamp(1rem, 4vw, 2rem);
   /* Grid gutters tuned to Rise-like rhythm (approx 24 → 80px) */
   --grid-gutter: 1.5rem;    /* ~24px base */
+  /* Fluid type tokens (Utopia-inspired) */
+  --vw-min: 360; /* px */
+  --vw-max: 1440; /* px */
+  --step-0-min: 16;  --step-0-max: 18;   /* body */
+  --step-2-min: 24;  --step-2-max: 32;   /* h4 */
+  --step-3-min: 28;  --step-3-max: 40;   /* h3 */
+  --step-4-min: 36;  --step-4-max: 56;   /* h2 */
+  --step-5-min: 48;  --step-5-max: 80;   /* h1 */
+  --fluid: calc((100vw - var(--vw-min)*1px)/(var(--vw-max) - var(--vw-min)));
 }
+
+/*
+  Layout Contract (macro → micro)
+  - App shell: body uses CSS Grid rows [auto, 1fr, auto].
+  - Each major region (header/main/footer) sits inside wrappers that occupy those rows.
+  - Content blocks: grid-shell → container-row/container-wide → grid-12 + gutter.
+  - Spacing: prefer logical properties (padding-inline, margin-block) and stack utilities.
+*/
 
 /* Widen gutters and container padding progressively to reflect reference site */
 @media (min-width: 640px) {
@@ -103,9 +123,14 @@ body { font-family: articulat-cf, system-ui, -apple-system, Segoe UI, Helvetica 
 /* Always use default arrow cursor for interactive elements (no hand pointer) */
 :where(a, button, [role="button"], summary) { cursor: default; }
 /* During wipes, hide cursor everywhere */
-body.cursor-hidden, body.cursor-hidden * { cursor: none !important; }
+body.cursor-hidden, body.cursor-hidden * { cursor: none; }
 /* Separate class used only during page wipe so we don't fight CursorTrailGate */
-body.cursor-hide-transition, body.cursor-hide-transition * { cursor: none !important; }
+body.cursor-hide-transition, body.cursor-hide-transition * { cursor: none; }
+
+/* Custom cursor dot with inversion core (Chronicle-inspired but subtle) */
+.cursor-dot { width: 14px; height: 14px; margin-left: -7px; margin-top: -7px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.6); transition: opacity 120ms ease; will-change: transform; }
+.cursor-dot .cursor-core { width: 100%; height: 100%; border-radius: inherit; background: #fff; mix-blend-mode: difference; opacity: 0; transition: opacity 140ms ease; }
+.cursor-dot.is-invert .cursor-core { opacity: 0.9; }
 
 /* Uppercase utilities */
 .uc { text-transform: uppercase; }
@@ -182,6 +207,27 @@ a, button {
   }
 }
 
+/* Sheen (shine) sweep for interactive elements */
+@layer utilities {
+  .sheen { position: relative; overflow: hidden; isolation: isolate; }
+  .sheen::after {
+    content: "";
+    position: absolute; inset: -20%;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+    transform: translateX(-120%) rotate(0.001deg);
+    transition: transform 600ms cubic-bezier(.16,1,.3,1);
+    pointer-events: none;
+    mix-blend-mode: screen;
+    will-change: transform;
+  }
+  .sheen:hover::after,
+  .sheen:focus-visible::after { transform: translateX(120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheen::after { transition: none; transform: translateX(0); }
+}
+
 /* Cursor will be hidden globally via body.cursor-hidden; don't force-hide on all interactive elements */
 
 /* Accessible focus-visible ring */
@@ -201,7 +247,8 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
   align-items: center;
   justify-content: center;
   padding: 0.75rem 1.25rem;
-  border-radius: 9999px;
+  /* Rectangular geometry to match Chronicle style */
+  border-radius: 6px;
   border: 1px solid var(--surface-border);
   color: white;
   text-transform: uppercase;
@@ -214,11 +261,12 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
   color: black;
   background-color: white;
 }
-.button-primary:active { transform: scale(0.99); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); }
+.button-primary:active { box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); }
 .button-primary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
-/* View Transitions (guard for support) */
-/* View Transitions: keep disabled to avoid parser warnings until broader support */
+/* View Transitions (progressive enhancement): enable root name only to avoid lint on pseudo-elements */
+html { view-transition-name: root; }
+@keyframes vt-slide-in { from { transform: translateY(6px); opacity: .001 } to { transform:none; opacity:1 } }
 
 /* Contour backdrop: container that hosts layered SVGs for parallax */
 .contour-host {
@@ -452,9 +500,9 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 }
 
 /* In-view reveal (premium subtle motion) */
-[data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity var(--duration-slow) var(--easing-ui), transform var(--duration-slow) var(--easing-ui); }
+[data-reveal] { opacity: 0; transform: translateY(14px) translateZ(0); backface-visibility: hidden; will-change: opacity, transform; transition: opacity var(--duration-motion) var(--ease-motion), transform var(--duration-motion) var(--ease-motion); }
 [data-reveal].is-inview { opacity: 1; transform: none; }
-[data-reveal-stagger] > * { opacity: 0; transform: translateY(14px); transition: opacity var(--duration-slow) var(--easing-ui), transform var(--duration-slow) var(--easing-ui); }
+[data-reveal-stagger] > * { opacity: 0; transform: translateY(14px) translateZ(0); backface-visibility: hidden; will-change: opacity, transform; transition: opacity var(--duration-motion) var(--ease-motion), transform var(--duration-motion) var(--ease-motion); }
 [data-reveal-stagger].is-inview > * { opacity: 1; transform: none; }
 [data-reveal-stagger].is-inview > *:nth-child(1) { transition-delay: 80ms; }
 [data-reveal-stagger].is-inview > *:nth-child(2) { transition-delay: 200ms; }
@@ -462,8 +510,35 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 [data-reveal-stagger].is-inview > *:nth-child(4) { transition-delay: 440ms; }
 [data-reveal-stagger].is-inview > *:nth-child(5) { transition-delay: 560ms; }
 [data-reveal-stagger].is-inview > *:nth-child(6) { transition-delay: 680ms; }
+[data-reveal-stagger].is-inview > *:nth-child(7) { transition-delay: 800ms; }
+[data-reveal-stagger].is-inview > *:nth-child(8) { transition-delay: 920ms; }
+[data-reveal-stagger].is-inview > *:nth-child(9) { transition-delay: 1040ms; }
+[data-reveal-stagger].is-inview > *:nth-child(10) { transition-delay: 1160ms; }
+[data-reveal-stagger].is-inview > *:nth-child(11) { transition-delay: 1280ms; }
+[data-reveal-stagger].is-inview > *:nth-child(12) { transition-delay: 1400ms; }
 @media (prefers-reduced-motion) {
   [data-reveal], [data-reveal-stagger] > * { transition: none; transform: none; opacity: 1; }
+}
+
+/* Blur variants */
+[data-reveal-blur] { opacity: 0; transform: translateY(16px) translateZ(0); filter: blur(8px); backface-visibility: hidden; will-change: opacity, transform, filter; transition: opacity var(--duration-motion) var(--ease-motion), transform var(--duration-motion) var(--ease-motion), filter var(--duration-motion) var(--ease-motion); }
+[data-reveal-blur].is-inview { opacity: 1; transform: none; filter: blur(0); }
+[data-reveal-blur-stagger] > * { opacity: 0; transform: translateY(16px) translateZ(0); filter: blur(8px); backface-visibility: hidden; will-change: opacity, transform, filter; transition: opacity var(--duration-motion) var(--ease-motion), transform var(--duration-motion) var(--ease-motion), filter var(--duration-motion) var(--ease-motion); }
+[data-reveal-blur-stagger].is-inview > * { opacity: 1; transform: none; filter: blur(0); }
+[data-reveal-blur-stagger].is-inview > *:nth-child(1) { transition-delay: 80ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(2) { transition-delay: 200ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(3) { transition-delay: 320ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(4) { transition-delay: 440ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(5) { transition-delay: 560ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(6) { transition-delay: 680ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(7) { transition-delay: 800ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(8) { transition-delay: 920ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(9) { transition-delay: 1040ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(10) { transition-delay: 1160ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(11) { transition-delay: 1280ms; }
+[data-reveal-blur-stagger].is-inview > *:nth-child(12) { transition-delay: 1400ms; }
+@media (prefers-reduced-motion) {
+  [data-reveal-blur], [data-reveal-blur-stagger] > * { transition: none; transform: none; opacity: 1; filter: none; }
 }
 
 /* Media should never exceed their container width by default */
@@ -493,7 +568,7 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 }
 
 /* Listbox (custom dropdown) */
-.ui-lb__button { border-radius: var(--radius-md); }
+.ui-lb__button { border-radius: 6px; }
 .ui-lb__button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .ui-lb__panel { border-radius: var(--radius-md); transform: translateY(-2px) scale(0.98); opacity: 0; transition: transform var(--duration-normal) var(--easing-ui), opacity var(--duration-normal) var(--easing-ui); }
 .ui-lb__panel[data-open="1"] { transform: translateY(0) scale(1); opacity: 1; }
@@ -524,6 +599,25 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 .marquee-item svg { height: 2rem; width: auto; }
 .marquee-item:hover { opacity: 1; }
 
+/* Optional faded edges for the marquee, similar to Chronicle logo strip */
+.marquee--faded::before,
+.marquee--faded::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: clamp(32px, 10vw, 140px);
+  pointer-events: none;
+  z-index: 1;
+}
+.marquee--faded::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--color-background, #000) 0%, rgba(0,0,0,0.0) 100%);
+}
+.marquee--faded::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--color-background, #000) 0%, rgba(0,0,0,0.0) 100%);
+}
+
 @keyframes marquee-linear {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -546,3 +640,158 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 body.pt-disable-scroll { overflow: hidden; }
 /* Disable pointer events on app content during wipe */
 body.pt-no-events [data-app-content] { pointer-events: none; }
+
+/* Solid button with arrow tail (used throughout) */
+.button-solid {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1.25rem;
+  /* Rectangular geometry */
+  border-radius: 6px;
+  border: 1px solid var(--surface-border);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: background-color var(--duration-slow) var(--easing-ui), color var(--duration-slow) var(--easing-ui), border-color var(--duration-slow) var(--easing-ui);
+}
+.button--md { height: 3rem; padding-inline: 1.4rem; line-height: 1; }
+.button-solid:hover { background: #fff; color: #000; border-color: rgba(255,255,255,0.9); }
+.button-solid:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* Arrow tail: text + arrow shift without layout jump */
+.arrow-shift .btn-tail { display: inline-flex; align-items: center; gap: 0.4rem; }
+.arrow-shift .btn-tail .arrow { display: inline-block; transform: translateX(0); transition: transform 420ms var(--ease-premium), opacity 420ms var(--ease-premium); opacity: 0.9; }
+.arrow-shift:hover .btn-tail .arrow, .arrow-shift:focus-visible .btn-tail .arrow { transform: translateX(3px); opacity: 1; }
+
+/* Proximity nav highlight (header/footer) */
+.nav-prox {
+  position: relative;
+  isolation: isolate;
+  /* Avoid any absolutely-positioned effects from expanding layout */
+  max-width: 100%;
+  overflow: hidden; /* clip proximity highlight/underline within the nav row */
+}
+.nav-prox .nav-prox__highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 160px;
+  transform: translateX(var(--nav-x, -9999px));
+  pointer-events: none;
+  opacity: var(--nav-opacity, 0);
+  transition: opacity 300ms var(--ease-premium);
+  background: radial-gradient(56px 56px at center, rgba(255,255,255,0.12), rgba(255,255,255,0.08) 60%, transparent 70%);
+  filter: blur(10px);
+  z-index: 0;
+}
+.nav-prox a { position: relative; z-index: 1; transition: color 300ms var(--ease-premium), opacity 200ms var(--ease-premium), transform 200ms var(--ease-premium); }
+.nav-prox a[data-prox] { opacity: var(--prox-opacity, 0.7); transform: translateZ(0) scale(var(--prox-scale, 1)); }
+
+/* Smooth underline slider that tracks hovered/active link */
+.nav-underline {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: min(var(--ul-w, 0px), 100%);
+  transform: translateX(var(--ul-x, 0px));
+  opacity: var(--ul-o, 0);
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.7) 35%, rgba(255,255,255,0));
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.25));
+  pointer-events: none;
+  transition: opacity 220ms var(--ease-premium);
+  max-width: 100%;
+}
+
+/* 1px boundary lines (header bottom / footer top) following the proximity highlight */
+.nav-prox::before,
+.nav-prox::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 120px;
+  height: 1px;
+  transform: translateX(var(--nav-x, -9999px));
+  opacity: var(--nav-opacity, 0);
+  transition: opacity 300ms var(--ease-premium);
+  background: linear-gradient(90deg, rgba(255,255,255,0.0), rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.0));
+  pointer-events: none;
+  z-index: 0;
+}
+.nav-prox::before { top: -1px; }
+.nav-prox::after { bottom: -1px; }
+/* Show only bottom line for header nav; only top line for footer nav */
+.nav-prox--header::before { display: none; }
+.nav-prox--footer::after { display: none; }
+
+/* Footer top sheen that intensifies as the pointer nears the bottom edge */
+.footer-sheen {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 160px;
+  pointer-events: none;
+  opacity: calc(var(--footer-alpha, 0));
+  transition: opacity 240ms var(--ease-premium);
+  background: linear-gradient(to top, rgba(255,255,255,0.06), rgba(255,255,255,0.02) 40%, transparent 100%);
+}
+
+
+/* Compact filter chips (blog/category) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2.25rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  letter-spacing: 0.06em;
+  /* Single line with ellipsis when constrained */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  transition: background-color var(--duration-normal) var(--easing-ui), border-color var(--duration-normal) var(--easing-ui), color var(--duration-normal) var(--easing-ui);
+}
+.chip:hover, .chip:focus-visible { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
+.chip.is-active { background: #fff; color: #000; border-color: rgba(255,255,255,0.9); }
+
+/* Footer/content unmask reveal driven by CSS variable */
+.mask-reveal {
+  --reveal: 0%; /* 0 -> 100 */
+  -webkit-mask-image: linear-gradient(to top, black var(--reveal), transparent calc(var(--reveal) + 20%));
+          mask-image: linear-gradient(to top, black var(--reveal), transparent calc(var(--reveal) + 20%));
+}
+
+@layer utilities {
+  /* Stack spacing utilities (logical margin-block) */
+  :root {
+    --stack-xs: 0.5rem;   /* ~mt-2 */
+    --stack-sm: 0.75rem;  /* ~mt-3 */
+    --stack-md: 1.5rem;   /* ~mt-6 */
+    --stack-lg: 2.5rem;   /* ~mt-10 */
+    --stack-xl: 6rem;     /* ~mt-24 */
+  }
+  .mbs-xs { margin-block-start: var(--stack-xs); }
+  .mbs-sm { margin-block-start: var(--stack-sm); }
+  .mbs-md { margin-block-start: var(--stack-md); }
+  .mbs-lg { margin-block-start: var(--stack-lg); }
+  .mbs-xl { margin-block-start: var(--stack-xl); }
+  .mbe-xs { margin-block-end: var(--stack-xs); }
+  .mbe-sm { margin-block-end: var(--stack-sm); }
+  .mbe-md { margin-block-end: var(--stack-md); }
+  .mbe-lg { margin-block-end: var(--stack-lg); }
+  .mbe-xl { margin-block-end: var(--stack-xl); }
+  .txt-0 { font-size: clamp(var(--step-0-min)*1px, calc(var(--step-0-min)*1px + (var(--step-0-max) - var(--step-0-min)) * var(--fluid)), var(--step-0-max)*1px); line-height: 1.5; }
+  .txt-2 { font-size: clamp(var(--step-2-min)*1px, calc(var(--step-2-min)*1px + (var(--step-2-max) - var(--step-2-min)) * var(--fluid)), var(--step-2-max)*1px); line-height: 1.35; }
+  .txt-3 { font-size: clamp(var(--step-3-min)*1px, calc(var(--step-3-min)*1px + (var(--step-3-max) - var(--step-3-min)) * var(--fluid)), var(--step-3-max)*1px); line-height: 1.28; }
+  .txt-4 { font-size: clamp(var(--step-4-min)*1px, calc(var(--step-4-min)*1px + (var(--step-4-max) - var(--step-4-min)) * var(--fluid)), var(--step-4-max)*1px); line-height: 1.2; }
+  .txt-5 { font-size: clamp(var(--step-5-min)*1px, calc(var(--step-5-min)*1px + (var(--step-5-max) - var(--step-5-min)) * var(--fluid)), var(--step-5-max)*1px); line-height: 1.12; }
+}
+

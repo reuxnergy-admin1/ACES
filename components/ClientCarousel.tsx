@@ -52,10 +52,10 @@ export default function ClientCarousel({ className, reveal = false }: Readonly<{
     ['--marquee-duration']: '36s',
   };
   return (
-    <section aria-label="Client partnerships" className={clsx('container-row w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
+    <section aria-label="Client partnerships" className={clsx('container-wide w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
       {/* Animated marquee with no backdrop; floats over site background */}
       <div className="overflow-hidden py-3 md:py-4">
-        <div className="marquee" aria-hidden="true">
+        <div className="marquee marquee--faded" aria-hidden="true">
           <ul className="marquee-track" style={trackStyle}>
             {looped.map((l) => (
               <li key={l.id} className="marquee-item">

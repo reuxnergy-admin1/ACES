@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 type TooltipProps = {
   label: string;
-  children: React.ReactElement;
+  children: React.ReactElement<React.HTMLAttributes<HTMLElement>>;
   placement?: "top" | "bottom" | "left" | "right";
   delayMs?: number;
 };
@@ -33,13 +33,21 @@ export function Tooltip({ label, children, placement = "top", delayMs = 120 }: T
     : `left-full top-1/2 -translate-y-1/2 ml-[${offset}px]`;
 
   // Clone the child and attach ARIA + event handlers directly to it to avoid nested interactive content
+  type ChildProps = {
+    onMouseEnter?: (e: React.MouseEvent) => void;
+    onMouseLeave?: (e: React.MouseEvent) => void;
+    onFocus?: (e: React.FocusEvent) => void;
+    onBlur?: (e: React.FocusEvent) => void;
+    onKeyDown?: (e: React.KeyboardEvent) => void;
+  };
+  const cprops = (children.props ?? {}) as Partial<ChildProps> & React.HTMLAttributes<HTMLElement>;
   const child = cloneElement(children, {
     'aria-describedby': open ? id : undefined,
-    onMouseEnter: (e: any) => { children.props?.onMouseEnter?.(e); show(); },
-    onMouseLeave: (e: any) => { children.props?.onMouseLeave?.(e); hide(); },
-    onFocus: (e: any) => { children.props?.onFocus?.(e); show(); },
-    onBlur: (e: any) => { children.props?.onBlur?.(e); hide(); },
-    onKeyDown: (e: any) => { children.props?.onKeyDown?.(e); if (e.key === 'Escape') hide(); },
+    onMouseEnter: (e: React.MouseEvent) => { cprops.onMouseEnter?.(e); show(); },
+    onMouseLeave: (e: React.MouseEvent) => { cprops.onMouseLeave?.(e); hide(); },
+    onFocus: (e: React.FocusEvent) => { cprops.onFocus?.(e); show(); },
+    onBlur: (e: React.FocusEvent) => { cprops.onBlur?.(e); hide(); },
+    onKeyDown: (e: React.KeyboardEvent) => { cprops.onKeyDown?.(e); if (e.key === 'Escape') hide(); },
   });
   return (
     <span ref={wrapRef} className="relative inline-flex">
@@ -50,10 +58,11 @@ export function Tooltip({ label, children, placement = "top", delayMs = 120 }: T
   aria-hidden={open ? undefined : true}
         className={clsx(
           "pointer-events-none absolute z-overlay surface surface--sm surface-90 surface-strong elevate radius-sm px-2 py-1 text-[11px] uc tracking-wide text-white/90",
-          "transition-[opacity,transform] duration-300 ease-[var(--ease-premium)]",
+          "transition-[opacity,transform] duration-360 ease-[var(--ease-premium)] will-change-[opacity,transform]",
           open ? "opacity-100 scale-100" : "opacity-0 scale-95",
           posClass
         )}
+        style={{ backfaceVisibility: 'hidden', transform: open ? 'translateZ(0) scale(1)' : 'translateZ(0) scale(0.95)' }}
       >
         {label}
       </span>
