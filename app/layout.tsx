@@ -23,7 +23,9 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const mainId = useId();
+  // useId() may include characters like ':' that don't work in URL hashes
+  const rawMainId = useId();
+  const mainId = `main-${rawMainId.replace(/:/g, '')}`;
   return (
     <html lang="en">
       <head>
