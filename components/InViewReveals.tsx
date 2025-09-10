@@ -23,7 +23,7 @@ export default function InViewReveals() {
     // Pre-warm everything currently in view after layout
     markVisibleNow();
 
-    if (typeof (window as any).IntersectionObserver === 'undefined') {
+  if (typeof window.IntersectionObserver === 'undefined') {
       // Hard fallback if IO is unavailable
       q().forEach((el) => el.classList.add('is-inview'));
       return;
@@ -47,7 +47,7 @@ export default function InViewReveals() {
     const t1 = window.setTimeout(rescan, 120);
     const t2 = window.setTimeout(rescan, 420);
     const t3 = window.setTimeout(rescan, 1200);
-    try { (document as any).fonts?.ready?.then(rescan); } catch { /* noop */ }
+  try { (document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts?.ready?.then(rescan); } catch { /* noop */ }
     window.addEventListener('load', rescan, { once: true });
 
     // Hard fallback: force anything near viewport to visible after 2.5s

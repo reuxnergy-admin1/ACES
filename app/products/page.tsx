@@ -29,13 +29,13 @@ export default function Page() {
         <ContainerRow className="mt-10" data-reveal-blur-stagger>
           <div className="auto-grid" style={gridStyle}>
             <Link className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift" href="/products/aircraft/">
-              <div className="text-xl">Aircraft</div><div className="mt-2 text-white/60">Windows, windscreens, enclosures</div>
+              <div className="text-xl">Aircraft</div><div className="mt-2 body text-white/60">Windows, windscreens, enclosures</div>
             </Link>
           <Link className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift" href="/products/helicopters/">
-            <div className="text-xl">Helicopters</div><div className="mt-2 text-white/60">Cabin transparencies and doors</div>
+            <div className="text-xl">Helicopters</div><div className="mt-2 body text-white/60">Cabin transparencies and doors</div>
           </Link>
           <Link className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift" href="/products/motorsport/">
-            <div className="text-xl">Motorsport</div><div className="mt-2 text-white/60">Lightweight glazing & components</div>
+            <div className="text-xl">Motorsport</div><div className="mt-2 body text-white/60">Lightweight glazing & components</div>
           </Link>
           </div>
         </ContainerRow>

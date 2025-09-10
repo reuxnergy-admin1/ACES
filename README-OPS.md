@@ -7,7 +7,7 @@ This project can run as a static export or on a server/edge runtime. Pick one mo
 - `next.config.js` sets `output: 'export'` in production. This disables middleware at runtime, so HTTP headers from `middleware.ts` will not be applied by the server. You must configure them at your CDN.
 - Apply the following headers at the CDN:
 
-```
+```http
 Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: blob:; font-src 'self' https://use.typekit.net https://p.typekit.net; style-src 'self' 'unsafe-inline' https://use.typekit.net; script-src 'self' 'strict-dynamic' https: http:; connect-src 'self'
 Referrer-Policy: strict-origin-when-cross-origin
 X-Frame-Options: DENY
@@ -17,6 +17,7 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 ```
 
 Notes:
+
 - We cannot use per-request nonces on a static CDN. The `script-src` therefore omits nonces and relies on `strict-dynamic`.
 - If you need stricter policies later, move to Option B.
 
@@ -37,4 +38,29 @@ Notes:
 
 - Enable the grid overlay by adding `#debug-grid` to the URL or `localStorage.setItem('gridDebug','1')`.
 - A11y collector runs in Playwright via axe-core and logs violations without failing CI. Upgrade to fail-on-violation once content stabilizes.
+
+## Developer scripts (quick ref)
+
+- dev: Start Next.js dev server
+- build: Production build
+- start: Start prod server
+- lint: Run ESLint
+- test:e2e: Playwright tests
+- test:e2e:update: Update Playwright snapshots
+- test:reference: External reference audit
+- test:e2e:install: Install Playwright browsers
+- guard:bg: Verify background contour assets
+- guard:bg:update: Refresh background contour checksum
+- diagram:build: Build the market-map Mermaid SVG (docs/diagrams)
+- diagram:build:all: Build all Mermaid SVGs in docs/diagrams
+
+## Docs & Diagrams
+
+Mermaid source files live in `docs/diagrams/*.mmd` and compile to SVG alongside the sources.
+
+- Edit `docs/diagrams/market-map.mmd`
+- Build once: `pnpm diagram:build`
+- Build all: `pnpm diagram:build:all`
+
+The Mermaid CLI theme is in `docs/diagrams/theme.json`.
 

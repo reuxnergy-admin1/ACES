@@ -27,6 +27,17 @@
   --container-pad: clamp(1rem, 4vw, 2rem);
   /* Grid gutters tuned to Rise-like rhythm (approx 24 → 80px) */
   --grid-gutter: 1.5rem;    /* ~24px base */
+  /* Fluid type steps (Utopia-style) */
+  --font-step--2: clamp(0.79rem, 0.72rem + 0.3vw, 0.9rem);
+  --font-step--1: clamp(0.89rem, 0.79rem + 0.4vw, 1.0rem);
+  --font-step-0:  clamp(1.00rem, 0.90rem + 0.5vw, 1.125rem);
+  --font-step-1:  clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
+  --font-step-2:  clamp(1.56rem, 1.20rem + 1.0vw, 1.95rem);
+  --font-step-3:  clamp(1.95rem, 1.50rem + 1.4vw, 2.45rem);
+  /* Fluid vertical stacks */
+  --stack-sm: clamp(1.0rem, 0.6rem + 1.2vw, 1.6rem);
+  --stack-md: clamp(1.4rem, 0.9rem + 1.6vw, 2.2rem);
+  --stack-lg: clamp(2.0rem, 1.2rem + 2.2vw, 3.2rem);
 }
 
 /* Widen gutters and container padding progressively to reflect reference site */
@@ -93,6 +104,12 @@ body.cursor-hidden { cursor: none; }
 h1, h2 { text-transform: uppercase; }
 h1 { letter-spacing: 0.08em; line-height: 1.14; }
 h2 { letter-spacing: 0.06em; line-height: 1.18; }
+
+/* Heading utilities aligning with fluid steps (opt-in) */
+.h1 { font-size: var(--font-step-3); line-height: 1.1; letter-spacing: 0.02em; }
+.h2 { font-size: var(--font-step-2); line-height: 1.15; letter-spacing: 0.02em; }
+.h3 { font-size: var(--font-step-1); line-height: 1.2; }
+.body { font-size: var(--font-step-0); line-height: 1.55; }
 
 /* Native cursor is hidden via inline style on <body> in layout.tsx to avoid !important warnings */
 
@@ -359,9 +376,8 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 
 /* Section bands: generous vertical rhythm consistent across pages */
 /* Use :where() to keep specificity at 0 so utility classes (e.g., pt-28) can override */
-:where(.section-band) { padding-block: 3rem; }
-@media (min-width: 768px) { :where(.section-band) { padding-block: 4rem; } }
-@media (min-width: 1024px) { :where(.section-band) { padding-block: 6rem; } }
+:where(.section-band) { padding-block: var(--stack-md); }
+@media (min-width: 1024px) { :where(.section-band) { padding-block: var(--stack-lg); } }
 
 /* Auto-fit grid helpers for cards/logos/posts (min track size customizable) */
 .auto-grid {
@@ -423,6 +439,8 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
   .sheen-card { transition: none; }
   .sheen-card::before { transition: none; }
 }
+
+/* Nav sheen styles are defined under 'Chronicle-style feature flagged effects' below */
 
 /* Grid overlay debug removed for production */
 
@@ -487,6 +505,12 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 @media (prefers-reduced-motion) {
   [data-reveal], [data-reveal-stagger] > * { transition: none; transform: none; opacity: 1; }
 }
+
+/* Progressive: CSS Scroll Timeline for reveal when supported (no custom at-rules to avoid lint errors) */
+@supports (animation-timeline: scroll()) {
+  .reveal-scroll { opacity: 0; transform: translateY(16px); animation: fadeSlide 1 both; animation-timeline: scroll(); animation-range: entry 20% cover 30%; }
+}
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
 
 /* Media should never exceed their container width by default */
 img, video, canvas, svg { display: block; max-width: 100%; height: auto; }

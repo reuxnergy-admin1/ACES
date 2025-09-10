@@ -7,7 +7,7 @@ export default function Page() {
       <ContainerRow>
         <Grid12 data-reveal-blur-stagger>
           <Span cols={8}><h1 className='text-4xl md:text-5xl font-light'>Industries</h1></Span>
-          <Span cols={8}><p className='mt-6 text-white/70'>Civil aviation (fixed-wing and rotorcraft), defence-adjacent platforms via approved channels, UAV/RPAS, and motorsport applications demanding low mass, high rigidity, and optical discipline.</p></Span>
+          <Span cols={8}><p className='mt-6 body text-white/70 max-w-reading'>Civil aviation (fixed-wing and rotorcraft), defence-adjacent platforms via approved channels, UAV/RPAS, and motorsport applications demanding low mass, high rigidity, and optical discipline.</p></Span>
         </Grid12>
       </ContainerRow>
     </section>

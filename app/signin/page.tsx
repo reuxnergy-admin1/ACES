@@ -7,7 +7,7 @@ export default function Page() {
       <ContainerRow>
         <Grid12 data-reveal-blur-stagger>
           <Span cols={6}><h1 className="text-4xl font-light">Sign In</h1></Span>
-          <Span cols={6}><p className="mt-6 text-white/70">Restricted portal for registered customers. If you don&apos;t have access, please <a className="link-underline" href="/contact/">contact us</a>.</p></Span>
+          <Span cols={6}><p className="mt-6 body text-white/70 max-w-reading">Restricted portal for registered customers. If you don&apos;t have access, please <a className="link-underline" href="/contact/">contact us</a>.</p></Span>
           <Span cols={6}>
             <form className="mt-8 space-y-4">
               <input className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Email address" type="email" required />

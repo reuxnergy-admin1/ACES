@@ -8,6 +8,13 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        bg: 'var(--color-background)',
+        fg: 'var(--color-foreground)',
+        muted: 'var(--color-muted)',
+        subtle: 'var(--color-subtle)',
+        line: 'var(--color-line)',
+      },
       zIndex: {
         bg: '0',
         content: '10',

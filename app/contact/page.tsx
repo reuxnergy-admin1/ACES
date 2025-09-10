@@ -12,7 +12,7 @@ export default function Page(){
   return (<section className="grid-shell section-band pt-28">
     <ContainerRow>
       <Grid12 data-reveal-blur-stagger>
-        <Span cols={8}><h1 className="text-4xl font-light">Request a Quote</h1></Span>
+  <Span cols={8}><h1 className="text-4xl font-light">Request a Quote</h1></Span>
       </Grid12>
     </ContainerRow>
     <ContainerRow className="mt-8">
@@ -51,6 +51,6 @@ export default function Page(){
       </Grid12>
       </form>
     </ContainerRow>
-  <p className="container-row mt-4 text-xs text-white/50">This form currently opens your email client to send to info@acesaerodynamics.com. Swap to a server or service when ready.</p>
+  <p className="container-row mt-4 body text-white/50 max-w-reading">This form currently opens your email client to send to info@acesaerodynamics.com. Swap to a server or service when ready.</p>
   </section>);
 }

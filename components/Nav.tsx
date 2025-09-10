@@ -233,6 +233,8 @@ export function Nav() {
       )}
     >
   <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
+  {/* Wrap header content so it can be inerted when mobile menu opens */}
+  <div data-app-content>
   <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
         <div className="container-wide">
           {/* Chronicle-style nav sheen overlay (feature flagged) */}
@@ -308,6 +310,49 @@ export function Nav() {
             </div>
           </div>
         </div>
+  </div>
+  {/* Dropdown panel (desktop) */}
+    {openMenu && (
+        <div
+          role="menu"
+          tabIndex={0}
+      aria-label="Submenu"
+      aria-labelledby={`menuitem-${openMenu}`}
+          className={clsx(
+            'hidden md:block absolute left-0 right-0 top-full z-header surface surface-90 surface--md surface-strong elevate radius-lg border-t border-white/12',
+            'transition-[opacity,transform] duration-700 ease-[var(--ease-premium)] motion-reduce:transition-none',
+            panelShow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
+          )}
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              setOpenMenu(null);
+              return;
+            }
+            onSubmenuKeyDown(e);
+          }}
+        >
+          <div className="grid-shell">
+            <div className="container-wide grid-12 gutter py-6">
+              {activeParent && (
+                <div key={activeParent.id} className="md:col-span-8">
+                  <div className="text-white/60 uc tracking-[0.08em] text-xs">{activeParent.label}</div>
+                  <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {(activeParent.children ?? []).map((c) => (
+                      <li key={c.href}>
+                        <Link href={c.href} className="link-underline text-white/90 hover:text-white">
+                          {c.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
   </div>
   <dialog
         id={menuId}
@@ -385,48 +430,6 @@ export function Nav() {
           </div>
         </div>
       </dialog>
-      {/* Dropdown panel (desktop) */}
-    {openMenu && (
-        <div
-          role="menu"
-          tabIndex={0}
-      aria-label="Submenu"
-      aria-labelledby={`menuitem-${openMenu}`}
-          className={clsx(
-            'hidden md:block absolute left-0 right-0 top-full z-header surface surface-90 surface--md surface-strong elevate radius-lg border-t border-white/12',
-            'transition-[opacity,transform] duration-700 ease-[var(--ease-premium)] motion-reduce:transition-none',
-            panelShow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-1'
-          )}
-          onMouseEnter={cancelClose}
-          onMouseLeave={scheduleClose}
-          onKeyDown={(e) => {
-            if (e.key === 'Escape') {
-              setOpenMenu(null);
-              return;
-            }
-            onSubmenuKeyDown(e);
-          }}
-        >
-          <div className="grid-shell">
-            <div className="container-wide grid-12 gutter py-6">
-              {activeParent && (
-                <div key={activeParent.id} className="md:col-span-8">
-                  <div className="text-white/60 uc tracking-[0.08em] text-xs">{activeParent.label}</div>
-                  <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {(activeParent.children ?? []).map((c) => (
-                      <li key={c.href}>
-                        <Link href={c.href} className="link-underline text-white/90 hover:text-white">
-                          {c.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }

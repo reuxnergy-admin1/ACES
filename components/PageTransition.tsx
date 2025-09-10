@@ -45,6 +45,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   const pendingColour = useRef<string>('#ffffff');
   const watchdogId = useRef<number | null>(null);
   const isAutomation = typeof navigator !== 'undefined' && Reflect.get(navigator, 'webdriver') === true;
+  const reduceMotionRef = useRef(false);
   const timings = useRef({
     coverDur: isAutomation ? 600 : 900,
     revealHold: isAutomation ? 60 : 100,
@@ -91,6 +92,9 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   }, [disarmWatchdog]);
 
   const fallbackRevealIfActive = useCallback(() => {
+    if (reduceMotionRef.current) {
+      return; // nothing to reveal in reduced motion
+    }
     const ov = overlayRef.current;
     if (!ov || ov.dataset.active !== '1') return;
     const circ = circleRef.current;
@@ -102,6 +106,11 @@ export default function PageTransition({ children }: Readonly<{ children: React.
 
   // Animate content fade on enter; if overlay is active, shrink it to reveal content
   useEffect(() => {
+    // Detect reduced motion preference
+    try {
+      reduceMotionRef.current = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+    } catch { reduceMotionRef.current = false; }
+
     const el = shellRef.current;
     if (el) {
       el.classList.remove('page-fade');
@@ -114,6 +123,13 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     // If overlay is active (navigation occurred), shrink it to reveal content
     const ov = overlayRef.current;
     if (!ov) return;
+    if (reduceMotionRef.current) {
+      // Ensure overlay is not active under reduced motion
+      ov.dataset.active = '0';
+      ov.style.pointerEvents = 'none';
+      document.body.classList.remove('cursor-hide-transition', 'pt-disable-scroll', 'pt-no-events');
+      return;
+    }
     // Shrink overlay if currently active (dataset) — do not rely solely on state
     if (ov.dataset.active === '1') {
       // Small route-ready hold to finish the cover crescendo, then reveal
@@ -156,6 +172,9 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   useEffect(() => {
   /* eslint-disable max-nested-callbacks */
   function preLock(e: PointerEvent) {
+      if (reduceMotionRef.current) {
+        return; // skip overlay in reduced motion
+      }
       // Pre-emptively engage locks on pointerdown for internal navigations for snappy feel
       const a = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
       if (!a) return;
@@ -185,6 +204,9 @@ export default function PageTransition({ children }: Readonly<{ children: React.
       }
     }
     function onClick(e: MouseEvent) {
+      if (reduceMotionRef.current) {
+        return; // skip overlay in reduced motion
+      }
       // If an animation is already active, ignore subsequent clicks
       if (overlayRef.current?.dataset.active === '1') return;
       // Ignore modified/new-tab clicks
@@ -298,6 +320,9 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   // Reverse wipe on browser back/forward (popstate)
   useEffect(() => {
     const handler = () => {
+      if (reduceMotionRef.current) {
+        return;
+      }
       if (!overlayRef.current || overlayRef.current.dataset.active === '1') return;
       const x = window.innerWidth / 2;
       const y = Math.max(0, window.innerHeight - 24);

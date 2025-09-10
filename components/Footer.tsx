@@ -9,7 +9,9 @@ export function Footer() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const onMove = (e: PointerEvent) => {
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mq.matches) return; // respect reduced motion
+  const onMove = (e: PointerEvent) => {
       const y = e.clientY;
       const bottomDist = Math.max(0, window.innerHeight - y);
       const thresh = 240;

@@ -7,7 +7,7 @@ export default function Page() {
       <ContainerRow>
         <Grid12 data-reveal-blur-stagger>
           <Span cols={8}><h1 className='text-4xl md:text-5xl font-light'>Helicopters</h1></Span>
-          <Span cols={8}><p className='mt-6 text-white/70'>Placeholder catalogue and engineering notes for helicopters. Supply product IDs to enable ordering.</p></Span>
+          <Span cols={8}><p className='mt-6 body text-white/70 max-w-reading'>Placeholder catalogue and engineering notes for helicopters. Supply product IDs to enable ordering.</p></Span>
         </Grid12>
       </ContainerRow>
     </section>

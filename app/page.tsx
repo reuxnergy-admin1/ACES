@@ -14,10 +14,10 @@ export default function Page() {
   <ContainerWide>
         <Grid12 className="items-start md:items-end">
           <Span cols={8}>
-            <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-full">
+            <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch]">
               Aviation grade cast acrylic for clarity under pressure.
             </h1>
-            <p className="mt-6 max-w-2xl text-white/70">
+            <p className="mt-6 body max-w-reading text-white/70">
               SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and
               non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
             </p>
@@ -35,7 +35,7 @@ export default function Page() {
             </div>
           </Span>
           <Span cols={4}>
-            <div className="text-sm">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
+            <div className="text-sm body text-white/70">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
           </Span>
         </Grid12>
       </ContainerWide>
@@ -53,7 +53,7 @@ export default function Page() {
           <SheenCard key={c.href} className="md:col-span-4" data-reveal>
             <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
               <div className="text-xl">{c.title}</div>
-              <div className="mt-2 text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
+              <div className="mt-2 body text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
               <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
             </Link>
           </SheenCard>
@@ -89,7 +89,7 @@ export default function Page() {
   <SectionBand>
     <ContainerRow>
       <Grid12 data-reveal-stagger>
-        <Span cols={8}>
+  <Span cols={8}>
           <Prose>
             <h2>Compliance & QA</h2>
             <p>SACAA‑approved (MP39). Documented process control with full traceability and optical inspection. Our release documentation accompanies every shipment.</p>
@@ -122,7 +122,7 @@ export default function Page() {
         </Span>
         <Span cols={4}>
           <div className="surface surface-90 surface-strong radius-md p-5">
-            <div className="text-white/80">Speak to our engineers about your application.</div>
+            <div className="body text-white/80">Speak to our engineers about your application.</div>
             <div className="mt-4 flex gap-3">
               <Link href="/contact/" className="button-primary h-11 px-5">
                 <span aria-hidden="true" className="reveal-line h top" />
@@ -155,8 +155,8 @@ export default function Page() {
         ].map(([n,t,d]) => (
           <div key={n} className="md:col-span-2 border-t border-white/10 pt-4">
             <div className="text-white/50 text-sm uc tracking-[0.12em]">{n}</div>
-            <div className="mt-1 text-white">{t}</div>
-            <div className="mt-1 text-white/60 text-sm">{d}</div>
+            <div className="mt-1 body text-white">{t}</div>
+            <div className="mt-1 body text-white/60 text-sm">{d}</div>
           </div>
         ))}
       </Grid12>

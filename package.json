@@ -2,6 +2,7 @@
   "name": "aces-aerodynamics-site",
   "private": true,
   "version": "0.1.0",
+  "packageManager": "pnpm@9.12.3",
   "engines": {
     "node": ">=22.0.0"
   },
@@ -11,6 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next build",
+  "diagram:build": "PUPPETEER_CONFIG=docs/diagrams/puppeteer-config.json mmdc -i docs/diagrams/market-map.mmd -o docs/diagrams/market-map.svg -b transparent -C docs/diagrams/theme.json",
+  "diagram:build:all": "for f in docs/diagrams/*.mmd; do PUPPETEER_CONFIG=docs/diagrams/puppeteer-config.json npx -y @mermaid-js/mermaid-cli -i \"$f\" -o docs/diagrams -b transparent -C docs/diagrams/theme.json; done",
     "lh:ci": "npx @lhci/cli collect --config=./lighthouserc.json && npx @lhci/cli assert --config=./lighthouserc.json",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
@@ -28,21 +31,22 @@
     "react": "19.1.1",
     "react-dom": "19.1.1",
     "split-type": "^0.3.4",
-    "three": "^0.179.1"
+    "three": "^0.180.0"
   },
   "devDependencies": {
+  "@mermaid-js/mermaid-cli": "^10.9.1",
     "@playwright/test": "^1.55.0",
-    "@tailwindcss/postcss": "4.1.12",
+    "@tailwindcss/postcss": "4.1.13",
     "@tailwindcss/typography": "0.5.16",
-    "@types/node": "24.3.0",
+    "@types/node": "24.3.1",
     "@types/react": "19.1.12",
     "@types/react-dom": "^19.1.9",
-    "@types/three": "^0.179.0",
+    "@types/three": "^0.180.0",
     "autoprefixer": "10.4.21",
-    "eslint": "9.34.0",
+    "eslint": "9.35.0",
     "eslint-config-next": "15.5.2",
     "postcss": "8.5.6",
-    "tailwindcss": "4.1.12",
+    "tailwindcss": "4.1.13",
     "typescript": "5.9.2"
   }
 }

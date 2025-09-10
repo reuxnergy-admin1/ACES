@@ -1,7 +1,11 @@
-import type { ReactNode, ElementType } from 'react';
+import type { ReactNode, HTMLAttributes } from 'react';
 
-type Props = Readonly<{ children: ReactNode; className?: string; as?: ElementType }>;
+type Props = Readonly<{ children: ReactNode; className?: string } & HTMLAttributes<HTMLDivElement>>;
 
-export default function ContainerFluid({ children, className = '', as: Tag = 'div' }: Props) {
-  return <Tag className={`container-fluid ${className}`}>{children}</Tag>;
+export default function ContainerFluid({ children, className = '', ...rest }: Props) {
+  return (
+    <div className={`container-fluid ${className}`.trim()} {...rest}>
+      {children}
+    </div>
+  );
 }

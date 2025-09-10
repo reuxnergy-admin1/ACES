@@ -2,14 +2,15 @@
 import { useEffect, useId, useRef, useState, cloneElement } from "react";
 import clsx from "clsx";
 
+type TooltipChildProps = React.HTMLAttributes<HTMLElement> & React.AriaAttributes;
 type TooltipProps = {
   label: string;
-  children: React.ReactElement;
+  children: React.ReactElement<TooltipChildProps>;
   placement?: "top" | "bottom" | "left" | "right";
   delayMs?: number;
 };
 
-export function Tooltip({ label, children, placement = "top", delayMs = 120 }: TooltipProps) {
+export function Tooltip({ label, children, placement = "top", delayMs = 120 }: Readonly<TooltipProps>) {
   const id = useId();
   const [open, setOpen] = useState(false);
   const tRef = useRef<number | null>(null);
@@ -27,25 +28,35 @@ export function Tooltip({ label, children, placement = "top", delayMs = 120 }: T
   };
 
   const offset = 10;
-  const posClass = placement === "top" ? `bottom-full left-1/2 -translate-x-1/2 mb-[${offset}px]`
-    : placement === "bottom" ? `top-full left-1/2 -translate-x-1/2 mt-[${offset}px]`
-    : placement === "left" ? `right-full top-1/2 -translate-y-1/2 mr-[${offset}px]`
-    : `left-full top-1/2 -translate-y-1/2 ml-[${offset}px]`;
+  let posClass = '';
+  switch (placement) {
+    case 'top':
+      posClass = `bottom-full left-1/2 -translate-x-1/2 mb-[${offset}px]`;
+      break;
+    case 'bottom':
+      posClass = `top-full left-1/2 -translate-x-1/2 mt-[${offset}px]`;
+      break;
+    case 'left':
+      posClass = `right-full top-1/2 -translate-y-1/2 mr-[${offset}px]`;
+      break;
+    default:
+      posClass = `left-full top-1/2 -translate-y-1/2 ml-[${offset}px]`;
+  }
 
   // Clone the child and attach ARIA + event handlers directly to it to avoid nested interactive content
-  const child = cloneElement(children, {
+  const child = cloneElement<TooltipChildProps>(children, {
     'aria-describedby': open ? id : undefined,
-    onMouseEnter: (e: any) => { children.props?.onMouseEnter?.(e); show(); },
-    onMouseLeave: (e: any) => { children.props?.onMouseLeave?.(e); hide(); },
-    onFocus: (e: any) => { children.props?.onFocus?.(e); show(); },
-    onBlur: (e: any) => { children.props?.onBlur?.(e); hide(); },
-    onKeyDown: (e: any) => { children.props?.onKeyDown?.(e); if (e.key === 'Escape') hide(); },
+    onMouseEnter: (e) => { children.props?.onMouseEnter?.(e); show(); },
+    onMouseLeave: (e) => { children.props?.onMouseLeave?.(e); hide(); },
+    onFocus: (e) => { children.props?.onFocus?.(e); show(); },
+    onBlur: (e) => { children.props?.onBlur?.(e); hide(); },
+    onKeyDown: (e) => { children.props?.onKeyDown?.(e); if (e.key === 'Escape') hide(); },
   });
   return (
     <span ref={wrapRef} className="relative inline-flex">
       {child}
       <span
-        id={id}
+  id={id}
         role="tooltip"
   aria-hidden={open ? undefined : true}
         className={clsx(

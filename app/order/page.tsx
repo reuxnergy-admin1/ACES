@@ -16,7 +16,7 @@ export default function Page() {
           <Span cols={6}><OrderForm products={PRODUCTS} /></Span>
           <Span cols={6}>
             <h1 className="text-4xl font-light">Order</h1>
-            <p className="mt-6 text-white/70">Select a product ID to proceed. If your plan covers this unit, it will deduct from allocation; otherwise you will be routed to payment.</p>
+            <p className="mt-6 body text-white/70 max-w-reading">Select a product ID to proceed. If your plan covers this unit, it will deduct from allocation; otherwise you will be routed to payment.</p>
             <p className="mt-4 text-xs text-white/50">Checkout & plan logic to be integrated with your ERP/payment gateway.</p>
           </Span>
         </Grid12>
