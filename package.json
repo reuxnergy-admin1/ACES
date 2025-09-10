@@ -12,8 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next build",
-  "diagram:build": "PUPPETEER_CONFIG=docs/diagrams/puppeteer-config.json mmdc -i docs/diagrams/market-map.mmd -o docs/diagrams/market-map.svg -b transparent -C docs/diagrams/theme.json",
-  "diagram:build:all": "for f in docs/diagrams/*.mmd; do PUPPETEER_CONFIG=docs/diagrams/puppeteer-config.json npx -y @mermaid-js/mermaid-cli -i \"$f\" -o docs/diagrams -b transparent -C docs/diagrams/theme.json; done",
+    "diagram:build": "PUPPETEER_CONFIG=docs/diagrams/puppeteer-config.json mmdc -i docs/diagrams/market-map.mmd -o docs/diagrams/market-map.svg -b transparent -C docs/diagrams/theme.json",
+    "diagram:build:all": "for f in docs/diagrams/*.mmd; do PUPPETEER_CONFIG=docs/diagrams/puppeteer-config.json npx -y @mermaid-js/mermaid-cli -i \"$f\" -o docs/diagrams -b transparent -C docs/diagrams/theme.json; done",
     "lh:ci": "npx @lhci/cli collect --config=./lighthouserc.json && npx @lhci/cli assert --config=./lighthouserc.json",
     "test:e2e": "playwright test",
     "test:e2e:update": "playwright test --update-snapshots",
@@ -34,7 +34,7 @@
     "three": "^0.180.0"
   },
   "devDependencies": {
-  "@mermaid-js/mermaid-cli": "^10.9.1",
+    "@mermaid-js/mermaid-cli": "^11.9.0",
     "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "4.1.13",
     "@tailwindcss/typography": "0.5.16",
@@ -46,6 +46,7 @@
     "eslint": "9.35.0",
     "eslint-config-next": "15.5.2",
     "postcss": "8.5.6",
+    "puppeteer": "^23",
     "tailwindcss": "4.1.13",
     "typescript": "5.9.2"
   }

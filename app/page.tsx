@@ -12,7 +12,7 @@ export default function Page() {
   <section className="grid-shell section-band pt-28">
   {/* Use wide container so hero aligns with product cards below */}
   <ContainerWide>
-        <Grid12 className="items-start md:items-end">
+  <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
           <Span cols={8}>
             <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch]">
               Aviation grade cast acrylic for clarity under pressure.
@@ -29,9 +29,12 @@ export default function Page() {
                 <span aria-hidden="true" className="reveal-line v right" />
                 <span className="sr-only">Request a Quote</span>
                 <span aria-hidden="true">Request a Quote</span>
+                <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
               </Link>
               {/* Match visual height to primary button for cleaner baseline alignment */}
-              <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">Speak to a Specialist</Link>
+              <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">
+                <span className="btn-tail"><span>Speak to a Specialist</span><span className="arrow" aria-hidden="true">&nbsp;→</span></span>
+              </Link>
             </div>
           </Span>
           <Span cols={4}>
@@ -131,8 +134,11 @@ export default function Page() {
                 <span aria-hidden="true" className="reveal-line v right" />
                 <span className="sr-only">Request a Quote</span>
                 <span aria-hidden="true">Request a Quote</span>
+                <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
               </Link>
-              <Link href="/contact/?type=specialist" className="wipe-link h-11 inline-flex items-center uc px-4">Specialist Call</Link>
+              <Link href="/contact/?type=specialist" className="wipe-link h-11 inline-flex items-center uc px-4">
+                <span className="btn-tail"><span>Specialist Call</span><span className="arrow" aria-hidden="true">&nbsp;→</span></span>
+              </Link>
             </div>
           </div>
         </Span>

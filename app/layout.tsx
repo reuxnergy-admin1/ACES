@@ -9,6 +9,8 @@ import { Nav } from '@/components/Nav';
 import PageTransition from '@/components/PageTransition';
 import ResponsiveContours from '@/components/ResponsiveContours';
 import ToastProvider from '@/components/ui/ToastProvider';
+import SkipLink from '@/components/SkipLink';
+import InlinePrelockScript from '@/components/InlinePrelockScript';
 
 export const metadata = {
   metadataBase: new URL('https://www.acesaerodynamics.com'),
@@ -36,7 +38,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <link rel="stylesheet" href="https://use.typekit.net/szi2mge.css" />
       </head>
   <body suppressHydrationWarning className="bg-black text-white antialiased min-h-dvh grid grid-rows-[auto_1fr_auto]">
-  <a href={`#${mainId}`} className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-overlay focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
+  {/* Pre-hydration capture script */}
+  <InlinePrelockScript />
+  <SkipLink targetId={mainId} />
   <ToastProvider>
     {/* Immediate paint: server SVG fallback, hidden when GL is ready (body.bg-gl-ready) */}
     <div data-bg-fallback aria-hidden data-vrt-mask className="fixed inset-0 z-bg pointer-events-none">
@@ -47,7 +51,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <Nav />
     </div>
     <PageTransition>
-      <main id={mainId} data-app-content className="relative z-content fade-stagger row-start-2 row-end-3">
+  <main id={mainId} data-app-content className="relative z-content fade-stagger row-start-2 row-end-3" tabIndex={-1}>
         {children}
       </main>
     </PageTransition>

@@ -16,7 +16,7 @@ export default function BlogFilters({ className, categories = ['All','Engineerin
         <button
           key={cat}
           type="button"
-          className={clsx('chip uc tracking-[0.06em]',
+          className={clsx('chip uc tracking-[0.06em] whitespace-nowrap',
             active === cat && 'is-active')}
           aria-pressed={active === cat}
           onClick={() => setActive(cat)}

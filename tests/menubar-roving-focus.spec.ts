@@ -6,10 +6,10 @@ test.describe('Desktop menubar roving focus', () => {
     await page.goto('/');
     const menubar = page.getByRole('menubar', { name: /main menu/i });
     await expect(menubar).toBeVisible();
-    // Focus the first link by pressing Tab until inside menubar
-    await page.keyboard.press('Tab');
-    // Ensure focus is on a link within the menubar
-    const firstFocused = await page.evaluate(() => !!document.activeElement && (document.activeElement as HTMLElement).closest('[role="menubar"]'));
+  // Focus the first menu item directly to begin roving focus checks
+  await page.getByRole('menuitem').first().focus();
+  // Ensure focus is on a link within the menubar
+  const firstFocused = await page.evaluate(() => !!document.activeElement && (document.activeElement as HTMLElement).closest('[role="menubar"]'));
     expect(firstFocused).toBeTruthy();
     // ArrowRight moves to next
     await page.keyboard.press('ArrowRight');

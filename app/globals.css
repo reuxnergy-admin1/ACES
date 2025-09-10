@@ -87,6 +87,8 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* Clip minor subpixel overflow and stabilize scrollbar gutter to prevent stray horizontal scrollbars */
+html { overflow-x: clip; scrollbar-gutter: stable both-edges; }
 /* Prevent horizontal scroll at the root without clipping fixed descendants attached to body */
 /* Avoid forcing a permanent gutter; rely on element-level fixes instead */
 /* Reserve gutter space to avoid 100vw including the scrollbar width on platforms that show it */
@@ -160,6 +162,11 @@ body.cursor-hide-transition, body.cursor-hide-transition * { cursor: none; }
 .wipe-link:hover::before, .wipe-link:focus-visible::before {
   transform: translateX(0);
 }
+
+/* Tail composition used in tests to ensure arrow and label share row */
+.btn-tail { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.btn-tail > span { display: inline-block; line-height: 1; }
+.btn-tail .arrow { line-height: 1; display: inline-block; }
 
 /* Link and button microinteractions */
 /* Avoid layout-shifting hover effects; keep transitions to color/opacity only */

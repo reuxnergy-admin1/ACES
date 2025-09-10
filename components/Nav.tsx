@@ -55,8 +55,30 @@ export function Nav() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
+    // Basic focus trap when open: keep tab focus within the dialog
+    const onTrap = (e: KeyboardEvent) => {
+      if (!open || e.key !== 'Tab') return;
+      const dialog = document.querySelector('dialog[open]');
+      if (!dialog) return;
+      const focusables = dialog.querySelectorAll<HTMLElement>(
+        'a[href],button:not([disabled]),textarea,input,select,[tabindex]:not([tabindex="-1"])'
+      );
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey) {
+        if (active === first) {
+          e.preventDefault();
+          (last as HTMLElement | undefined)?.focus();
+        }
+      } else if (active === last) {
+        e.preventDefault();
+        (first as HTMLElement | undefined)?.focus();
+      }
+    };
     if (open) {
       document.addEventListener('keydown', onKey);
+      document.addEventListener('keydown', onTrap, true);
       // Save position and lock scroll (iOS-safe)
       scrollYRef.current = window.scrollY;
       const html = document.documentElement;
@@ -81,6 +103,7 @@ export function Nav() {
       requestAnimationFrame(() => closeBtnRef.current?.focus());
     } else {
       document.removeEventListener('keydown', onKey);
+      document.removeEventListener('keydown', onTrap, true);
       // Restore scroll
       const html = document.documentElement;
       const body = document.body as HTMLBodyElement & { _prevOverflow?: string; _prevPos?: string; _prevTop?: string; _prevWidth?: string };
@@ -107,6 +130,7 @@ export function Nav() {
     }
     return () => {
       document.removeEventListener('keydown', onKey);
+  document.removeEventListener('keydown', onTrap, true);
       const html = document.documentElement;
       const body = document.body as HTMLBodyElement & { _prevOverflow?: string; _prevPos?: string; _prevTop?: string; _prevWidth?: string };
       html.style.overflow = '';
@@ -233,8 +257,8 @@ export function Nav() {
       )}
     >
   <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
-  {/* Wrap header content so it can be inerted when mobile menu opens */}
-  <div data-app-content>
+  {/* Header content deliberately not marked as data-app-content so page-transition lock doesn't block nav clicks */}
+  <div>
   <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
         <div className="container-wide">
           {/* Chronicle-style nav sheen overlay (feature flagged) */}
@@ -359,6 +383,7 @@ export function Nav() {
         open={open}
   aria-modal="true"
         aria-labelledby={`${menuId}-title`}
+        aria-label="Menu"
         className={clsx(
             'md:hidden fixed inset-0 z-overlay m-0 p-0 surface surface-opaque surface--sm surface-strong elevate border-t border-white/12',
           'transition-opacity duration-500 ease-[var(--ease-premium)]',

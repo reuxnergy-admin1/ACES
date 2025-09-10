@@ -1,0 +1,506 @@
+[
+  {
+    "route": "/work/ikea-uk",
+    "width": 640,
+    "overflow": false,
+    "containerMax": 640,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work/ikea-uk",
+    "width": 1600,
+    "overflow": false,
+    "containerMax": 1600,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog",
+    "width": 1280,
+    "overflow": false,
+    "containerMax": 1280,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 56
+  },
+  {
+    "route": "/blog",
+    "width": 640,
+    "overflow": false,
+    "containerMax": 640,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog",
+    "width": 1600,
+    "overflow": false,
+    "containerMax": 1600,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/services",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog/ai-seo-content-automation",
+    "width": 1280,
+    "overflow": false,
+    "containerMax": 1280,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog/ai-seo-content-automation",
+    "width": 640,
+    "overflow": false,
+    "containerMax": 640,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/about",
+    "width": 1280,
+    "overflow": false,
+    "containerMax": 1280,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog/ai-seo-content-automation",
+    "width": 1600,
+    "overflow": false,
+    "containerMax": 1600,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/about",
+    "width": 640,
+    "overflow": false,
+    "containerMax": 640,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work/ikea-uk",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/about",
+    "width": 1600,
+    "overflow": false,
+    "containerMax": 1600,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/careers",
+    "width": 1280,
+    "overflow": false,
+    "containerMax": 1280,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/careers",
+    "width": 640,
+    "overflow": false,
+    "containerMax": 640,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/contact",
+    "width": 1280,
+    "overflow": false,
+    "containerMax": 1280,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/careers",
+    "width": 1600,
+    "overflow": false,
+    "containerMax": 1600,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/contact",
+    "width": 640,
+    "overflow": false,
+    "containerMax": 640,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/contact",
+    "width": 1600,
+    "overflow": false,
+    "containerMax": 1600,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/",
+    "width": 1440,
+    "overflow": false,
+    "containerMax": 1440,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 80
+  },
+  {
+    "route": "/blog/ai-seo-content-automation",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 56
+  },
+  {
+    "route": "/",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 80
+  },
+  {
+    "route": "/services",
+    "width": 1440,
+    "overflow": false,
+    "containerMax": 1440,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/services",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/about",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work",
+    "width": 1440,
+    "overflow": false,
+    "containerMax": 1440,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/services",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/careers",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/contact",
+    "width": 390,
+    "overflow": false,
+    "containerMax": 390,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work/ikea-uk",
+    "width": 1440,
+    "overflow": false,
+    "containerMax": 1440,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/",
+    "width": 414,
+    "overflow": false,
+    "containerMax": 414,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 56
+  },
+  {
+    "route": "/work/ikea-uk",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog",
+    "width": 1440,
+    "overflow": false,
+    "containerMax": 1440,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work/ikea-uk",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/services",
+    "width": 414,
+    "overflow": false,
+    "containerMax": 414,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work",
+    "width": 414,
+    "overflow": false,
+    "containerMax": 414,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog/ai-seo-content-automation",
+    "width": 1440,
+    "overflow": false,
+    "containerMax": 1440,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog/ai-seo-content-automation",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog/ai-seo-content-automation",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/work/ikea-uk",
+    "width": 414,
+    "overflow": false,
+    "containerMax": 414,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/blog",
+    "width": 414,
+    "overflow": false,
+    "containerMax": 414,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/about",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/about",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/careers",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/careers",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/contact",
+    "width": 768,
+    "overflow": false,
+    "containerMax": 768,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/contact",
+    "width": 1920,
+    "overflow": false,
+    "containerMax": 1920,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 48
+  },
+  {
+    "route": "/",
+    "width": 1024,
+    "overflow": false,
+    "containerMax": 1024,
+    "paddingLeft": 0,
+    "paddingRight": 0,
+    "gutterHeuristic": 80
+  }
+]

@@ -50,9 +50,10 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     coverDur: isAutomation ? 600 : 900,
     revealHold: isAutomation ? 60 : 100,
     revealDur: isAutomation ? 800 : 900,
-    fallbackRevealAfter: isAutomation ? 700 : 900,
-    watchdogMs: 4000,
+  fallbackRevealAfter: isAutomation ? 700 : 900,
+  watchdogMs: isAutomation ? 3000 : 4000,
   });
+  // Note: we don't currently depend on pathname changes directly; popstate and overlay state drive reveals.
 
   const clearLocksAndOverlay = useCallback(() => {
     const ov = overlayRef.current;
@@ -81,6 +82,13 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     }
   }, []);
 
+  // Query reduced motion synchronously when needed (avoids relying solely on effect timing)
+  const isReducedMotionNow = useCallback(() => {
+    try {
+      return typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+    } catch { return false; }
+  }, []);
+
   const finalizeAfterShrink = useCallback((overlayEl: SVGSVGElement, dimNode: SVGRectElement | null) => {
     overlayEl.dataset.active = '0';
     overlayEl.style.pointerEvents = 'none';
@@ -103,6 +111,23 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     shrinkCircle(circ, dimNode, timings.current.revealDur)
       .then(() => finalizeAfterShrink(ov, dimNode));
   }, [finalizeAfterShrink]);
+
+  // If route has changed and overlay is still marked active, trigger reveal to avoid stalls
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const ov = overlayRef.current;
+    if (!ov) return;
+    if (ov.dataset.active === '1') {
+      const circ = circleRef.current;
+      const dimNode = dimRef.current;
+      if (circ) {
+        shrinkCircle(circ, dimNode, timings.current.revealDur)
+          .then(() => { const overlayEl = overlayRef.current; if (overlayEl) finalizeAfterShrink(overlayEl, dimNode); });
+      } else {
+        clearLocksAndOverlay();
+      }
+    }
+  }, [clearLocksAndOverlay, finalizeAfterShrink]);
 
   // Animate content fade on enter; if overlay is active, shrink it to reveal content
   useEffect(() => {
@@ -172,7 +197,9 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   useEffect(() => {
   /* eslint-disable max-nested-callbacks */
   function preLock(e: PointerEvent) {
-      if (reduceMotionRef.current) {
+      if (reduceMotionRef.current || isReducedMotionNow()) {
+        // Ensure any accidental locks are cleared and overlay stays inactive
+        clearLocksAndOverlay();
         return; // skip overlay in reduced motion
       }
       // Pre-emptively engage locks on pointerdown for internal navigations for snappy feel
@@ -190,6 +217,8 @@ export default function PageTransition({ children }: Readonly<{ children: React.
         const x = e.clientX;
         const y = e.clientY;
         ov.dataset.active = '1';
+  // Keep overlay from capturing the pending mouseup/click so default anchor nav proceeds
+  ov.style.pointerEvents = 'none';
         ov.dataset.phase = 'cover';
         c.setAttribute('cx', String(x));
         c.setAttribute('cy', String(y));
@@ -200,11 +229,15 @@ export default function PageTransition({ children }: Readonly<{ children: React.
           noise.setAttribute('baseFrequency', '0.022');
           noise.setAttribute('seed', String(Math.floor(Math.random()*1000)));
         }
-  armWatchdog();
+        // Ensure a reveal happens even if onClick early-returns
+        window.setTimeout(fallbackRevealIfActive, timings.current.fallbackRevealAfter);
+        armWatchdog();
       }
     }
     function onClick(e: MouseEvent) {
-      if (reduceMotionRef.current) {
+      if (reduceMotionRef.current || isReducedMotionNow()) {
+        // Ensure any accidental locks are cleared and overlay stays inactive
+        clearLocksAndOverlay();
         return; // skip overlay in reduced motion
       }
       // If an animation is already active, ignore subsequent clicks
@@ -302,7 +335,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     document.addEventListener('pointerdown', preLock, true);
     document.addEventListener('click', onClick, true);
     return () => { document.removeEventListener('click', onClick, true); document.removeEventListener('pointerdown', preLock, true); };
-  }, [armWatchdog, fallbackRevealIfActive]);
+  }, [armWatchdog, fallbackRevealIfActive, clearLocksAndOverlay, isReducedMotionNow]);
   /* eslint-enable max-nested-callbacks */
 
   // Sync SVG viewBox to viewport for consistent geometry
@@ -320,7 +353,8 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   // Reverse wipe on browser back/forward (popstate)
   useEffect(() => {
     const handler = () => {
-      if (reduceMotionRef.current) {
+      if (reduceMotionRef.current || isReducedMotionNow()) {
+        clearLocksAndOverlay();
         return;
       }
       if (!overlayRef.current || overlayRef.current.dataset.active === '1') return;
@@ -359,7 +393,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     const opts: AddEventListenerOptions = { passive: true };
     window.addEventListener('popstate', handler as EventListener, opts);
     return () => window.removeEventListener('popstate', handler as EventListener, opts);
-  }, [armWatchdog]);
+  }, [armWatchdog, clearLocksAndOverlay, isReducedMotionNow]);
 
   // Ensure cleanup on unload to avoid dangling locks if the page is abandoned mid-animation
   useEffect(() => {
