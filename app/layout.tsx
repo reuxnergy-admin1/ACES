@@ -10,7 +10,7 @@ import PageTransition from '@/components/PageTransition';
 import ResponsiveContours from '@/components/ResponsiveContours';
 import ToastProvider from '@/components/ui/ToastProvider';
 import SkipLink from '@/components/SkipLink';
-import InlinePrelockScript from '@/components/InlinePrelockScript';
+import { getRequestNonce } from '@/lib/csp';
 
 export const metadata = {
   metadataBase: new URL('https://www.acesaerodynamics.com'),
@@ -30,16 +30,17 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const mainId = 'main-content';
   const cookieStore = await cookies();
   const chronicleOn = cookieStore.get('feature-chronicle-ui')?.value === '1';
+  const nonce = await getRequestNonce();
   return (
     <html lang="en" className={chronicleOn ? 'feature-chronicle-ui' : undefined}>
       <head>
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
         <link rel="stylesheet" href="https://use.typekit.net/szi2mge.css" />
+  {/* Pre-hydration capture script with CSP nonce */}
+  <script nonce={nonce}>{`(()=>{try{var reduce=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)===true;if(reduce)return;var isAuto=!!(navigator&&navigator.webdriver===true);function isInternal(a){if(!a)return false;var h=a.getAttribute?(a.getAttribute('href')||''):'';return h.indexOf('/')===0&&h.indexOf('/#')!==0}function clear(){document.body.classList.remove('cursor-hide-transition','pt-disable-scroll','pt-no-events');var ov=document.querySelector('svg.pt-blob-svg');if(ov)ov.setAttribute('data-active','0')}function markOverlayActive(){var ov=document.querySelector('svg.pt-blob-svg');if(ov){ov.setAttribute('data-active','1');ov.style.pointerEvents='none';return true}return false}if(isAuto){try{document.body.classList.add('cursor-hide-transition','pt-disable-scroll','pt-no-events')}catch(_){};if(!markOverlayActive()){var mo=new MutationObserver(function(){if(markOverlayActive()){try{mo.disconnect()}catch(_){}}});try{mo.observe(document.documentElement,{childList:true,subtree:true})}catch(_){}}setTimeout(clear,2200)}function onClick(e){var t=e.target;if(!t||!t.closest)return;var a=t.closest('a[href]');if(!isInternal(a))return;document.body.classList.add('cursor-hide-transition','pt-disable-scroll','pt-no-events');if(isAuto){setTimeout(clear,2200)}}document.addEventListener('click',onClick,true)}catch(_){}})();`}</script>
       </head>
   <body suppressHydrationWarning className="bg-black text-white antialiased min-h-dvh grid grid-rows-[auto_1fr_auto]">
-  {/* Pre-hydration capture script */}
-  <InlinePrelockScript />
   <SkipLink targetId={mainId} />
   <ToastProvider>
     {/* Immediate paint: server SVG fallback, hidden when GL is ready (body.bg-gl-ready) */}
