@@ -252,7 +252,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
       if (!href.startsWith('/') || href.startsWith('/#')) return;
       // Start overlay
       const rect = a.getBoundingClientRect?.();
-      // For header primary nav links, prefer a consistent bottom‑center origin for a composed brand move.
+      // For header primary nav links, prefer a consistent bottom‑centre origin for a composed brand move.
       const inHeaderNav = !!(a.closest('nav[aria-label="Primary"]'));
       let x: number;
       let y: number;

@@ -4,7 +4,7 @@ Next.js 15 + TypeScript + Tailwind 4 site with motion/a11y patterns and Playwrig
 
 ## Getting started
 
-- Requirements: Node 22+ (see `.nvmrc`), pnpm 9+
+- Requirements: Node 22+ (see `.nvmrc`), pnpm 9.12.3+
 - Install: `pnpm install`
 - Dev: `pnpm dev` then open <http://localhost:3000>
 
@@ -13,9 +13,14 @@ Next.js 15 + TypeScript + Tailwind 4 site with motion/a11y patterns and Playwrig
 - `pnpm build` — production build
 - `pnpm start` — serve production build
 - `pnpm lint` — ESLint
-- `pnpm test:e2e` — Playwright tests
+- `pnpm test:e2e` — Playwright tests (runs against production build)
+- `pnpm test:e2e:update` — update Playwright snapshots
+- `pnpm test:e2e:install` — install Playwright browsers with dependencies
 - `pnpm guard:bg` — checks background assets integrity
+- `pnpm guard:bg:update` — refresh background asset checksums
 - `pnpm diagram:build` — generate Mermaid SVG for market map
+- `pnpm diagram:build:all` — generate all Mermaid SVGs in docs/diagrams
+- `pnpm lh:ci` — run Lighthouse CI audit
 
 More operational details: see `README-OPS.md`.
 
@@ -23,8 +28,9 @@ More operational details: see `README-OPS.md`.
 
 - Components live under `components/` and pages under `app/`
 - Motion utilities are in `components/motion` and `lib/motion`
-- Security/CSP guidance in `middleware.ts` and `README-OPS.md`
+- Security/CSP with nonce implementation in `middleware.ts` and `lib/csp.ts`
 - Diagrams (Mermaid) in `docs/diagrams/`
+- Tests configured for production server to ensure deterministic rendering
 
 ## Contributing
 

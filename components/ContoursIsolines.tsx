@@ -273,13 +273,13 @@ function FullscreenQuad(props: Props) {
     let targetX = lastX;
     let targetY = lastY;
     if (magnetRef.current.active) {
-      // Nudge pointer toward center of hovered interactive element (max 12px)
+      // Nudge pointer toward centre of hovered interactive element (max 12px)
       const vx = magnetRef.current.cx - lastX;
       const vy = magnetRef.current.cy - lastY;
       const len = Math.hypot(vx, vy) || 1;
       const maxOffset = 12; // px
       const k = Math.min(maxOffset, len) / len;
-      targetX = lastX + vx * k * 0.5; // half-strength toward center
+      targetX = lastX + vx * k * 0.5; // half-strength toward centre
       targetY = lastY + vy * k * 0.5;
     }
     const targetUV = new THREE.Vector2(

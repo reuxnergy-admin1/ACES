@@ -1,14 +1,20 @@
 # Operations and Security
 
-This project can run as a static export or on a server/edge runtime. Pick one model and apply headers accordingly.
+This project runs on a server/edge runtime with per-request CSP nonces for enhanced security. The CSP implementation supports strict script policies whilst maintaining compatibility with required third-party resources.
 
-## Option A — Static export (current)
+## Current Configuration — Server/Edge Runtime
 
-- `next.config.js` sets `output: 'export'` in production. This disables middleware at runtime, so HTTP headers from `middleware.ts` will not be applied by the server. You must configure them at your CDN.
-- Apply the following headers at the CDN:
+- The project is configured as a Next.js server/edge deployment with CSP nonces
+- `middleware.ts` generates per-request nonces and injects comprehensive security headers
+- Pre-hydration scripts use the CSP nonce for secure inline execution
+- Stronger CSP policy enabled: `script-src 'self' 'nonce-...' 'strict-dynamic'`
+
+## Security Headers (Applied via Middleware)
+
+Production headers applied automatically via `middleware.ts`:
 
 ```http
-Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: blob:; font-src 'self' https://use.typekit.net https://p.typekit.net; style-src 'self' 'unsafe-inline' https://use.typekit.net; script-src 'self' 'strict-dynamic' https: http:; connect-src 'self'
+Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: blob:; font-src 'self' https://use.typekit.net https://p.typekit.net; style-src 'self' 'unsafe-inline' https://use.typekit.net; script-src 'self' 'nonce-<generated>' https: http:; connect-src 'self'
 Referrer-Policy: strict-origin-when-cross-origin
 X-Frame-Options: DENY
 X-Content-Type-Options: nosniff
@@ -16,43 +22,47 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 Permissions-Policy: geolocation=(), microphone=(), camera=()
 ```
 
-Notes:
+**Development Mode**: CSP is relaxed to avoid interfering with Next.js dev server, HMR, and source maps. Only essential security headers are applied.
 
-- We cannot use per-request nonces on a static CDN. The `script-src` therefore omits nonces and relies on `strict-dynamic`.
-- If you need stricter policies later, move to Option B.
+## Alternative Deployment — Static Export
 
-## Option B — Server/Edge runtime
+If you need to deploy as static files (e.g., to a CDN):
 
-- Remove `output: 'export'` in `next.config.js`. The Edge middleware will then run and inject per-request nonces plus the CSP in `middleware.ts`.
-- This enables a stronger policy: `script-src 'self' 'nonce-...' 'strict-dynamic'` (no `unsafe-inline`).
+1. Update `next.config.js` to add `output: 'export'`
+2. Configure security headers at your CDN level using the headers above
+3. Note: CSP nonces cannot be used with static export; you'll need to adjust the CSP policy accordingly
 
 ## Fonts
 
-- Today we load Adobe Typekit in `<head>`. If you switch to self-hosted fonts, use `next/font/local` and set `font-display: swap`. Preload woff2 weights in `<head>`.
+- Adobe Typekit fonts are loaded in `<head>` with appropriate CSP directives
+- For self-hosted fonts, use `next/font/local` with `font-display: swap` and preload woff2 weights
 
 ## Images
 
-- With static export we use `images.unoptimized: true`. On a server/edge deploy you can enable the Next image optimizer or use a CDN-based transformer.
+- Next.js Image optimisation is enabled for server/edge deployments
+- For static export, set `images.unoptimized: true` in `next.config.js`
 
-## A11y and QA
+## Accessibility and QA
 
-- Enable the grid overlay by adding `#debug-grid` to the URL or `localStorage.setItem('gridDebug','1')`.
-- A11y collector runs in Playwright via axe-core and logs violations without failing CI. Upgrade to fail-on-violation once content stabilizes.
+- Enable the grid overlay by adding `#debug-grid` to the URL or `localStorage.setItem('gridDebug','1')`
+- A11y auditing runs in Playwright via axe-core and logs violations without failing CI
+- Upgrade to fail-on-violation once content stabilises
 
-## Developer scripts (quick ref)
+## Developer Scripts (Quick Reference)
 
-- dev: Start Next.js dev server
-- build: Production build
-- start: Start prod server
-- lint: Run ESLint
-- test:e2e: Playwright tests
-- test:e2e:update: Update Playwright snapshots
-- test:reference: External reference audit
-- test:e2e:install: Install Playwright browsers
-- guard:bg: Verify background contour assets
-- guard:bg:update: Refresh background contour checksum
-- diagram:build: Build the market-map Mermaid SVG (docs/diagrams)
-- diagram:build:all: Build all Mermaid SVGs in docs/diagrams
+- `dev` — Start Next.js development server
+- `build` — Production build
+- `start` — Start production server
+- `lint` — Run ESLint
+- `test:e2e` — Playwright tests (against production build for deterministic rendering)
+- `test:e2e:update` — Update Playwright snapshots
+- `test:reference` — External reference audit
+- `test:e2e:install` — Install Playwright browsers with dependencies
+- `guard:bg` — Verify background contour assets integrity
+- `guard:bg:update` — Refresh background contour checksums
+- `diagram:build` — Build the market-map Mermaid SVG (`docs/diagrams`)
+- `diagram:build:all` — Build all Mermaid SVGs in `docs/diagrams`
+- `lh:ci` — Run Lighthouse CI audit
 
 ## Docs & Diagrams
 
@@ -62,5 +72,23 @@ Mermaid source files live in `docs/diagrams/*.mmd` and compile to SVG alongside 
 - Build once: `pnpm diagram:build`
 - Build all: `pnpm diagram:build:all`
 
-The Mermaid CLI theme is in `docs/diagrams/theme.json`.
+The Mermaid CLI configuration includes:
+
+- Custom theme: `docs/diagrams/theme.json`
+- Puppeteer config: `docs/diagrams/puppeteer-config.json`
+- Deterministic rendering for consistent outputs
+
+## Testing Configuration
+
+- Playwright tests run against the production build (`pnpm build && pnpm start`) for deterministic rendering
+- VRT (Visual Regression Testing) includes masking for dynamic content
+- Tests include reduced motion emulation for consistent snapshots
+- Global setup includes route pre-warming to avoid first-hit RSC stream races
+
+## CSP and Nonce Implementation
+
+- CSP nonces are generated per-request using Web Crypto API
+- Nonces are exposed via `x-nonce` header and accessible in server components via `getRequestNonce()`
+- Pre-hydration scripts in layout use nonce for secure inline execution
+- Development mode disables CSP to support HMR and dev tooling
 
