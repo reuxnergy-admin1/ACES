@@ -1,7 +1,7 @@
-import type { ReactNode, ElementType } from 'react';
+import { createElement, type ReactNode, type ElementType, type HTMLAttributes } from 'react';
 
-type Props = Readonly<{ children: ReactNode; className?: string; as?: ElementType }>;
+type Props = Readonly<{ children: ReactNode; className?: string; as?: ElementType } & HTMLAttributes<HTMLDivElement>>;
 
-export default function ContainerWide({ children, className = '', as: Tag = 'div' }: Props) {
-  return <Tag className={`container-wide ${className}`}>{children}</Tag>;
+export default function ContainerWide({ children, className = '', as: Tag = 'div', ...rest }: Props) {
+  return createElement(Tag, { className: `container-wide ${className}`, ...rest }, children);
 }

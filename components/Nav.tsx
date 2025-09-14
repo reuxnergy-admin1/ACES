@@ -184,8 +184,7 @@ export function Nav() {
     setMobileOpen(prev => ({ ...prev, [id]: !prev[id] }));
   }, []);
 
-  // Desktop hover background pill refs/state
-  const hoverRef = useRef<HTMLDivElement | null>(null);
+  // Desktop proximity highlight refs/state
   const containerRef = useRef<HTMLDivElement | null>(null);
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const activeParent = useMemo(() => {
@@ -193,60 +192,59 @@ export function Nav() {
     return found ?? null;
   }, [items, openMenu]);
 
-  const moveHover = useCallback((href: string | null) => {
-    const pill = hoverRef.current;
-    const container = containerRef.current;
-    if (!pill || !container) return;
-    const targetHref = href ?? items.find(i => pathname?.startsWith(i.href))?.href ?? null;
-    const targetEl = targetHref ? linkRefs.current[targetHref] : null;
-    const contRect = container.getBoundingClientRect();
-    if (targetEl) {
-      const r = targetEl.getBoundingClientRect();
-      const pad = 8; // little horizontal breathing room
-      const x = r.left - contRect.left - pad / 2;
-      const w = r.width + pad;
-      pill.style.opacity = '1';
-      pill.style.transform = `translate(${x}px, -50%)`;
-      pill.style.width = `${w}px`;
-    } else {
-      // Hide when no active target
-      pill.style.opacity = '0';
-      pill.style.width = '0px';
+  const updateProximityFromPoint = useCallback((x: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const localX = x - rect.left;
+    // Write CSS var for highlight position and default opacity
+    el.style.setProperty('--nav-x', `${localX - 90}px`);
+    el.style.setProperty('--nav-opacity', '1');
+    // Compute per-link proximity for subtle scale/opacity
+  const links = Array.from(el.querySelectorAll('a[href]')).filter((n): n is HTMLElement => n instanceof HTMLElement);
+    // Track closest link for underline slider
+    let closest: { a: HTMLElement; dist: number } | null = null;
+    for (const a of links) {
+      const r = a.getBoundingClientRect();
+      const center = r.left + r.width / 2 - rect.left;
+      const dist = Math.abs(localX - center);
+      const prox = Math.max(0, 1 - dist / 220); // radius ~220px
+      a.style.setProperty('--prox-opacity', String(0.6 + prox * 0.4));
+      a.style.setProperty('--prox-scale', String(1 + prox * 0.04));
+      if (!closest || dist < closest.dist) closest = { a, dist };
     }
-  }, [items, pathname]);
+    // Position underline slider under closest link
+    try {
+  const target = closest?.a;
+      const ul = el.querySelector<HTMLElement>('.nav-underline');
+      if (target && ul) {
+        const tr = target.getBoundingClientRect();
+        const x = tr.left - rect.left;
+        el.style.setProperty('--ul-x', `${x}px`);
+        el.style.setProperty('--ul-w', `${tr.width}px`);
+        el.style.setProperty('--ul-o', '1');
+      }
+    } catch { /* noop */ }
+  }, []);
 
-  useEffect(() => {
-    moveHover(null);
-    const onResize = () => moveHover(null);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [moveHover]);
-
-  // Hide/revert indicator to active item when pointer leaves the group (attached via DOM to avoid a11y lint on JSX)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const handler = () => moveHover(null);
-    el.addEventListener('mouseleave', handler);
-    return () => el.removeEventListener('mouseleave', handler);
-  }, [moveHover]);
+    const onMove = (e: MouseEvent) => updateProximityFromPoint(e.clientX);
+    const onLeave = () => {
+      el.style.setProperty('--nav-opacity', '0');
+  const links = Array.from(el.querySelectorAll('a[href]')).filter((n): n is HTMLElement => n instanceof HTMLElement);
+      for (const a of links) { a.style.removeProperty('--prox-opacity'); a.style.removeProperty('--prox-scale'); }
+      el.style.setProperty('--ul-o', '0');
+    };
+    el.addEventListener('mousemove', onMove);
+    el.addEventListener('mouseleave', onLeave);
+    window.addEventListener('resize', onLeave);
+    return () => { el.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave); window.removeEventListener('resize', onLeave); };
+  }, [updateProximityFromPoint]);
+  // No-op: pill removed
 
-  // Keyboard navigation inside submenu panel
-  const onSubmenuKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
-    const keys = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
-    if (!keys.includes(e.key)) return;
-    e.preventDefault();
-    const container = e.currentTarget;
-    const links = Array.from(container.querySelectorAll<HTMLAnchorElement>('a[href]'));
-    if (links.length === 0) return;
-    const idx = links.findIndex((a) => a === document.activeElement);
-    let next = idx;
-    if (e.key === 'ArrowDown') next = (idx + 1 + links.length) % links.length;
-    if (e.key === 'ArrowUp') next = (idx - 1 + links.length) % links.length;
-    if (e.key === 'Home') next = 0;
-    if (e.key === 'End') next = links.length - 1;
-    links[next]?.focus();
-  }, []);
+  // Keyboard navigation inside submenu panel handled inline in JSX below
 
   // Roving focus across top-level menu items on desktop (ArrowLeft/Right, Home/End)
   const onMenubarKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -283,36 +281,35 @@ export function Nav() {
               <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
               </Link>
             </div>
-            <nav className="hidden md:flex items-center gap-4 md:col-span-8 justify-self-start" aria-label="Primary"
+      <nav className="hidden md:flex items-center gap-4 md:col-span-8 justify-self-start" aria-label="Primary"
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}>
       <div
                 ref={containerRef}
-    className="relative flex items-center gap-2 py-1 overflow-hidden"
+        className="nav-prox nav-prox--header relative flex items-center gap-2 py-1 overflow-hidden"
         role="menubar"
         aria-label="Main menu"
                 aria-orientation="horizontal"
                 tabIndex={0}
         onKeyDown={onMenubarKeyDown}
               >
-            {/* Sliding hover background pill */}
-            <div
-              ref={hoverRef}
-              aria-hidden
-              className="absolute top-1/2 left-0 -translate-y-1/2 h-[34px] rounded-full bg-white/10 supports-[backdrop-filter]:backdrop-blur-sm"
-              style={{ width: 0, transform: 'translate(0px, -50%)', transition: 'transform 700ms var(--ease-premium), width 700ms var(--ease-premium), opacity 420ms var(--ease-premium)', opacity: 0 }}
-            />
+    {/* Cursor proximity highlight */}
+    <div aria-hidden="true" className="nav-prox__highlight" />
+  <div aria-hidden="true" className="nav-underline" />
               {items.map((item) => {
               const active = pathname?.startsWith(item.href);
               return (
                   <div key={item.id} className="relative">
-                    <Link
+        <Link
                       href={item.href}
                       ref={(el) => { linkRefs.current[item.href] = el; }}
-                      onMouseEnter={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
-                      onFocus={() => { cancelClose(); moveHover(item.href); if (item.children) setOpenMenu(item.id); }}
-                      className={clsx('group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors link-underline',
-                        active ? 'text-white' : 'text-white/80 hover:text-white')}
+                      // Let global PageTransition handle navigation; keep href for a11y and middle-click
+                      onClick={undefined}
+            onMouseEnter={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
+            onFocus={() => { cancelClose(); if (item.children) setOpenMenu(item.id); }}
+      className={clsx('sheen group relative z-10 px-3 py-2 text-sm md:text-[0.95rem] tracking-[0.08em] uc transition-colors link-underline',
+      active ? 'text-white is-active' : 'text-white/80 hover:text-white')}
+            data-prox
                       aria-current={active ? 'page' : undefined}
                       aria-haspopup={item.children ? 'menu' : undefined}
                       aria-expanded={item.children ? (openMenu === item.id) : undefined}
@@ -320,7 +317,6 @@ export function Nav() {
                       id={`menuitem-${item.id}`}
                     >
                       {item.label}
-                      {item.children ? <span className="hidden ml-1 pointer-events-none show-on-pointer-fine">+</span> : null}
                     </Link>
                   </div>
               );
@@ -328,7 +324,7 @@ export function Nav() {
               </div>
             </nav>
               <div className="hidden md:flex md:col-span-2 justify-self-end">
-                <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-all duration-700 px-4 py-2 uc tracking-[0.08em] hover:rounded-xl">REQUEST A QUOTE</Link>
+                <Link href="/contact/" className="sheen button-solid button--md arrow-shift"><span className="btn-tail"><span>REQUEST A QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
               </div>
             </div>
           </div>
@@ -408,12 +404,12 @@ export function Nav() {
                 );
               }
               return (
-                <Link key={item.id} href={item.href} className={clsx('link-underline block px-3 py-2 text-lg tracking-[0.08em] text-white/80 hover:text-white uc', active && 'is-active text-white')}>
+                <Link key={item.id} href={item.href} className={clsx('sheen link-underline block px-3 py-2 text-lg tracking-[0.08em] text-white/80 hover:text-white uc', active && 'is-active text-white')}>
                   {item.label}
                 </Link>
               );
             })}
-            <Link href="/contact/" className="inline-flex items-center rounded-full border border-white/30 text-white/90 hover:text-black hover:bg-white/90 transition-colors duration-700 px-4 py-2 uc tracking-[0.08em]">REQUEST A QUOTE</Link>
+            <Link href="/contact/" className="sheen button-solid button--md arrow-shift"><span className="btn-tail"><span>REQUEST A QUOTE</span> <span className="arrow" aria-hidden>→</span></span></Link>
           </div>
         </div>
       </dialog>
@@ -436,7 +432,19 @@ export function Nav() {
               setOpenMenu(null);
               return;
             }
-            onSubmenuKeyDown(e);
+            const keys = ['ArrowDown', 'ArrowUp', 'Home', 'End'];
+            if (!keys.includes(e.key)) return;
+            e.preventDefault();
+            const container = e.currentTarget as HTMLElement;
+            const links = Array.from(container.querySelectorAll('a[href]')) as unknown as HTMLElement[];
+            if (links.length === 0) return;
+            const idx = links.findIndex((a) => a === document.activeElement);
+            let next = idx;
+            if (e.key === 'ArrowDown') next = (idx + 1 + links.length) % links.length;
+            if (e.key === 'ArrowUp') next = (idx - 1 + links.length) % links.length;
+            if (e.key === 'Home') next = 0;
+            if (e.key === 'End') next = links.length - 1;
+            links[next]?.focus();
           }}
         >
           <div className="grid-shell">
