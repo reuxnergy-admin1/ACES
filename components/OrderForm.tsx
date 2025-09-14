@@ -16,7 +16,7 @@ export function OrderForm({ products }: Readonly<{ products: readonly Product[] 
       {/* Hidden input ensures form compatibility if needed */}
       <Listbox name="product" options={opts} value={selected} onChange={setSelected} />
       <button
-        className="button-primary w-full arrow-shift button--md"
+        className="button-solid w-full arrow-shift button--md"
         type="button"
         onClick={() => {
           show('Ordering flow coming soon. We will contact you shortly.', { variant: 'success' });

@@ -9,14 +9,29 @@ export default function Page(){
       </Grid12>
     </ContainerRow>
     <ContainerRow className="mt-8">
-      <form method="post" action="mailto:info@acesaerodynamics.com" className="w-full">
+      <form method="post" action="mailto:info@acesaerodynamics.com" className="w-full" noValidate>
       <Grid12 data-reveal-blur-stagger>
-        <Span cols={6}><input required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Full name"/></Span>
-        <Span cols={6}><input required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Company"/></Span>
-        <Span cols={6}><input required type="email" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Email"/></Span>
-        <Span cols={6}><input className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Phone"/></Span>
-        <Span cols={12}><textarea className="w-full bg-black border border-white/20 rounded px-4 py-3" rows={6} placeholder="Project details"></textarea></Span>
-        <Span cols={8}><button className="button-primary w-full md:w-auto arrow-shift button--md" type="submit"><span className="btn-tail"><span>Send</span> <span className="arrow" aria-hidden>→</span></span></button></Span>
+        <Span cols={6}>
+          <label htmlFor="contact-name" className="sr-only">Full name</label>
+          <input id="contact-name" name="name" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Full name"/>
+        </Span>
+        <Span cols={6}>
+          <label htmlFor="contact-company" className="sr-only">Company</label>
+          <input id="contact-company" name="company" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Company"/>
+        </Span>
+        <Span cols={6}>
+          <label htmlFor="contact-email" className="sr-only">Email</label>
+          <input id="contact-email" name="email" required type="email" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Email"/>
+        </Span>
+        <Span cols={6}>
+          <label htmlFor="contact-phone" className="sr-only">Phone</label>
+          <input id="contact-phone" name="phone" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Phone"/>
+        </Span>
+        <Span cols={12}>
+          <label htmlFor="contact-details" className="sr-only">Project details</label>
+          <textarea id="contact-details" name="details" className="w-full bg-black border border-white/20 rounded px-4 py-3" rows={6} placeholder="Project details"></textarea>
+        </Span>
+        <Span cols={8}><button className="button-solid w-full md:w-auto arrow-shift button--md" type="submit"><span className="btn-tail"><span>Send</span> <span className="arrow" aria-hidden>→</span></span></button></Span>
       </Grid12>
       </form>
     </ContainerRow>

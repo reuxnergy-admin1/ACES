@@ -19,12 +19,12 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   const ring2Ref = useRef<SVGCircleElement>(null);
   const ring3Ref = useRef<SVGCircleElement>(null);
   const dimRef = useRef<SVGRectElement>(null);
-  const [isActive, setIsActive] = useState(false);
+  const [, setIsActive] = useState(false);
   const animId = useRef(0);
   const clickPos = useRef<Coords | null>(null);
   const pendingColour = useRef<string>('#ffffff');
 
-  // Animate content fade on enter (kept from previous version)
+  // Animate content fade on enter; if overlay is active, shrink it to reveal content
   useEffect(() => {
     const el = shellRef.current;
     if (el) {
@@ -38,16 +38,17 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     // If overlay is active (navigation occurred), shrink it to reveal content
     const ov = overlayRef.current;
     if (!ov) return;
-    if (isActive) {
+    // Shrink overlay if currently active (dataset) — do not rely solely on state
+    if (ov.dataset.active === '1') {
       // Small route-ready hold to finish the cover crescendo, then reveal
-      const HOLD = 100; // 80–120ms comfort range
+      const HOLD = 160; // allow reveal observers to arm before unveil
       const holdId = window.setTimeout(() => {
         // Animate circle radius back to 0 using JS for smoothness
         const circle = circleRef.current!;
         if (!circle) return;
         const startR = parseFloat(circle.getAttribute('r') || '0');
         const t0 = performance.now();
-        const DUR = 1000;
+        const DUR = 1200;
         function ease(t: number) { return 1 - Math.pow(1 - t, 3); }
         const id = ++animId.current;
         function frame(t: number) {
@@ -74,6 +75,34 @@ export default function PageTransition({ children }: Readonly<{ children: React.
 
   // Global click capture to start overlay expand
   useEffect(() => {
+    function preLock(e: PointerEvent) {
+      // Pre-emptively engage locks on pointerdown for internal navigations for snappy feel
+      const a = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      if (!href.startsWith('/') || href.startsWith('/#')) return;
+      document.body.classList.add('cursor-hide-transition');
+      document.body.classList.add('pt-disable-scroll');
+      document.body.classList.add('pt-no-events');
+      // Activate overlay immediately so tests can observe it and users feel responsive
+      const ov = overlayRef.current;
+      const c = circleRef.current;
+      if (ov && c && ov.dataset.active !== '1') {
+        const x = (e as PointerEvent).clientX;
+        const y = (e as PointerEvent).clientY;
+        ov.dataset.active = '1';
+        ov.dataset.phase = 'cover';
+        c.setAttribute('cx', String(x));
+        c.setAttribute('cy', String(y));
+        c.setAttribute('r', '12');
+        c.setAttribute('fill', colourForPath());
+        const noise = noiseRef.current;
+        if (noise) {
+          noise.setAttribute('baseFrequency', '0.022');
+          noise.setAttribute('seed', String(Math.floor(Math.random()*1000)));
+        }
+      }
+    }
     function onClick(e: MouseEvent) {
       // If an animation is already active, ignore subsequent clicks
       if (overlayRef.current?.dataset.active === '1') return;
@@ -119,7 +148,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
       const dy = Math.max(y, window.innerHeight - y);
       const targetR = Math.sqrt(dx*dx + dy*dy) + 24;
       const t0 = performance.now();
-      const DUR = 1000;
+      const DUR = 1200;
       function ease(t: number) { return 1 - Math.pow(1 - t, 3); }
       const id = ++animId.current;
       function frame(t: number) {
@@ -144,7 +173,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
           const circ = circleRef.current!; if (!circ) return;
           const startR = parseFloat(circ.getAttribute('r') || '0');
           const t0b = performance.now();
-          const DURB = 700;
+          const DURB = 900;
           function easeOut(t: number) { return 1 - Math.pow(1 - t, 3); }
           function f(t: number) {
             const p = Math.min(1, (t - t0b) / DURB);
@@ -157,8 +186,9 @@ export default function PageTransition({ children }: Readonly<{ children: React.
         }
       }, 900);
     }
+    document.addEventListener('pointerdown', preLock, true);
     document.addEventListener('click', onClick, true);
-    return () => document.removeEventListener('click', onClick, true);
+    return () => { document.removeEventListener('click', onClick, true); document.removeEventListener('pointerdown', preLock, true); };
   }, []);
 
   // Sync SVG viewBox to viewport for consistent geometry

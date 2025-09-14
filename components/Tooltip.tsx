@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, cloneElement } from "react";
 import clsx from "clsx";
 
 type TooltipProps = {
@@ -32,20 +32,18 @@ export function Tooltip({ label, children, placement = "top", delayMs = 120 }: T
     : placement === "left" ? `right-full top-1/2 -translate-y-1/2 mr-[${offset}px]`
     : `left-full top-1/2 -translate-y-1/2 ml-[${offset}px]`;
 
+  // Clone the child and attach ARIA + event handlers directly to it to avoid nested interactive content
+  const child = cloneElement(children, {
+    'aria-describedby': open ? id : undefined,
+    onMouseEnter: () => show(),
+    onMouseLeave: () => hide(),
+    onFocus: () => show(),
+    onBlur: () => hide(),
+    onKeyDown: (e: React.KeyboardEvent) => { if (e.key === 'Escape') hide(); },
+  } as React.Attributes & Record<string, unknown>);
   return (
     <span ref={wrapRef} className="relative inline-flex">
-      <button
-        type="button"
-        aria-describedby={open ? id : undefined}
-        className="contents"
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        onFocus={show}
-  onBlur={hide}
-  onKeyDown={(e) => { if (e.key === 'Escape') hide(); }}
-      >
-        {children}
-      </button>
+      {child}
       <span
         id={id}
         role="tooltip"
