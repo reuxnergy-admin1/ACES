@@ -1,5 +1,6 @@
 import { OrderForm } from '@/components/OrderForm';
 import ContainerRow from '@/components/layout/ContainerRow';
+import SectionBand from '@/components/layout/SectionBand';
 import { Grid12, Span } from '@/components/layout/Grid12';
 
 const PRODUCTS = [
@@ -10,7 +11,7 @@ const PRODUCTS = [
 
 export default function Page() {
   return (
-    <section className="grid-shell section-band pt-28">
+    <SectionBand className="pt-28">
       <ContainerRow>
         <Grid12 data-reveal-blur-stagger>
           <Span cols={6}><OrderForm products={PRODUCTS} /></Span>
@@ -21,6 +22,6 @@ export default function Page() {
           </Span>
         </Grid12>
       </ContainerRow>
-    </section>
+    </SectionBand>
   );
 }

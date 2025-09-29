@@ -25,3 +25,7 @@ out/
 
 # Coverage
 coverage/
+
+# Test results
+test-results/
+playwright-report/
