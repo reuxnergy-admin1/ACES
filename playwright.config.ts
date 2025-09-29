@@ -14,7 +14,7 @@ export default defineConfig({
   },
   webServer: {
   // Use production server for deterministic snapshots (no dev overlays, stable rendering)
-  command: 'pnpm build && pnpm start',
+  command: 'npm run build && npm run start',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
   timeout: 180_000,
