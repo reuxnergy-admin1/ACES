@@ -386,6 +386,17 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 :where(.section-band) { padding-block: var(--stack-md); }
 @media (min-width: 1024px) { :where(.section-band) { padding-block: var(--stack-lg); } }
 
+/* Fluid spacing utilities for consistent vertical rhythm */
+.mt-stack-sm { margin-top: var(--stack-sm); }
+.mt-stack-md { margin-top: var(--stack-md); }
+.mt-stack-lg { margin-top: var(--stack-lg); }
+.mb-stack-sm { margin-bottom: var(--stack-sm); }
+.mb-stack-md { margin-bottom: var(--stack-md); }
+.mb-stack-lg { margin-bottom: var(--stack-lg); }
+.gap-stack-sm { gap: var(--stack-sm); }
+.gap-stack-md { gap: var(--stack-md); }
+.gap-stack-lg { gap: var(--stack-lg); }
+
 /* Auto-fit grid helpers for cards/logos/posts (min track size customizable) */
 .auto-grid {
   display: grid;
