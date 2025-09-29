@@ -20,7 +20,11 @@
     "test:reference": "playwright test tests/external-audit.spec.ts",
     "test:e2e:install": "playwright install --with-deps",
     "guard:bg": "node ./scripts/bg-guard.mjs verify",
-    "guard:bg:update": "node ./scripts/bg-guard.mjs update"
+    "guard:bg:update": "node ./scripts/bg-guard.mjs update",
+    "merge:intelligent": "node ./scripts/intelligent-merge.mjs merge",
+    "merge:report": "node ./scripts/intelligent-merge.mjs report",
+    "merge:demo": "node ./scripts/intelligent-merge-demo.mjs",
+    "merge:utility": "node ./scripts/branch-merge-utility.mjs"
   },
   "dependencies": {
     "@react-three/fiber": "^9.3.0",

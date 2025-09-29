@@ -6,6 +6,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Intelligent merge temporary files
+intelligent-merge.sh
+merge-analysis-report.json
+intelligent-merge-report.json
+
 # Next.js
 .next/
 out/
