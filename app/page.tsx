@@ -9,60 +9,65 @@ import Prose from '@/components/layout/Prose';
 
 export default function Page() {
   return (
-  <section className="grid-shell section-band pt-28">
-  {/* Use wide container so hero aligns with product cards below */}
-  <ContainerWide>
-  <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
-          <Span cols={8}>
-            <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch]">
-              Aviation grade cast acrylic for clarity under pressure.
-            </h1>
-            <p className="mt-6 body max-w-reading text-white/70">
-              SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and
-              non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-3 items-center">
-              <Link href="/contact/" className="button-primary h-11 px-5">
-                <span aria-hidden="true" className="reveal-line h top" />
-                <span aria-hidden="true" className="reveal-line h bottom" />
-                <span aria-hidden="true" className="reveal-line v left" />
-                <span aria-hidden="true" className="reveal-line v right" />
-                <span className="sr-only">Request a Quote</span>
-                <span aria-hidden="true">Request a Quote</span>
-                <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
-              </Link>
-              {/* Match visual height to primary button for cleaner baseline alignment */}
-              <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">
-                <span className="btn-tail"><span>Speak to a Specialist</span><span className="arrow" aria-hidden="true">&nbsp;→</span></span>
-              </Link>
-            </div>
-          </Span>
-          <Span cols={4}>
-            <div className="text-sm body text-white/70">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
-          </Span>
-        </Grid12>
-      </ContainerWide>
+    <>
+      {/* Hero section using consistent SectionBand pattern */}
+      <SectionBand className="pt-28">
+        <ContainerWide>
+          <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
+            <Span cols={8}>
+              <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch]">
+                Aviation grade cast acrylic for clarity under pressure.
+              </h1>
+              <p className="mt-6 body max-w-reading text-white/70">
+                SACAA-approved (MP39) fabrication of cast acrylic windows, windscreens and transparent enclosures for certified and
+                non-pressurised aircraft, plus high-performance composite components for aerospace and motorsport.
+              </p>
+              <div className="mt-10 flex flex-wrap gap-3 items-center">
+                <Link href="/contact/" className="button-primary h-11 px-5">
+                  <span aria-hidden="true" className="reveal-line h top" />
+                  <span aria-hidden="true" className="reveal-line h bottom" />
+                  <span aria-hidden="true" className="reveal-line v left" />
+                  <span aria-hidden="true" className="reveal-line v right" />
+                  <span className="sr-only">Request a Quote</span>
+                  <span aria-hidden="true">Request a Quote</span>
+                  <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
+                </Link>
+                {/* Match visual height to primary button for cleaner baseline alignment */}
+                <Link href="/contact/?type=specialist" className="wipe-link px-5 h-11 inline-flex items-center uc">
+                  <span className="btn-tail"><span>Speak to a Specialist</span><span className="arrow" aria-hidden="true">&nbsp;→</span></span>
+                </Link>
+              </div>
+            </Span>
+            <Span cols={4}>
+              <div className="text-sm body text-white/70">Partners include Denel (formerly Atlas) and the Council for Scientific & Industrial Research.</div>
+            </Span>
+          </Grid12>
+        </ContainerWide>
+      </SectionBand>
 
-  {/* Client carousel directly after hero */}
-  <ClientCarousel className="mt-10 md:mt-16" reveal />
+      {/* Client carousel using fluid spacing token */}
+      <ClientCarousel className="mt-[var(--stack-md)]" reveal />
 
-  <ContainerRow className="section-band pt-0" data-reveal-stagger>
-        <Grid12>
-        {[
-          {title:'Aerospace Transparencies', href:'/products/aircraft/'},
-          {title:'Helicopter Transparencies', href:'/products/helicopters/'},
-          {title:'Motorsport Components', href:'/products/motorsport/'},
-        ].map((c) => (
-          <SheenCard key={c.href} className="md:col-span-4" data-reveal>
-            <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
-              <div className="text-xl">{c.title}</div>
-              <div className="mt-2 body text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
-              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
-            </Link>
-          </SheenCard>
-        ))}
-        </Grid12>
-      </ContainerRow>
+      {/* Product cards section */}
+      <SectionBand>
+        <ContainerRow>
+          <Grid12 data-reveal-stagger>
+            {[
+              {title:'Aerospace Transparencies', href:'/products/aircraft/'},
+              {title:'Helicopter Transparencies', href:'/products/helicopters/'},
+              {title:'Motorsport Components', href:'/products/motorsport/'},
+            ].map((c) => (
+              <SheenCard key={c.href} className="md:col-span-4" data-reveal>
+                <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
+                  <div className="text-xl">{c.title}</div>
+                  <div className="mt-2 body text-white/60">Design, tooling, thermoforming, finishing, coatings, QA.</div>
+                  <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Explore →</div>
+                </Link>
+              </SheenCard>
+            ))}
+          </Grid12>
+        </ContainerRow>
+      </SectionBand>
 
   {/* Capabilities */}
   <SectionBand>
@@ -169,27 +174,27 @@ export default function Page() {
     </ContainerRow>
   </SectionBand>
 
-  {/* Insights */}
-  <SectionBand>
-    <ContainerRow>
-      <Grid12>
-        <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Insights</h2></Span>
-        {[
-          {title:'Choosing coatings for clarity and durability', href:'/blog/'},
-          {title:'Avoiding forming defects in acrylic', href:'/blog/'},
-          {title:'QA metrics that matter (VLT, haze)', href:'/blog/'},
-        ].map((p) => (
-          <SheenCard key={p.title} className="md:col-span-4" data-reveal>
-            <Link href={p.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
-              <div className="text-xl">{p.title}</div>
-              <div className="mt-2 text-white/60">Short engineering notes from our team.</div>
-              <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Read →</div>
-            </Link>
-          </SheenCard>
-        ))}
-      </Grid12>
-    </ContainerRow>
-  </SectionBand>
-    </section>
+      {/* Insights */}
+      <SectionBand>
+        <ContainerRow>
+          <Grid12>
+            <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Insights</h2></Span>
+            {[
+              {title:'Choosing coatings for clarity and durability', href:'/blog/'},
+              {title:'Avoiding forming defects in acrylic', href:'/blog/'},
+              {title:'QA metrics that matter (VLT, haze)', href:'/blog/'},
+            ].map((p) => (
+              <SheenCard key={p.title} className="md:col-span-4" data-reveal>
+                <Link href={p.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline">
+                  <div className="text-xl">{p.title}</div>
+                  <div className="mt-2 text-white/60">Short engineering notes from our team.</div>
+                  <div className="mt-8 text-white/60 group-hover:text-white transition-colors">Read →</div>
+                </Link>
+              </SheenCard>
+            ))}
+          </Grid12>
+        </ContainerRow>
+      </SectionBand>
+    </>
   );
 }
