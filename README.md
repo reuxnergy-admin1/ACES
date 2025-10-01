@@ -153,7 +153,9 @@ aces-aerodynamics/
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — Branch, commit, and test conventions
 - **[README-OPS.md](README-OPS.md)** — Operations, security, and deployment
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
+- **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Comprehensive design system and UI patterns
 - **[AUDIT.md](AUDIT.md)** — Repository audit and quality targets
+- **[QC-REPORT.md](QC-REPORT.md)** — Quality control report and production readiness
 - **[BRAND.md](BRAND.md)** — Brand guidelines and logo usage
 
 ## Technology Stack

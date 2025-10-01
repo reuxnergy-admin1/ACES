@@ -220,7 +220,9 @@
 - `README.md:1` — Quickstart and script overview
 - `README-OPS.md:1` — Security, deployment, testing operations
 - `README-LAYOUT.md:1` — Canonical layout decisions and policies
+- `UI-UX-PATTERNS.md:1` — Comprehensive design system and UI patterns library
 - `AUDIT.md:1` — Repository audit map and quality targets
+- `QC-REPORT.md:1` — Quality control report and production readiness
 - `CHRONICLE_IMPLEMENTATION.md:1` — Chronicle feature-flag implementation details
 
 **Contact & Ownership**
