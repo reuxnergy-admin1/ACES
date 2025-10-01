@@ -1,8 +1,10 @@
 **Project Overview**
 - **Name:** ACES Aerodynamics — Website
+- **Production URL:** [www.acesaerodynamics.com](https://www.acesaerodynamics.com)
 - **Stack:** Next.js 15 (App Router) + React 19 + TypeScript + Tailwind 4 + Playwright + Lighthouse CI
 - **Runtime:** Server/Edge with CSP nonces (production). Deterministic E2E tests against production build.
 - **Design:** Server-first rendering with a motion system, robust accessibility, and a responsive layout grid. Background uses instant SVG with idle WebGL upgrade.
+- **Status:** Alpha - Production-ready codebase with comprehensive documentation
 
 **Environment & Tooling**
 - **Node:** 22+ (`.nvmrc`)
@@ -139,9 +141,46 @@
   - Note: Playwright tests are not executed in CI by default; run locally or extend workflow as needed.
 
 **Operational Notes**
+- **Business Domain:** www.acesaerodynamics.com
+- **Business Email:** info@acesaerodynamics.com
+- **Social Media:**
+  - Facebook: facebook.com/acesaerodynamics
+  - Instagram: instagram.com/acesaerodynamics
 - **Fonts:** Adobe Typekit via `<link>` in `<head>`; CSP permits `https://use.typekit.net`.
 - **Images:** Next Image optimizer on server/edge; for static export set `images.unoptimized: true`.
 - **Robots/Sitemap:** `app/robots.ts:1`, `app/sitemap.ts:1` available; expand metadata as needed.
+
+**Deployment Options**
+
+**Option 1: Vercel (Recommended)**
+1. Connect GitHub repository to Vercel
+2. Configure build command: `pnpm build`
+3. Set Node.js version to 22.x
+4. Add custom domain: www.acesaerodynamics.com
+5. Middleware automatically applies security headers
+6. Automatic previews for pull requests
+
+**Option 2: Netlify**
+1. Connect repository
+2. Build command: `pnpm build`
+3. Publish directory: `.next`
+4. Node version: 22
+5. Configure custom domain
+6. Headers are applied via middleware
+
+**Option 3: Static Export (CDN)**
+1. Add `output: 'export'` to `next.config.js`
+2. Add `images.unoptimized: true` for static images
+3. Run `pnpm build` (creates `out/` directory)
+4. Configure security headers at CDN level (see README-OPS.md)
+5. Note: Dynamic features (API routes, middleware) won't work
+6. Upload `out/` directory to CDN (Cloudflare Pages, AWS S3, etc.)
+
+**Environment Variables (if needed)**
+- None required for basic operation
+- Add analytics keys as needed (GA_MEASUREMENT_ID, etc.)
+- Add error tracking DSN if using Sentry
+- Form submission endpoint if implementing server-side forms
 
 **Common Tasks**
 - **Add a new route:** Create `app/your-route/page.tsx` (server by default). Only mark `use client` if directly using browser APIs/hooks.
@@ -156,11 +195,26 @@
 - **WebGL not appearing:** Check `window.__bg` flags, try `#force-gl`, ensure device has WebGL; verify `ResponsiveContours` is mounted and `body.bg-gl-ready` is toggled.
 - **Horizontal overflow in tests:** Inspect layout snapshots; ensure containers use grid/row primitives and apply `min-width:0` to flex/grid parents.
 
-**Roadmap / Open Items**
-- Expand SEO metadata and structured data; implement `sitemap.xml` detail and robots updates.
-- Consider enabling Playwright in CI with artifact upload of traces/videos.
-- Tighten ESLint rules with jsx-a11y and stricter TS options (e.g., `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`).
-- Chronicle UI: define token set and component variants.
+**Production Deployment Checklist**
+- [ ] Configure production domain DNS (www.acesaerodynamics.com)
+- [ ] Set up SSL/TLS certificates (automatic with Vercel/Netlify)
+- [ ] Configure environment variables if needed
+- [ ] Enable error tracking (Sentry, etc.)
+- [ ] Set up analytics (GA4, Plausible, etc.)
+- [ ] Configure CDN if using static export
+- [ ] Test all forms and contact methods
+- [ ] Run full Lighthouse CI audit
+- [ ] Verify CSP headers in production
+- [ ] Test on multiple devices and browsers
+
+**Future Enhancements**
+- Expand SEO metadata and structured data (JSON-LD schemas)
+- Consider enabling Playwright in CI with artifact upload of traces/videos
+- Tighten ESLint rules with jsx-a11y and stricter TS options
+- Chronicle UI: define full token set and component variants
+- Add CMS integration for blog content
+- Implement real-time form submission backend
+- Add internationalization (i18n) if expanding to other markets
 
 **File Index (Selected)**
 - `README.md:1` — Quickstart and script overview

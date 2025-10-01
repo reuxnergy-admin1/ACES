@@ -37,9 +37,91 @@
 - Use British English in comments, documentation, and user-facing strings
 - Maintain accessibility standards (WCAG 2.2 AA compliance)
 
+### UI/UX/UID Best Practices
+
+When adding or modifying UI components, ensure adherence to these standards:
+
+**Design Tokens**
+- Use CSS variables from `app/globals.css` for colours, spacing, typography
+- Never use magic numbers; reference design tokens
+- Maintain consistency with existing patterns
+
+**Accessibility (A11y)**
+- Minimum touch target size: 44×44px (or 24×24px with adequate spacing)
+- Colour contrast: ≥4.5:1 for text, ≥3:1 for UI components
+- Include focus indicators on all interactive elements (`:focus-visible`)
+- Use semantic HTML (`<nav>`, `<main>`, `<article>`, etc.)
+- Provide ARIA labels where visual context is insufficient
+- Test with keyboard navigation
+- Honour `prefers-reduced-motion` for animations
+- Maintain logical heading hierarchy
+
+**Layout & Typography**
+- Mobile-first: Design for 320px minimum width
+- Use `Grid12` + `Span` components for layout
+- Respect max-width constraints: 80rem (row), 96rem (wide)
+- Body text: 60-72ch optimal line length
+- Use fluid typography that scales with viewport
+- Avoid horizontal overflow (test with `pnpm test:e2e`)
+
+**Motion & Interaction**
+- Provide reduced motion alternatives
+- Animation duration: 200-400ms for UI, 600-1200ms for transitions
+- Use easing functions from design tokens
+- Ensure animations don't interfere with usability
+- Provide visual feedback for all interactions (hover, focus, active)
+
+**Performance**
+- Lazy load heavy components (WebGL, large images)
+- Use Next.js Image component for images
+- Prefer server components over client components
+- Minimize JavaScript bundle size
+- Optimize for Core Web Vitals (LCP < 2.5s, INP < 200ms, CLS < 0.1)
+
+**Responsive Design**
+- Test at multiple breakpoints: 320px, 640px, 768px, 1024px, 1280px, 1536px
+- Use `@media` queries from Tailwind breakpoints
+- Ensure touch targets are appropriately sized on mobile
+- Test on real devices when possible
+
 ## Documentation
 
 - Update relevant README files when making architectural changes
 - Keep `README-OPS.md` current with deployment and security configurations
 - Update `AUDIT.md` when resolving catalogued issues
 - Document new components in appropriate README sections
+
+## Alpha State Guidelines
+
+The project is currently in **Alpha** state, meaning:
+
+**Production-Ready Aspects**
+- ✅ Core architecture and infrastructure
+- ✅ Security headers and CSP implementation
+- ✅ Accessibility compliance (WCAG 2.2 AA)
+- ✅ Performance optimisation
+- ✅ Testing infrastructure
+- ✅ Documentation
+
+**Remaining for Beta/Production**
+- ⏳ Content finalisation and copywriting
+- ⏳ Real backend integration for forms
+- ⏳ Analytics and monitoring setup
+- ⏳ Comprehensive browser/device testing
+- ⏳ SEO metadata expansion
+- ⏳ Error tracking integration
+
+**What This Means for Contributors**
+- Focus on code quality and maintainability
+- Document all architectural decisions
+- Ensure backward compatibility
+- Add tests for new features
+- Keep dependencies up to date
+- Report bugs with detailed reproduction steps
+
+## Getting Help
+
+- **Documentation:** Start with [HANDOVER.md](HANDOVER.md) for technical overview
+- **Architecture:** See [AUDIT.md](AUDIT.md) for component inventory
+- **Operations:** Check [README-OPS.md](README-OPS.md) for deployment details
+- **Questions:** Open a GitHub issue with the `question` label
