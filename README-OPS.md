@@ -29,8 +29,112 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 If you need to deploy as static files (e.g., to a CDN):
 
 1. Update `next.config.js` to add `output: 'export'`
-2. Configure security headers at your CDN level using the headers above
-3. Note: CSP nonces cannot be used with static export; you'll need to adjust the CSP policy accordingly
+2. Add `images: { unoptimized: true }` for image optimization
+3. Configure security headers at your CDN level using the headers above
+4. Note: CSP nonces cannot be used with static export; you'll need to adjust the CSP policy accordingly
+5. Build: `pnpm build` creates an `out/` directory
+6. Deploy the `out/` directory to your CDN
+
+**Recommended CDN Options:**
+- Cloudflare Pages (automatic SSL, global CDN, edge functions)
+- Netlify (edge functions, form handling, split testing)
+- AWS S3 + CloudFront (enterprise-grade, custom configuration)
+- Vercel (best Next.js integration, automatic optimizations)
+
+## Production Deployment Guide
+
+### Pre-Deployment Checklist
+
+**Code Quality**
+- [ ] Run `pnpm lint` - No errors or warnings
+- [ ] Run `pnpm build` - Successful production build
+- [ ] Run `pnpm test:e2e` - All tests passing
+- [ ] Run `pnpm guard:bg` - Asset integrity verified
+- [ ] Run `pnpm lh:ci` - Lighthouse scores meet targets
+
+**Configuration**
+- [ ] Verify domain configuration (www.acesaerodynamics.com)
+- [ ] Review environment variables (analytics, monitoring, etc.)
+- [ ] Confirm Node.js version (≥22.0.0)
+- [ ] Check pnpm lockfile is committed
+- [ ] Verify `.gitignore` excludes sensitive files
+
+**Content Review**
+- [ ] All placeholder content replaced
+- [ ] Contact information correct (info@acesaerodynamics.com)
+- [ ] Legal pages updated (privacy, cookies)
+- [ ] All links tested and working
+- [ ] Images optimized and alt text provided
+- [ ] Metadata and SEO tags complete
+
+**Security**
+- [ ] CSP headers configured correctly
+- [ ] No sensitive data in client-side code
+- [ ] HTTPS enforced (automatic with most platforms)
+- [ ] Security headers verified in production
+- [ ] Dependencies reviewed for vulnerabilities
+
+### Deployment Steps (Vercel - Recommended)
+
+1. **Connect Repository**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Select the repository: `IAmJonoBo/ACES`
+
+2. **Configure Build**
+   - Framework Preset: Next.js
+   - Build Command: `pnpm build`
+   - Output Directory: `.next` (default)
+   - Install Command: `pnpm install`
+   - Node.js Version: 22.x
+
+3. **Set Environment Variables** (if any)
+   ```
+   NODE_ENV=production
+   # Add analytics, monitoring, etc.
+   ```
+
+4. **Configure Domain**
+   - Add custom domain: `www.acesaerodynamics.com`
+   - Configure DNS records as instructed
+   - Enable automatic HTTPS
+
+5. **Deploy**
+   - Click "Deploy"
+   - Wait for build to complete
+   - Verify deployment at preview URL
+   - Test thoroughly before pointing production domain
+
+6. **Post-Deployment Verification**
+   - Test all pages and functionality
+   - Verify forms and contact methods
+   - Check security headers (use securityheaders.com)
+   - Run Lighthouse audit
+   - Test on multiple devices/browsers
+   - Monitor for errors
+
+### Continuous Deployment
+
+- Push to `main` branch triggers automatic deployment
+- Pull requests get preview deployments
+- Rollback available through Vercel dashboard
+- Monitor deployment status and logs
+
+### Monitoring & Maintenance
+
+**Essential Monitoring**
+- Uptime monitoring (UptimeRobot, Pingdom, etc.)
+- Error tracking (Sentry, Rollbar, etc.)
+- Analytics (Google Analytics, Plausible, etc.)
+- Performance monitoring (Vercel Analytics, Lighthouse CI)
+
+**Regular Maintenance**
+- Review dependency updates weekly
+- Monitor security advisories
+- Keep Node.js version current
+- Review analytics and user feedback
+- Update content regularly
 
 ## Fonts
 

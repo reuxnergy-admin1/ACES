@@ -14,16 +14,58 @@ import { getRequestNonce } from '@/lib/csp';
 
 export const metadata = {
   metadataBase: new URL('https://www.acesaerodynamics.com'),
-  title: 'ACES Aerodynamics — Precision Transparencies & Composites',
-  description: 'SACAA-approved fabrication of cast acrylic transparencies and high-performance composites for aerospace and motorsport.',
+  title: {
+    default: 'ACES Aerodynamics — Precision Transparencies & Composites',
+    template: '%s | ACES Aerodynamics',
+  },
+  description: 'SACAA-approved fabrication of cast acrylic transparencies and high-performance composites for aerospace and motorsport. Based in South Africa, serving global aviation and racing industries.',
+  keywords: ['aerospace transparencies', 'aircraft canopies', 'helicopter windscreens', 'motorsport composites', 'cast acrylic', 'SACAA approved', 'aviation manufacturing', 'South Africa aerospace'],
+  authors: [{ name: 'ACES Aerodynamics' }],
+  creator: 'ACES Aerodynamics',
+  publisher: 'ACES Aerodynamics',
   openGraph: {
-    title: 'ACES Aerodynamics',
-    description: 'Precision Transparencies & Composites',
+    title: 'ACES Aerodynamics — Precision Transparencies & Composites',
+    description: 'SACAA-approved fabrication of cast acrylic transparencies and high-performance composites for aerospace and motorsport.',
     url: 'https://www.acesaerodynamics.com',
+    siteName: 'ACES Aerodynamics',
     locale: 'en_ZA',
     type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'ACES Aerodynamics - Precision Engineering',
+      },
+    ],
   },
-  icons: { icon: '/favicon.ico' }
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ACES Aerodynamics — Precision Transparencies & Composites',
+    description: 'SACAA-approved fabrication of cast acrylic transparencies and high-performance composites for aerospace and motorsport.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
+  verification: {
+    // Add verification codes when available
+    // google: 'your-google-verification-code',
+    // bing: 'your-bing-verification-code',
+  },
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
