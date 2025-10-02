@@ -211,13 +211,36 @@ This project adheres to industry-standard best practices:
 
 ## Production Deployment
 
-The site is configured for deployment to Vercel or similar platforms supporting Next.js server/edge runtime:
+The site is optimized for deployment to modern hosting platforms with full Next.js support:
+
+### Recommended: Netlify (Full Guide Available)
+
+See **[docs/NETLIFY.md](./docs/NETLIFY.md)** for comprehensive step-by-step instructions including:
+- Automated builds with pnpm
+- Environment variable configuration
+- Custom domain and SSL setup
+- Continuous deployment from GitHub
+
+### Alternative: Vercel
 
 1. **Build:** `pnpm build`
 2. **Environment:** Set `NODE_ENV=production`
 3. **Domain:** Configure DNS to point to `www.acesaerodynamics.com`
 4. **Security:** Middleware applies security headers automatically
 5. **Monitoring:** Consider adding error tracking and analytics
+
+### Backend Integration
+
+For database, authentication, and backend features, see **[docs/SUPABASE.md](./docs/SUPABASE.md)** for:
+- PostgreSQL database setup
+- User authentication
+- Real-time features
+- File storage
+- Row Level Security configuration
+
+### Complete Deployment Workflow
+
+See **[docs/DEPLOYMENT-GUIDE.md](./docs/DEPLOYMENT-GUIDE.md)** for the complete end-to-end deployment process with Netlify + Supabase integration.
 
 For static export alternative, see `README-OPS.md`.
 

@@ -152,21 +152,22 @@
 
 **Deployment Options**
 
-**Option 1: Vercel (Recommended)**
+**Option 1: Netlify (Recommended) - Full Integration Guide Available**
+- **Complete Guide**: [docs/NETLIFY.md](./docs/NETLIFY.md)
+- **Quick Setup**: Connect GitHub repository to Netlify
+- **Build command**: `pnpm build`
+- **Publish directory**: `.next`
+- **Node version**: 22
+- **Features**: Custom domain, automatic SSL, deploy previews, edge CDN
+- **Configuration**: Pre-configured via `netlify.toml`
+
+**Option 2: Vercel**
 1. Connect GitHub repository to Vercel
 2. Configure build command: `pnpm build`
 3. Set Node.js version to 22.x
 4. Add custom domain: www.acesaerodynamics.com
 5. Middleware automatically applies security headers
 6. Automatic previews for pull requests
-
-**Option 2: Netlify**
-1. Connect repository
-2. Build command: `pnpm build`
-3. Publish directory: `.next`
-4. Node version: 22
-5. Configure custom domain
-6. Headers are applied via middleware
 
 **Option 3: Static Export (CDN)**
 1. Add `output: 'export'` to `next.config.js`
@@ -175,6 +176,16 @@
 4. Configure security headers at CDN level (see README-OPS.md)
 5. Note: Dynamic features (API routes, middleware) won't work
 6. Upload `out/` directory to CDN (Cloudflare Pages, AWS S3, etc.)
+
+**Backend Integration: Supabase**
+- **Complete Guide**: [docs/SUPABASE.md](./docs/SUPABASE.md)
+- **Features**: PostgreSQL database, authentication, real-time, storage
+- **Use Cases**: Contact forms, user accounts, CMS, file uploads
+- **Security**: Row Level Security (RLS) policies for data protection
+
+**Complete Deployment Workflow**
+- **End-to-End Guide**: [docs/DEPLOYMENT-GUIDE.md](./docs/DEPLOYMENT-GUIDE.md)
+- **Includes**: Netlify + Supabase integration, domain setup, monitoring
 
 **Environment Variables (if needed)**
 - None required for basic operation
