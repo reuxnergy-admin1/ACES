@@ -35,13 +35,19 @@ If you need to deploy as static files (e.g., to a CDN):
 5. Build: `pnpm build` creates an `out/` directory
 6. Deploy the `out/` directory to your CDN
 
-**Recommended CDN Options:**
-- Cloudflare Pages (automatic SSL, global CDN, edge functions)
-- Netlify (edge functions, form handling, split testing)
-- AWS S3 + CloudFront (enterprise-grade, custom configuration)
-- Vercel (best Next.js integration, automatic optimizations)
+**Recommended Hosting Options:**
+- **Netlify** (recommended) — Full Next.js support, automatic SSL, edge CDN, deploy previews. See [docs/NETLIFY.md](../docs/NETLIFY.md) for complete setup guide.
+- **Vercel** (alternative) — Best Next.js integration, automatic optimizations, edge network.
+- **Static CDN Options** (if using static export):
+  - Cloudflare Pages (automatic SSL, global CDN, edge functions)
+  - AWS S3 + CloudFront (enterprise-grade, custom configuration)
 
 ## Production Deployment Guide
+
+**Complete Deployment Guides Available:**
+- **Netlify Deployment**: [docs/NETLIFY.md](../docs/NETLIFY.md) — Comprehensive guide for Netlify hosting
+- **Supabase Integration**: [docs/SUPABASE.md](../docs/SUPABASE.md) — Backend setup with database and auth
+- **End-to-End Workflow**: [docs/DEPLOYMENT-GUIDE.md](../docs/DEPLOYMENT-GUIDE.md) — Complete deployment process
 
 ### Pre-Deployment Checklist
 
