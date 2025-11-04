@@ -57,7 +57,7 @@
   to = "/:splat/"
   status = 301
   force = false
-  conditions = { path = ["!/**/", "!/*.{js,json,xml,txt,png,jpg,jpeg,gif,svg,webp,ico}"] }
+  conditions = {path = "!/**/", path = "!/*.{js,json,xml,txt,png,jpg,jpeg,gif,svg,webp,ico}"}
 
 # Functions configuration (if using Netlify Functions in future)
 [functions]

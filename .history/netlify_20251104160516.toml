@@ -59,6 +59,7 @@
   force = false
   conditions = { path = ["!/**/", "!/*.{js,json,xml,txt,png,jpg,jpeg,gif,svg,webp,ico}"] }
 
+
 # Functions configuration (if using Netlify Functions in future)
 [functions]
   directory = "netlify/functions"
