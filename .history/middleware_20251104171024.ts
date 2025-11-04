@@ -54,13 +54,12 @@ export function middleware(req: NextRequest) {
     "base-uri 'self'",
     "frame-ancestors 'none'",
     "object-src 'none'",
-    "img-src 'self' data: blob: https:",
+    "img-src 'self' data: blob:",
     "font-src 'self' https://use.typekit.net https://p.typekit.net",
     "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net",
-    `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} blob: data: https: http:`.trim(),
+    `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} https: http:`.trim(),
     isProd ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
   ];
-
 
   const csp = directives.join('; ');
 

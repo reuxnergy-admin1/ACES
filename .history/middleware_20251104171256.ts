@@ -49,17 +49,17 @@ export function middleware(req: NextRequest) {
   // Expose nonce to the app (can be read in server components via headers())
   res.headers.set('x-nonce', nonce);
 
-  const directives: string[] = [
-    "default-src 'self'",
-    "base-uri 'self'",
-    "frame-ancestors 'none'",
-    "object-src 'none'",
-    "img-src 'self' data: blob: https:",
-    "font-src 'self' https://use.typekit.net https://p.typekit.net",
-    "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net",
-    `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} blob: data: https: http:`.trim(),
-    isProd ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
-  ];
+const directives: string[] = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "frame-ancestors 'none'",
+  "object-src 'none'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' https://use.typekit.net https://p.typekit.net",
+  "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net",
+  `script-src 'self' 'nonce-${nonce}' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} blob: data: https: http:`.trim(),
+  isProd ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
+];
 
 
   const csp = directives.join('; ');
