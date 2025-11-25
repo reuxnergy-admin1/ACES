@@ -10,7 +10,7 @@ export default function Page() {
       <SectionBand className="!pt-[113px] sm:!pt-[120px] lg:!pt-[126px]">
         <ContainerWide>
           <Grid12 data-reveal-blur-stagger>
-            <Span cols={12}><h1 className="text-4xl font-light">PRODUCTS AND SERVICES</h1></Span>
+            <Span cols={12} className="text-right md:text-left"><h1 className="text-4xl font-light">PRODUCTS AND SERVICES</h1></Span>
           </Grid12>
         </ContainerWide>
       </SectionBand>
@@ -20,7 +20,7 @@ export default function Page() {
         <ContainerWide>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-reveal-blur-stagger>
             {/* Aircraft Transparencies */}
-            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-right md:text-left">
               <div className="text-xl font-medium mb-4">Aircraft Transparencies</div>
               <div className="text-white/60 space-y-1">
                 <p>All Certified and Uncertified</p>
@@ -30,7 +30,7 @@ export default function Page() {
             </div>
 
             {/* Helicopter Transparencies */}
-            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-right md:text-left">
               <div className="text-xl font-medium mb-4">Helicopter Transparencies</div>
               <div className="text-white/60 space-y-1">
                 <p>All Certified and Uncertified</p>
@@ -40,7 +40,7 @@ export default function Page() {
             </div>
 
             {/* Motorsport Components */}
-            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-right md:text-left">
               <div className="text-xl font-medium mb-4">Motorsport Components</div>
               <div className="text-white/60 space-y-1">
                 <p>Saloon | Rally Racing Windows</p>
@@ -51,7 +51,7 @@ export default function Page() {
             </div>
 
             {/* Aerospace Components */}
-            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-right md:text-left">
               <div className="text-xl font-medium mb-4">Aerospace Components</div>
               <div className="text-white/60 space-y-1">
                 <p>Wing Tips | Elevator Tips | Rudder Caps</p>
@@ -61,7 +61,7 @@ export default function Page() {
             </div>
 
             {/* Prototyping */}
-            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-right md:text-left">
               <div className="text-xl font-medium mb-4">Prototyping</div>
               <div className="text-white/60 space-y-1">
                 <p>Prototype Component Development to</p>
@@ -71,7 +71,7 @@ export default function Page() {
             </div>
 
             {/* Retrofitting and Reverse Engineering */}
-            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-right md:text-left">
               <div className="text-xl font-medium mb-4">Retrofitting and Reverse Engineering</div>
               <div className="text-white/60 space-y-1">
                 <p>Discontinued Aircraft Windows and</p>
