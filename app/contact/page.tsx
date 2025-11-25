@@ -34,7 +34,7 @@ export default function Page(){
   return (
     <>
       {/* Hero section */}
-      <SectionBand className="pt-28">
+      <SectionBand className="pt-36 md:pt-40">
         <ContainerRow>
           <Grid12 data-reveal-blur-stagger>
             <Span cols={8}><h1 className="text-4xl font-light">Request a Quote</h1></Span>

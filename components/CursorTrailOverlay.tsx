@@ -3,13 +3,12 @@ import { useEffect, useRef } from "react";
 
 type Ripple = { x: number; y: number; t: number };
 
-// A crisp, canvas-based cursor with a very short trail and click ripple effect.
+// A crisp, canvas-based cursor with minimal trail and snappy click ripple effect.
 // Cursor is white by default, turns black when over white card backgrounds (sheen cards with wipe active).
 export default function CursorTrailOverlay() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef({ x: 0, y: 0, t: 0 });
-  const pointsRef = useRef<Array<{x:number;y:number;t:number}>>([]);
   const activeRef = useRef(false);
   const darkModeRef = useRef(false);
   const ripplesRef = useRef<Ripple[]>([]);
@@ -49,9 +48,7 @@ export default function CursorTrailOverlay() {
     const onMove = (e: PointerEvent) => {
       visible = true;
       const now = performance.now();
-      const p = { x: e.clientX, y: e.clientY, t: now };
-      lastRef.current = p;
-      pointsRef.current.push(p);
+      lastRef.current = { x: e.clientX, y: e.clientY, t: now };
       activeRef.current = true;
       
       // Check if cursor is over a sheen card that is currently wiped (hover/focus state)
@@ -69,13 +66,13 @@ export default function CursorTrailOverlay() {
       }
     };
     
-    // Click ripple effect - centered on cursor position
+    // Click ripple effect - centered on cursor position, snappy and responsive
     const onPointerDown = (e: PointerEvent) => {
       if (isReducedMotion) return;
       const now = performance.now();
       ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: now });
       // Limit ripple pool to prevent memory buildup on rapid clicks
-      if (ripplesRef.current.length > 5) {
+      if (ripplesRef.current.length > 3) {
         ripplesRef.current.shift();
       }
       activeRef.current = true;
@@ -101,14 +98,14 @@ export default function CursorTrailOverlay() {
     };
     document.addEventListener('visibilitychange', onVis);
 
-    const maxTrailMs = 6;
-    const rippleDurationMs = 600;
-    const rippleMaxRadius = 80;
+    // Faster ripple for snappier clicks
+    const rippleDurationMs = 350;
+    const rippleMaxRadius = 60;
 
     const render = () => {
       const wipeHide = document.body.classList.contains('cursor-hide-transition');
-      const now = performance.now();      
-      pointsRef.current = wipeHide ? [] : pointsRef.current.filter((p) => now - p.t <= maxTrailMs);
+      const now = performance.now();
+      
       // Clean up expired ripples
       ripplesRef.current = ripplesRef.current.filter((r) => now - r.t <= rippleDurationMs);
       
@@ -121,54 +118,27 @@ export default function CursorTrailOverlay() {
         
         for (const ripple of ripplesRef.current) {
           const age = (now - ripple.t) / rippleDurationMs; // 0..1
-          const easeOut = 1 - Math.pow(1 - age, 3);
+          const easeOut = 1 - Math.pow(1 - age, 2.5); // Faster ease-out
           const radius = easeOut * rippleMaxRadius;
-          const alpha = Math.max(0, 0.4 * (1 - age));
+          const alpha = Math.max(0, 0.5 * (1 - age));
           
           // Apply DPR correction to ripple center coordinates
           const rx = Math.round(ripple.x * dpr) / dpr;
           const ry = Math.round(ripple.y * dpr) / dpr;
           
-          // Draw 2 concentric rings
-          for (let i = 0; i < 2; i++) {
-            const ringRadius = radius - i * 12;
-            if (ringRadius > 0) {
-              const ringAlpha = alpha * (1 - i * 0.3);
-              ctx.strokeStyle = `rgba(${rippleColor},${ringAlpha})`;
-              ctx.lineWidth = 1.5;
-              ctx.beginPath();
-              ctx.arc(rx, ry, ringRadius, 0, Math.PI * 2);
-              ctx.stroke();
-            }
-          }
+          // Draw single clean ring
+          ctx.strokeStyle = `rgba(${rippleColor},${alpha})`;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(rx, ry, radius, 0, Math.PI * 2);
+          ctx.stroke();
         }
       }
 
-      // Draw cursor and trail only when visible
+      // Draw cursor dot only when visible (no trail for snappy response)
       if (!wipeHide && visible && lastRef.current) {
-        // Choose color based on dark mode
         const isDark = darkModeRef.current;
         const headColor = isDark ? 'rgba(0,0,0,0.94)' : 'rgba(255,255,255,0.94)';
-        const trailColor = isDark ? '0,0,0' : '255,255,255';
-
-        // Trail: draw tiny faded segments from oldest to newest
-        const pts = pointsRef.current;
-        for (let i = 1; i < pts.length; i++) {
-          const p0 = pts[i - 1];
-          const p1 = pts[i];
-          const age = (now - p1.t) / maxTrailMs;
-          const alpha = Math.max(0, 1 - age) * 0.35;
-          ctx.strokeStyle = `rgba(${trailColor},${alpha})`;
-          ctx.lineWidth = 1.0;
-          const x0 = Math.round(p0.x * dpr) / dpr;
-          const y0 = Math.round(p0.y * dpr) / dpr;
-          const x1 = Math.round(p1.x * dpr) / dpr;
-          const y1 = Math.round(p1.y * dpr) / dpr;
-          ctx.beginPath();
-          ctx.moveTo(x0, y0);
-          ctx.lineTo(x1, y1);
-          ctx.stroke();
-        }
 
         // Head: draw cursor dot
         const { x, y } = lastRef.current;
@@ -182,10 +152,8 @@ export default function CursorTrailOverlay() {
       }
 
       // Continue animation loop if there's any active content
-      // Prioritize ripples to ensure they complete their animation even after pointer leaves
       const hasRipples = ripplesRef.current.length > 0;
-      const hasCursorActivity = activeRef.current || pointsRef.current.length > 0;
-      if (!wipeHide && (hasRipples || hasCursorActivity)) {
+      if (!wipeHide && (hasRipples || activeRef.current)) {
         rafRef.current = requestAnimationFrame(render);
       } else {
         rafRef.current = null;

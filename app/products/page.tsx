@@ -22,7 +22,7 @@ export default function Page() {
   return (
     <>
       {/* Hero section */}
-      <SectionBand className="pt-28">
+      <SectionBand className="pt-36 md:pt-40">
         <ContainerWide>
           <Grid12 data-reveal-blur-stagger>
             <Span cols={8}><h1 className="text-4xl md:text-5xl font-light">Products</h1></Span>

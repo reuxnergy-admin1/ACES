@@ -5,7 +5,7 @@ import { Grid12, Span } from '@/components/layout/Grid12';
 
 export default function Page(){
   return (
-    <SectionBand className="pt-28 theme-invert">
+    <SectionBand className="pt-36 md:pt-40 theme-invert">
       <ContainerWide>
         <Grid12 data-reveal-blur-stagger>
           <Span cols={8}><h1 className="text-4xl md:text-5xl font-light">Blog</h1></Span>
