@@ -1,52 +1,98 @@
-import StaggerReveal from '@/components/StaggerReveal';
-import Link from 'next/link';
-import type { CSSProperties } from 'react';
 import ContainerWide from '@/components/layout/ContainerWide';
-import ContainerRow from '@/components/layout/ContainerRow';
 import SectionBand from '@/components/layout/SectionBand';
 import { Grid12, Span } from '@/components/layout/Grid12';
+import Link from 'next/link';
 
 export default function Page() {
-  type CSSVars = CSSProperties & {
-    ['--auto-grid-min']?: string;
-    ['--auto-grid-gap']?: string;
-    ['--auto-grid-gap-md']?: string;
-    ['--auto-grid-gap-lg']?: string;
-  };
-  const gridStyle: CSSVars = {
-    ['--auto-grid-min']: '16rem',
-    ['--auto-grid-gap']: '1.5rem',
-    ['--auto-grid-gap-md']: '2rem',
-    ['--auto-grid-gap-lg']: '2.5rem',
-  };
   return (
     <>
       {/* Hero section */}
-      <SectionBand className="pt-36 md:pt-40">
+      <SectionBand className="!pt-[180px] sm:!pt-[200px] lg:!pt-[220px]">
         <ContainerWide>
           <Grid12 data-reveal-blur-stagger>
-            <Span cols={8}><h1 className="text-4xl md:text-5xl font-light">Products</h1></Span>
+            <Span cols={12}><h1 className="text-4xl md:text-5xl font-light">PRODUCTS AND SERVICES</h1></Span>
           </Grid12>
         </ContainerWide>
       </SectionBand>
 
-      {/* Product cards */}
+      {/* Product blocks */}
       <SectionBand>
-        <StaggerReveal>
-          <ContainerRow data-reveal-blur-stagger>
-            <div className="auto-grid" style={gridStyle}>
-              <Link className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift" href="/products/aircraft/">
-                <div className="text-xl">Aircraft</div><div className="mt-2 body text-white/60">Windows, windscreens, enclosures</div>
-              </Link>
-              <Link className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift" href="/products/helicopters/">
-                <div className="text-xl">Helicopters</div><div className="mt-2 body text-white/60">Cabin transparencies and doors</div>
-              </Link>
-              <Link className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline arrow-shift" href="/products/motorsport/">
-                <div className="text-xl">Motorsport</div><div className="mt-2 body text-white/60">Lightweight glazing & components</div>
-              </Link>
+        <ContainerWide>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-reveal-blur-stagger>
+            {/* Aircraft Transparencies */}
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+              <div className="text-xl font-medium mb-4">Aircraft Transparencies</div>
+              <div className="text-white/60 space-y-1">
+                <p>All Certified and Uncertified</p>
+                <p>Unpressurised Aircraft Types</p>
+                <p className="text-white/40 mt-2">Windows | Windshields | Side Windows</p>
+              </div>
             </div>
-          </ContainerRow>
-        </StaggerReveal>
+
+            {/* Helicopter Transparencies */}
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+              <div className="text-xl font-medium mb-4">Helicopter Transparencies</div>
+              <div className="text-white/60 space-y-1">
+                <p>All Certified and Uncertified</p>
+                <p>Unpressurised Helicopter Types</p>
+                <p className="text-white/40 mt-2">Canopy | Bubble | Side Windows</p>
+              </div>
+            </div>
+
+            {/* Motorsport Components */}
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+              <div className="text-xl font-medium mb-4">Motorsport Components</div>
+              <div className="text-white/60 space-y-1">
+                <p>Saloon | Rally Racing Windows</p>
+                <p>NACA Ducts</p>
+                <p>Headlight Lenses</p>
+                <p>Sliding Windows</p>
+              </div>
+            </div>
+
+            {/* Aerospace Components */}
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+              <div className="text-xl font-medium mb-4">Aerospace Components</div>
+              <div className="text-white/60 space-y-1">
+                <p>Wing Tips | Elevator Tips | Rudder Caps</p>
+                <p>Wheel Spats | Strut-Cuffs | Tail Cones</p>
+                <p>Cowlings | Fairings</p>
+              </div>
+            </div>
+
+            {/* Prototyping */}
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+              <div className="text-xl font-medium mb-4">Prototyping</div>
+              <div className="text-white/60 space-y-1">
+                <p>Prototype Component Development to</p>
+                <p>meet your needs & specifications</p>
+                <p className="mt-2">Project Advice & Consultation Services</p>
+              </div>
+            </div>
+
+            {/* Retrofitting and Reverse Engineering */}
+            <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors">
+              <div className="text-xl font-medium mb-4">Retrofitting and Reverse Engineering</div>
+              <div className="text-white/60 space-y-1">
+                <p>Discontinued Aircraft Windows and</p>
+                <p>Composite Components to restore</p>
+                <p>with Precision and Certification.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Centered Request a Quote button */}
+          <div className="mt-12 flex justify-center">
+            <Link href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
+              <span aria-hidden="true" className="reveal-line h top" />
+              <span aria-hidden="true" className="reveal-line h bottom" />
+              <span aria-hidden="true" className="reveal-line v left" />
+              <span aria-hidden="true" className="reveal-line v right" />
+              <span className="sr-only">Request a Quote</span>
+              <span aria-hidden="true">Request a Quote</span>
+            </Link>
+          </div>
+        </ContainerWide>
       </SectionBand>
     </>
   );

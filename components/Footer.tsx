@@ -41,7 +41,7 @@ export function Footer() {
             <div className="text-white uc tracking-wider">ACES Aerodynamics</div>
             <div className="mt-4">
               <div className="text-white/60 text-xs uc tracking-wider mb-1">Email</div>
-              <Link href="/contact/" className="link-underline text-white/80 hover:text-white">info@acesaerodynamics.com</Link>
+              <a href="mailto:info@acesaerodynamics.com" className="link-underline text-white/80 hover:text-white">info@acesaerodynamics.com</a>
             </div>
             <div className="mt-3">
               <div className="text-white/60 text-xs uc tracking-wider mb-1">WhatsApp</div>
