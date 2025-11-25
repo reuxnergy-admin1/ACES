@@ -27,7 +27,7 @@ export function Footer() {
       <div className="grid-shell">
         <div className="container-wide py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10" data-reveal>
           <div className="text-lg md:text-xl text-white/90 uc tracking-[0.08em]">Order with ACES</div>
-          <Link href="/contact/" className="button-primary h-11 px-5 whitespace-nowrap">
+          <Link href="/contact/" className="button-primary h-11 px-8 whitespace-nowrap">
             <span aria-hidden="true" className="reveal-line h top" />
             <span aria-hidden="true" className="reveal-line h bottom" />
             <span aria-hidden="true" className="reveal-line v left" />
@@ -60,7 +60,7 @@ export function Footer() {
           <Span cols={4}>
             <div className="uc tracking-wider text-white/60 text-xs">Company</div>
             <div className="mt-2 space-y-2">
-              <Link className="link-underline text-white/85 hover:text-white block" href="/about/history/">About</Link>
+              <Link className="link-underline text-white/85 hover:text-white block" href="/about/">About</Link>
               <a className="link-underline text-white/85 hover:text-white block" href="#products-and-services">Products and Services</a>
               <Link className="link-underline text-white/85 hover:text-white block" href="/blog/">Insights</Link>
             </div>

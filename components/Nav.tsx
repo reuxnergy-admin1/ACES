@@ -309,7 +309,7 @@ export function Nav() {
               </div>
             </nav>
               <div className="hidden md:flex md:col-span-2 justify-self-end">
-                <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-4 whitespace-nowrap">
+                <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-6 whitespace-nowrap">
                   <span aria-hidden="true" className="reveal-line h top" />
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
@@ -445,7 +445,7 @@ export function Nav() {
                 </Link>
               );
             })}
-            <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-4 whitespace-nowrap">
+            <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-6 whitespace-nowrap">
               <span aria-hidden="true" className="reveal-line h top" />
               <span aria-hidden="true" className="reveal-line h bottom" />
               <span aria-hidden="true" className="reveal-line v left" />
