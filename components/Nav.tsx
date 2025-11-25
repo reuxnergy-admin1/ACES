@@ -268,12 +268,12 @@ export function Nav() {
           {/* Desktop layout: wrapper hidden on mobile; inner uses our 12-col grid. Avoid conflict between hidden and grid-12. */}
           <div className="hidden md:block">
             <div className="grid-12 gutter items-center">
-            <div className="md:col-span-2 flex items-center">
+            <div className="md:col-span-2 flex items-center flex-shrink-0">
               <Link href="/" aria-label="ACES home" className="flex items-center">
               <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
               </Link>
             </div>
-            <nav className="hidden md:flex items-center gap-4 md:col-span-8 justify-self-start" aria-label="Primary"
+            <nav className="hidden md:flex items-center gap-4 md:col-span-7 justify-self-start" aria-label="Primary"
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}>
       <div
@@ -309,8 +309,8 @@ export function Nav() {
             })}
               </div>
             </nav>
-              <div className="hidden md:flex md:col-span-2 justify-self-end">
-                <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-6 whitespace-nowrap">
+              <div className="hidden md:flex md:col-span-3 justify-self-end">
+                <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-5 whitespace-nowrap text-sm flex-shrink-0">
                   <span aria-hidden="true" className="reveal-line h top" />
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
