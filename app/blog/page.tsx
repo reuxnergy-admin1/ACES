@@ -7,15 +7,17 @@ export default function Page(){
     <>
       <SectionBand className="!pt-[113px] sm:!pt-[120px] lg:!pt-[126px]">
         <ContainerWide>
-          <Grid12 data-reveal-blur-stagger>
-            <Span cols={12} className="text-right md:text-left"><h1 className="text-4xl font-light">INSIGHTS</h1></Span>
+          <Grid12>
+            <Span cols={12} className="text-right md:text-left">
+              <h1 className="text-4xl font-light">INSIGHTS</h1>
+            </Span>
           </Grid12>
         </ContainerWide>
       </SectionBand>
 
       <SectionBand>
         <ContainerWide>
-          <Grid12 data-reveal-blur-stagger>
+          <Grid12>
             <Span cols={12} className="md:col-span-6 lg:col-span-4">
               <article className="border border-white/10 rounded-2xl p-6 hover:border-white/30 transition-colors text-right md:text-left">
                 <h2 className="text-xl font-medium mb-4">Article Title Coming Soon</h2>
