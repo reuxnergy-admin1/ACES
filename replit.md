@@ -110,6 +110,25 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
+## Recent Changes (Nov 25, 2025 - Logo & Navigation Update)
+
+### Logo Update
+- Replaced old SVG logo with new PNG logo featuring icon + "ACES AERODYNAMICS" text
+- New logo file: `/public/aces-logo-new.png`
+- Logo uses responsive sizing: `width={160} height={40}` with `h-8 w-auto` class
+
+### Navigation Update
+- Removed ORDER link from navigation
+- Navigation now: HOME, ABOUT, PRODUCTS, INSIGHTS, REQUEST A QUOTE
+- Deleted `/app/order/` page
+
+### Tooltip Fix
+- Fixed social media icon tooltips to properly fit text content
+- Added `whitespace-nowrap` and increased padding (`px-3 py-1.5`)
+- Affected icons: LinkedIn, Facebook, Instagram, WhatsApp
+
+---
+
 ## Recent Changes (Nov 25, 2025 - Security Update & About Page)
 
 ### Security Dependency Update
