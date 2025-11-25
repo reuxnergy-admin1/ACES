@@ -158,16 +158,22 @@ aces-aerodynamics/
 
 9. **Cursor System Overhaul:**
    - Removed WebGL shader cursor dot (was causing inversion on blend-mode elements)
-   - Removed click ripple effects (expanding circles on click)
    - Removed magnet effect (cursor being pulled toward interactive elements)
    - Canvas-based cursor now sole renderer (CursorTrailOverlay)
    - Cursor stays white by default
    - Cursor turns black when hovering over sheen cards with white wipe active
    - Contour line push effect preserved (lines still respond to cursor position)
+   - Click ripple effect: 2 concentric rings expand from cursor position, proper DPR scaling
+
+10. **UX Improvements:**
+    - Page transitions optimized: reduced from 900ms to 450ms for faster navigation
+    - All "Request a Quote" buttons use whitespace-nowrap to stay on one line
+    - Contact form: Clean email submission with "Website Lead – [Company Name]" subject format
 
 ### Technical Updates
 - Fixed hydration errors related to automation detection timing
 - Simplified pre-hydration script to avoid SVG attribute modifications
+- CursorTrailOverlay: Ripple animation lifecycle managed independently to complete even after pointer leaves
 
 ## Previous Changes (Replit Import - Nov 25, 2024)
 - Configured Next.js development server for Replit environment (port 5000, host 0.0.0.0)
