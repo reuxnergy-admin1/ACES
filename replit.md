@@ -110,7 +110,61 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
-## Recent Changes (Replit Import - Nov 25, 2024)
+## Recent Changes (Nov 25, 2025 - Website Updates)
+
+### Content Updates (from PDF requirements)
+1. **Navigation:**
+   - Added HOME link before INSIGHTS
+   - Changed BLOG to INSIGHTS
+   - Menu now: HOME, INSIGHTS, SIGN IN, ORDER
+
+2. **Hero Section:**
+   - New title: "Aerospace & Motorsport Specialist Engineering Components"
+   - New subtitle about SACAA-approved (MP39) blanket approval
+   - Removed "Request a Quote" and "Speak to a Specialist" buttons
+
+3. **Products and Services Section:**
+   - New 6-card grid layout:
+     - Aircraft Transparencies
+     - Helicopter Transparencies
+     - Motorsport Components
+     - Aerospace Components
+     - Prototyping
+     - Retrofitting and Reverse Engineering
+   - Added "Request a Quote" button below cards
+
+4. **Process Section:**
+   - Simplified to 3 steps: Scope, Production, QA/Documentation/Delivery
+
+5. **Compliance & QA Section:**
+   - New content with CA21-19 airworthiness approval tag
+   - Two transparent cards: MP39 SACAA Approved, CA21-19 Airworthiness Tag
+
+6. **Insights Section:**
+   - Made dormant (commented out) until first article is published
+
+7. **Footer Updates:**
+   - Changed "Work with ACES" to "Order with ACES"
+   - Updated contact info: Email, WhatsApp (+27 82 893 5583)
+   - Updated address: 5 Industria Street, Potchindustria, Potchefstroom, 2520
+   - Added Google Maps link for address
+   - Updated company links: About, Products and Services, Insights
+   - Removed legal section
+   - Updated copyright: "ACES Plastics CC t/a ACES Aerodynamics"
+
+8. **Quote Page:**
+   - Added proper email form with subject line format: "Website Lead – [Company Name]"
+   - Improved form labels and input sizing
+
+9. **Cursor:**
+   - Removed cursor inversion effect - cursor now always stays white
+   - Simplified cursor overlay component
+
+### Technical Updates
+- Fixed hydration errors related to automation detection timing
+- Simplified pre-hydration script to avoid SVG attribute modifications
+
+## Previous Changes (Replit Import - Nov 25, 2024)
 - Configured Next.js development server for Replit environment (port 5000, host 0.0.0.0)
 - Modified middleware to allow framing in development for Replit preview
 - Set up workflow for automatic server start
@@ -119,4 +173,4 @@ aces-aerodynamics/
 
 ## Known Issues
 - Node version warning: Project specifies Node 22+, Replit running Node 20.19.3 (minor compatibility issue, not blocking)
-- Hydration warning in development (expected behavior for some SSR components)
+- Hydration warning may appear intermittently in development with automated testing (does not affect production)

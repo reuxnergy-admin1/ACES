@@ -1,7 +1,9 @@
+'use client';
+
 import ContainerRow from '@/components/layout/ContainerRow';
 import SectionBand from '@/components/layout/SectionBand';
 import { Grid12, Span } from '@/components/layout/Grid12';
-import { useId } from 'react';
+import { useId, useState, FormEvent } from 'react';
 
 export default function Page(){
   const uid = useId();
@@ -10,6 +12,25 @@ export default function Page(){
   const idEmail = `${uid}-email`;
   const idPhone = `${uid}-phone`;
   const idDetails = `${uid}-details`;
+  
+  const [company, setCompany] = useState('');
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const companyName = formData.get('company') as string || 'Unknown';
+    const subject = encodeURIComponent(`Website Lead – ${companyName}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.get('name')}\n` +
+      `Company: ${companyName}\n` +
+      `Email: ${formData.get('email')}\n` +
+      `Phone: ${formData.get('phone') || 'Not provided'}\n\n` +
+      `Project Details:\n${formData.get('details')}`
+    );
+    window.location.href = `mailto:info@acesaerodynamics.com?subject=${subject}&body=${body}`;
+    e.preventDefault();
+  };
+
   return (
     <>
       {/* Hero section */}
@@ -24,27 +45,35 @@ export default function Page(){
       {/* Form section */}
       <SectionBand>
         <ContainerRow>
-          <form method="post" action="mailto:info@acesaerodynamics.com" className="w-full" noValidate>
+          <form onSubmit={handleSubmit} className="w-full" noValidate>
             <Grid12 data-reveal-blur-stagger>
               <Span cols={6}>
-                <label htmlFor={idName} className="sr-only">Full name</label>
-                <input id={idName} name="name" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Full name"/>
+                <label htmlFor={idName} className="block text-white/60 text-sm mb-2">Full name *</label>
+                <input id={idName} name="name" required className="w-full bg-black border border-white/20 rounded px-4 py-3 min-h-[48px]" placeholder="Your full name"/>
               </Span>
               <Span cols={6}>
-                <label htmlFor={idCompany} className="sr-only">Company</label>
-                <input id={idCompany} name="company" required className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Company"/>
+                <label htmlFor={idCompany} className="block text-white/60 text-sm mb-2">Company *</label>
+                <input 
+                  id={idCompany} 
+                  name="company" 
+                  required 
+                  className="w-full bg-black border border-white/20 rounded px-4 py-3 min-h-[48px]" 
+                  placeholder="Your company name"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                />
               </Span>
               <Span cols={6}>
-                <label htmlFor={idEmail} className="sr-only">Email</label>
-                <input id={idEmail} name="email" required type="email" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Email"/>
+                <label htmlFor={idEmail} className="block text-white/60 text-sm mb-2">Email *</label>
+                <input id={idEmail} name="email" required type="email" className="w-full bg-black border border-white/20 rounded px-4 py-3 min-h-[48px]" placeholder="your@email.com"/>
               </Span>
               <Span cols={6}>
-                <label htmlFor={idPhone} className="sr-only">Phone</label>
-                <input id={idPhone} name="phone" className="w-full bg-black border border-white/20 rounded px-4 py-3" placeholder="Phone"/>
+                <label htmlFor={idPhone} className="block text-white/60 text-sm mb-2">Phone</label>
+                <input id={idPhone} name="phone" className="w-full bg-black border border-white/20 rounded px-4 py-3 min-h-[48px]" placeholder="+27 ..."/>
               </Span>
               <Span cols={12}>
-                <label htmlFor={idDetails} className="sr-only">Project details</label>
-                <textarea id={idDetails} name="details" className="w-full bg-black border border-white/20 rounded px-4 py-3" rows={6} placeholder="Project details"></textarea>
+                <label htmlFor={idDetails} className="block text-white/60 text-sm mb-2">Project details *</label>
+                <textarea id={idDetails} name="details" required className="w-full bg-black border border-white/20 rounded px-4 py-3" rows={6} placeholder="Tell us about your project requirements..."></textarea>
               </Span>
               <Span cols={8}>
                 <button className="button-primary w-full md:w-auto h-11 px-5" type="submit">
@@ -52,12 +81,12 @@ export default function Page(){
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
                   <span aria-hidden="true" className="reveal-line v right" />
-                  <span className="sr-only">Send</span>
-                  <span aria-hidden>Send</span>
+                  <span className="sr-only">Send Quote Request</span>
+                  <span aria-hidden="true">Send Quote Request</span>
                 </button>
               </Span>
             </Grid12>
-            <p className="mt-[var(--stack-sm)] body text-white/50 max-w-reading">This form currently opens your email client to send to info@acesaerodynamics.com. Swap to a server or service when ready.</p>
+            <p className="mt-[var(--stack-sm)] body text-white/50 max-w-reading">This form will open your email client to send to info@acesaerodynamics.com with subject: Website Lead – {company || '[Company Name]'}</p>
           </form>
         </ContainerRow>
       </SectionBand>

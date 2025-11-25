@@ -10,7 +10,7 @@ export function Footer() {
     const el = ref.current;
     if (!el) return;
   const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (mq.matches) return; // respect reduced motion
+  if (mq.matches) return;
   const onMove = (e: PointerEvent) => {
       const y = e.clientY;
       const bottomDist = Math.max(0, window.innerHeight - y);
@@ -23,12 +23,10 @@ export function Footer() {
   }, []);
   return (
     <footer ref={ref} className="relative border-t border-white/10 mt-24">
-      {/* Subtle top sheen inspired by Chronicle */}
       <div className="footer-sheen" aria-hidden="true" />
       <div className="grid-shell">
-        {/* Engagement strip */}
         <div className="container-wide py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10" data-reveal>
-          <div className="text-lg md:text-xl text-white/90 uc tracking-[0.08em]">Work with ACES</div>
+          <div className="text-lg md:text-xl text-white/90 uc tracking-[0.08em]">Order with ACES</div>
           <Link href="/contact/" className="button-primary h-11 px-5">
             <span aria-hidden="true" className="reveal-line h top" />
             <span aria-hidden="true" className="reveal-line h bottom" />
@@ -41,29 +39,30 @@ export function Footer() {
         <div className="container-wide py-16 grid-12 gutter text-sm text-white/70">
           <Span cols={4}>
             <div className="text-white uc tracking-wider">ACES Aerodynamics</div>
-            <div className="mt-2 text-white/70">SACAA-approved fabrication | MP39</div>
-            <div className="mt-2">
-              <a href="mailto:info@acesaerodynamics.com" className="link-underline text-white/80 hover:text-white">info@acesaerodynamics.com</a>
+            <div className="mt-4">
+              <div className="text-white/60 text-xs uc tracking-wider mb-1">Email</div>
+              <Link href="/contact/" className="link-underline text-white/80 hover:text-white">info@acesaerodynamics.com</Link>
             </div>
-            <div className="mt-1 text-white/70">WhatsApp: <a className="link-underline text-white/80 hover:text-white" href="https://wa.me/27600000000" target="_blank" rel="noopener noreferrer">+27 60 000 0000</a></div>
-            <div className="mt-1 text-white/70">Pretoria, Gauteng, South Africa</div>
+            <div className="mt-3">
+              <div className="text-white/60 text-xs uc tracking-wider mb-1">WhatsApp</div>
+              <a className="link-underline text-white/80 hover:text-white" href="https://wa.me/27828935583" target="_blank" rel="noopener noreferrer">+27 82 893 5583</a>
+            </div>
+            <div className="mt-3">
+              <div className="text-white/60 text-xs uc tracking-wider mb-1">Address</div>
+              <a className="link-underline text-white/80 hover:text-white" href="https://maps.app.goo.gl/5vdLTXqJNcxudLCBA" target="_blank" rel="noopener noreferrer">
+                5 Industria Street,<br />
+                Potchindustria,<br />
+                Potchefstroom,<br />
+                2520
+              </a>
+            </div>
           </Span>
           <Span cols={4}>
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <div className="uc tracking-wider text-white/60 text-xs">Company</div>
-                <div className="mt-2 space-y-2">
-                  <Link className="link-underline text-white/85 hover:text-white" href="/about/history/">About</Link><br/>
-                  <Link className="link-underline text-white/85 hover:text-white" href="/blog/">Blog</Link>
-                </div>
-              </div>
-              <div>
-                <div className="uc tracking-wider text-white/60 text-xs">Legal</div>
-                <div className="mt-2 space-y-2">
-                  <Link className="link-underline text-white/85 hover:text-white" href="/legal/privacy/">Privacy</Link><br/>
-                  <Link className="link-underline text-white/85 hover:text-white" href="/legal/cookies/">Cookies</Link>
-                </div>
-              </div>
+            <div className="uc tracking-wider text-white/60 text-xs">Company</div>
+            <div className="mt-2 space-y-2">
+              <Link className="link-underline text-white/85 hover:text-white block" href="/about/history/">About</Link>
+              <a className="link-underline text-white/85 hover:text-white block" href="#products-and-services">Products and Services</a>
+              <Link className="link-underline text-white/85 hover:text-white block" href="/blog/">Insights</Link>
             </div>
           </Span>
           <Span cols={4}>
@@ -88,16 +87,15 @@ export function Footer() {
               </a>
             </Tooltip>
             <Tooltip label="WhatsApp">
-              <a className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition-colors" href="https://wa.me/27600000000" target="_blank" rel="noopener noreferrer">
+              <a className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition-colors" href="https://wa.me/27828935583" target="_blank" rel="noopener noreferrer">
                 <span className="sr-only">WhatsApp</span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.62-6.003C.122 5.281 5.403 0 12.057 0c3.181 0 6.167 1.24 8.413 3.488a11.79 11.79 0 013.49 8.414c-.002 6.653-5.283 11.934-11.938 11.934a11.95 11.95 0 01-6.002-1.619L.057 24zm6.597-3.807c1.741 1.035 3.276 1.666 5.392 1.666 5.448 0 9.886-4.434 9.889-9.877.003-5.462-4.415-9.89-9.881-9.894-5.452 0-9.89 4.434-9.894 9.888 0 2.225.651 3.891 1.746 5.634l-.999 3.648 3.747-.965zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.03-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.173.198-.297.297-.495.099-.198.05-.372-.025-.521-.075-.149-.669-1.611-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.71.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.29.173-1.413z"/></svg>
               </a>
             </Tooltip>
           </div>
           </Span>
-          {/* Removed lower redundant CTA to focus hierarchy */}
           <Span cols={12}>
-            <div className="mt-10 flex flex-wrap items-center justify-between gap-3 text-white/50">
+            <div className="mt-10 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-white/50">
               <div className="flex items-center gap-3">
                 <span className="inline-flex items-center gap-2"><span className="inline-block w-2 h-2 rounded-full bg-white/60" aria-hidden="true" /> SACAA MP39</span>
               </div>
@@ -109,7 +107,7 @@ export function Footer() {
                 <Link href="#main-content" className="link-underline text-white/70 hover:text-white">Back to top</Link>
               </div>
             </div>
-            <div className="mt-3 text-white/40">© {new Date().getFullYear()} ACES Aerodynamics</div>
+            <div className="mt-3 text-white/40">© {new Date().getFullYear()} ACES Plastics CC t/a ACES Aerodynamics</div>
           </Span>
         </div>
       </div>

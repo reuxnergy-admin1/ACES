@@ -149,7 +149,8 @@ export function Nav() {
   }, [open]);
 
   const items: NavItem[] = useMemo(() => ([
-    { id: 'blog', href: '/blog/', label: 'BLOG' },
+    { id: 'home', href: '/', label: 'HOME' },
+    { id: 'insights', href: '/blog/', label: 'INSIGHTS' },
     { id: 'signin', href: '/signin/', label: 'SIGN IN' },
     { id: 'order', href: '/order/', label: 'ORDER' },
   ]), []);
