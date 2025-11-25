@@ -10,11 +10,11 @@ export default function Page() {
   return (
     <>
       {/* Hero section using consistent SectionBand pattern */}
-      <SectionBand className="pt-48 md:pt-44">
+      <SectionBand className="pt-56 md:pt-52">
         <ContainerWide>
           <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
             <Span cols={12} className="text-center md:text-left">
-              <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch] mx-auto md:mx-0">
+              <h1 className="text-4xl md:text-6xl font-light tracking-tight leading-[0.95] uc max-w-[22ch] mx-auto md:mx-0">
                 Aerospace & Motorsport Specialist Engineering Components
               </h1>
               <p className="mt-6 body max-w-reading text-white/70 mx-auto md:mx-0">
