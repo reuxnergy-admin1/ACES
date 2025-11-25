@@ -153,7 +153,6 @@ export function Nav() {
     { id: 'about', href: '/about/', label: 'ABOUT' },
     { id: 'products', href: '/products/', label: 'PRODUCTS' },
     { id: 'insights', href: '/blog/', label: 'INSIGHTS' },
-    { id: 'order', href: '/order/', label: 'ORDER' },
   ]), []);
 
   // Desktop dropdown open state
@@ -270,7 +269,7 @@ export function Nav() {
             <div className="grid-12 gutter items-center">
             <div className="md:col-span-2 flex items-center flex-shrink-0">
               <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={160} height={40} className="h-8 w-auto" priority />
               </Link>
             </div>
             <nav className="hidden md:flex items-center gap-4 md:col-span-7 justify-self-start" aria-label="Primary"
@@ -325,7 +324,7 @@ export function Nav() {
           {/* Mobile layout: grid for logo and menu button */}
           <div className="grid grid-cols-12 items-center md:hidden">
             <Link href="/" aria-label="ACES home" className="flex items-center col-span-8">
-              <Image src="/aces-logo.svg" alt="ACES Aerodynamics" width={88} height={26} priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={160} height={40} className="h-8 w-auto" priority />
             </Link>
             <div className="col-span-4 justify-self-end">
               <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="px-3 h-11" onClick={() => setOpen(!open)}>
