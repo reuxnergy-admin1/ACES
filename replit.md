@@ -110,10 +110,20 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
-## Recent Changes (Nov 25, 2025 - Logo & Navigation Update)
+## Recent Changes (Nov 25, 2025 - Header & Layout Fix)
+
+### Header Solid Black Background
+- Header now has solid black background (`bg-black`) instead of transparent/semi-transparent
+- Removed gradient overlay that was blending with page content
+- Header background is now consistent and always visible
+
+### Hero Section Spacing
+- Increased hero section top padding to `pt-48 md:pt-44` (192px mobile, 176px desktop)
+- Ensures main title text is well below the fixed header on all devices
+- Mobile headings centered with `text-center md:text-left` pattern
 
 ### Logo Update
-- Replaced old SVG logo with new PNG logo featuring icon + "ACES AERODYNAMICS" text
+- Replaced logo with new PNG featuring icon + "ACES AERODYNAMICS" text
 - New logo file: `/public/aces-logo-new.png`
 - Logo uses responsive sizing: `width={160} height={40}` with `h-8 w-auto` class
 
