@@ -156,9 +156,14 @@ aces-aerodynamics/
    - Added proper email form with subject line format: "Website Lead – [Company Name]"
    - Improved form labels and input sizing
 
-9. **Cursor:**
-   - Removed cursor inversion effect - cursor now always stays white
-   - Simplified cursor overlay component
+9. **Cursor System Overhaul:**
+   - Removed WebGL shader cursor dot (was causing inversion on blend-mode elements)
+   - Removed click ripple effects (expanding circles on click)
+   - Removed magnet effect (cursor being pulled toward interactive elements)
+   - Canvas-based cursor now sole renderer (CursorTrailOverlay)
+   - Cursor stays white by default
+   - Cursor turns black when hovering over sheen cards with white wipe active
+   - Contour line push effect preserved (lines still respond to cursor position)
 
 ### Technical Updates
 - Fixed hydration errors related to automation detection timing
