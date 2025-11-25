@@ -27,7 +27,7 @@ export function Footer() {
       <div className="grid-shell">
         <div className="container-wide py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10" data-reveal>
           <div className="text-lg md:text-xl text-white/90 uc tracking-[0.08em]">Order with ACES</div>
-          <Link href="/contact/" className="button-primary h-11 px-5">
+          <Link href="/contact/" className="button-primary h-11 px-5 whitespace-nowrap">
             <span aria-hidden="true" className="reveal-line h top" />
             <span aria-hidden="true" className="reveal-line h bottom" />
             <span aria-hidden="true" className="reveal-line v left" />

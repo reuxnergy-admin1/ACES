@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-// A crisp, canvas-based cursor with a very short trail.
+type Ripple = { x: number; y: number; t: number };
+
+// A crisp, canvas-based cursor with a very short trail and click ripple effect.
 // Cursor is white by default, turns black when over white card backgrounds (sheen cards with wipe active).
 export default function CursorTrailOverlay() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -10,8 +12,11 @@ export default function CursorTrailOverlay() {
   const pointsRef = useRef<Array<{x:number;y:number;t:number}>>([]);
   const activeRef = useRef(false);
   const darkModeRef = useRef(false);
+  const ripplesRef = useRef<Ripple[]>([]);
 
   useEffect(() => {
+    const isReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    
     const canvas = document.createElement("canvas");
     canvasRef.current = canvas;
     Object.assign(canvas.style, {
@@ -53,7 +58,6 @@ export default function CursorTrailOverlay() {
       const target = e.target as HTMLElement | null;
       const sheenCard = target?.closest?.('.sheen-card');
       if (sheenCard) {
-        // Check if card is in hover/focus state (wipe is showing)
         const isHovered = sheenCard.matches(':hover') || sheenCard.matches(':focus-within');
         darkModeRef.current = isHovered;
       } else {
@@ -64,12 +68,29 @@ export default function CursorTrailOverlay() {
         rafRef.current = requestAnimationFrame(render);
       }
     };
+    
+    // Click ripple effect - centered on cursor position
+    const onPointerDown = (e: PointerEvent) => {
+      if (isReducedMotion) return;
+      const now = performance.now();
+      ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: now });
+      // Limit ripple pool to prevent memory buildup on rapid clicks
+      if (ripplesRef.current.length > 5) {
+        ripplesRef.current.shift();
+      }
+      activeRef.current = true;
+      if (rafRef.current == null) {
+        rafRef.current = requestAnimationFrame(render);
+      }
+    };
+    
     const onLeave = () => {
       visible = false;
       activeRef.current = false;
       darkModeRef.current = false;
     };
     window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
     window.addEventListener("pointerleave", onLeave, { passive: true });
     const onVis = () => {
       if (document.visibilityState === 'hidden') {
@@ -81,13 +102,49 @@ export default function CursorTrailOverlay() {
     document.addEventListener('visibilitychange', onVis);
 
     const maxTrailMs = 6;
+    const rippleDurationMs = 600;
+    const rippleMaxRadius = 80;
 
     const render = () => {
       const wipeHide = document.body.classList.contains('cursor-hide-transition');
       const now = performance.now();      
       pointsRef.current = wipeHide ? [] : pointsRef.current.filter((p) => now - p.t <= maxTrailMs);
+      // Clean up expired ripples
+      ripplesRef.current = ripplesRef.current.filter((r) => now - r.t <= rippleDurationMs);
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Draw ripples first (behind cursor) - use DPR-corrected coordinates
+      if (!wipeHide) {
+        const isDark = darkModeRef.current;
+        const rippleColor = isDark ? '0,0,0' : '255,255,255';
+        
+        for (const ripple of ripplesRef.current) {
+          const age = (now - ripple.t) / rippleDurationMs; // 0..1
+          const easeOut = 1 - Math.pow(1 - age, 3);
+          const radius = easeOut * rippleMaxRadius;
+          const alpha = Math.max(0, 0.4 * (1 - age));
+          
+          // Apply DPR correction to ripple center coordinates
+          const rx = Math.round(ripple.x * dpr) / dpr;
+          const ry = Math.round(ripple.y * dpr) / dpr;
+          
+          // Draw 2 concentric rings
+          for (let i = 0; i < 2; i++) {
+            const ringRadius = radius - i * 12;
+            if (ringRadius > 0) {
+              const ringAlpha = alpha * (1 - i * 0.3);
+              ctx.strokeStyle = `rgba(${rippleColor},${ringAlpha})`;
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.arc(rx, ry, ringRadius, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // Draw cursor and trail only when visible
       if (!wipeHide && visible && lastRef.current) {
         // Choose color based on dark mode
         const isDark = darkModeRef.current;
@@ -124,7 +181,11 @@ export default function CursorTrailOverlay() {
         ctx.fill();
       }
 
-      if (!wipeHide && (activeRef.current || pointsRef.current.length)) {
+      // Continue animation loop if there's any active content
+      // Prioritize ripples to ensure they complete their animation even after pointer leaves
+      const hasRipples = ripplesRef.current.length > 0;
+      const hasCursorActivity = activeRef.current || pointsRef.current.length > 0;
+      if (!wipeHide && (hasRipples || hasCursorActivity)) {
         rafRef.current = requestAnimationFrame(render);
       } else {
         rafRef.current = null;
@@ -136,6 +197,7 @@ export default function CursorTrailOverlay() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("resize", resize);
       document.removeEventListener('visibilitychange', onVis);

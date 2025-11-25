@@ -47,11 +47,11 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   const reduceMotionRef = useRef(false);
   const isAutomationRef = useRef(false);
   const timings = useRef({
-    coverDur: 900,
-    revealHold: 100,
-    revealDur: 900,
-    fallbackRevealAfter: 900,
-    watchdogMs: 4000,
+    coverDur: 450,
+    revealHold: 60,
+    revealDur: 450,
+    fallbackRevealAfter: 500,
+    watchdogMs: 2500,
   });
 
   useEffect(() => {

@@ -79,7 +79,7 @@ export default function Page() {
             ))}
             <Span cols={12}>
               <div className="mt-8 flex justify-center">
-                <Link href="/contact/" className="button-primary h-11 px-6">
+                <Link href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
                   <span aria-hidden="true" className="reveal-line h top" />
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
