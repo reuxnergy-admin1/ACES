@@ -2,13 +2,14 @@
 import { useEffect, useRef } from "react";
 
 // A crisp, canvas-based cursor with a very short trail.
-// Inspired by https://codepen.io/ksenia-k/pen/rNoBgbV but simplified and shortened.
+// Cursor is white by default, turns black when over white card backgrounds (sheen cards with wipe active).
 export default function CursorTrailOverlay() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
   const lastRef = useRef({ x: 0, y: 0, t: 0 });
   const pointsRef = useRef<Array<{x:number;y:number;t:number}>>([]);
   const activeRef = useRef(false);
+  const darkModeRef = useRef(false);
 
   useEffect(() => {
     const canvas = document.createElement("canvas");
@@ -21,11 +22,9 @@ export default function CursorTrailOverlay() {
     });
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) {
-      return () => {
-        // nothing to clean up since we didn't attach
-      };
+      return () => {};
     }
-  let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
     const resize = () => {
       const w = window.innerWidth;
@@ -49,6 +48,18 @@ export default function CursorTrailOverlay() {
       lastRef.current = p;
       pointsRef.current.push(p);
       activeRef.current = true;
+      
+      // Check if cursor is over a sheen card that is currently wiped (hover/focus state)
+      const target = e.target as HTMLElement | null;
+      const sheenCard = target?.closest?.('.sheen-card');
+      if (sheenCard) {
+        // Check if card is in hover/focus state (wipe is showing)
+        const isHovered = sheenCard.matches(':hover') || sheenCard.matches(':focus-within');
+        darkModeRef.current = isHovered;
+      } else {
+        darkModeRef.current = false;
+      }
+      
       if (rafRef.current == null) {
         rafRef.current = requestAnimationFrame(render);
       }
@@ -56,6 +67,7 @@ export default function CursorTrailOverlay() {
     const onLeave = () => {
       visible = false;
       activeRef.current = false;
+      darkModeRef.current = false;
     };
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerleave", onLeave, { passive: true });
@@ -68,31 +80,29 @@ export default function CursorTrailOverlay() {
     };
     document.addEventListener('visibilitychange', onVis);
 
-  // Slight trail tuned by time not frames; shorten further for minimal persistence
-  const maxTrailMs = 6;
-  // Simple exponential smoothing for ultra-smooth head movement
-  // alpha is computed from a 90Hz baseline but scaled by frame dt
-  // Removed unused lastTime variable
+    const maxTrailMs = 6;
 
     const render = () => {
-      // Respect page transition cursor hide
       const wipeHide = document.body.classList.contains('cursor-hide-transition');
       const now = performance.now();      
-      // drop old points
       pointsRef.current = wipeHide ? [] : pointsRef.current.filter((p) => now - p.t <= maxTrailMs);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (!wipeHide && visible && lastRef.current) {
-        // Trail: draw tiny faded segments from oldest to newest (extremely short)
+        // Choose color based on dark mode
+        const isDark = darkModeRef.current;
+        const headColor = isDark ? 'rgba(0,0,0,0.94)' : 'rgba(255,255,255,0.94)';
+        const trailColor = isDark ? '0,0,0' : '255,255,255';
+
+        // Trail: draw tiny faded segments from oldest to newest
         const pts = pointsRef.current;
         for (let i = 1; i < pts.length; i++) {
           const p0 = pts[i - 1];
           const p1 = pts[i];
-          const age = (now - p1.t) / maxTrailMs; // 0..1
-          const alpha = Math.max(0, 1 - age) * 0.35; // very subtle
-          ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-          ctx.lineWidth = 1.0; // slightly wider to be closer to head size
-          // Align line segments to device pixels to reduce blur
+          const age = (now - p1.t) / maxTrailMs;
+          const alpha = Math.max(0, 1 - age) * 0.35;
+          ctx.strokeStyle = `rgba(${trailColor},${alpha})`;
+          ctx.lineWidth = 1.0;
           const x0 = Math.round(p0.x * dpr) / dpr;
           const y0 = Math.round(p0.y * dpr) / dpr;
           const x1 = Math.round(p1.x * dpr) / dpr;
@@ -103,10 +113,10 @@ export default function CursorTrailOverlay() {
           ctx.stroke();
         }
 
-        // Head: always draw white cursor head
+        // Head: draw cursor dot
         const { x, y } = lastRef.current;
         const r = 5.0;
-        ctx.fillStyle = 'rgba(255,255,255,0.94)';
+        ctx.fillStyle = headColor;
         const ax = Math.round(x * dpr) / dpr;
         const ay = Math.round(y * dpr) / dpr;
         ctx.beginPath();
@@ -114,9 +124,8 @@ export default function CursorTrailOverlay() {
         ctx.fill();
       }
 
-      // Pause rAF if we have nothing to render to save CPU and match display cadence
       if (!wipeHide && (activeRef.current || pointsRef.current.length)) {
-        rafRef.current = requestAnimationFrame(render); // Restart render loop on pointer movement
+        rafRef.current = requestAnimationFrame(render);
       } else {
         rafRef.current = null;
       }
@@ -129,7 +138,7 @@ export default function CursorTrailOverlay() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("resize", resize);
-  document.removeEventListener('visibilitychange', onVis);
+      document.removeEventListener('visibilitychange', onVis);
       canvas.remove();
       canvasRef.current = null;
     };

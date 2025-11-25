@@ -10,12 +10,11 @@ declare global {
       lastY?: number;
       uMouseX?: number;
       uMouseY?: number;
-      rippleActive?: number;
       mode?: string;
       allowGL?: boolean;
       canUseGL?: boolean;
     };
-  __BG_DEBUG_ONCE?: number;
+    __BG_DEBUG_ONCE?: number;
   }
 }
 
@@ -148,12 +147,12 @@ function FullscreenQuad(props: Props) {
     u_intensity:   { value: props.intensity },
     u_sigma:       { value: props.sigma },
     u_lineOpacity: { value: props.lineOpacity ?? 0.10 },
-    u_dotR:        { value: props.dotRadiusUV ?? 0.010 },
-    u_dotFeather:  { value: props.dotFeatherUV ?? 0.006 },
+    u_dotR:        { value: 0 },
+    u_dotFeather:  { value: 0 },
     u_rippleCenter:{ value: new THREE.Vector2(-1, -1) },
     u_rippleT:     { value: 0 },
     u_rippleActive:{ value: 0 },
-  }), [size.width, size.height, gl, props.density, props.lineWidth, props.intensity, props.sigma, props.lineOpacity, props.dotRadiusUV, props.dotFeatherUV]);
+  }), [size.width, size.height, gl, props.density, props.lineWidth, props.intensity, props.sigma, props.lineOpacity]);
 
   const material = useMemo(() => new THREE.ShaderMaterial({
     vertexShader: VERT,
@@ -164,10 +163,8 @@ function FullscreenQuad(props: Props) {
     uniforms
   }), [uniforms]);
 
-  // Pointer handling
+  // Pointer handling - only for contour line bump, no ripple effects
   useEffect(() => {
-    const isReduced = window.matchMedia?.('(prefers-reduced-motion)').matches;
-
     const updateLast = (x: number, y: number) => {
       last.current.x = x;
       last.current.y = y;
@@ -189,102 +186,30 @@ function FullscreenQuad(props: Props) {
       }
     };
 
-    const onPointerDown = (e: PointerEvent) => {
-      updateLast(e.clientX, e.clientY);
-      if (!isReduced) {
-        const u = material.uniforms;
-        const rectW = size.width;
-        const rectH = size.height;
-        (u.u_rippleCenter.value as THREE.Vector2).set(
-          last.current.x / rectW,
-          1 - last.current.y / rectH
-        );
-        u.u_rippleActive.value = 1;
-        u.u_rippleT.value = 0;
-      }
-    };
-    const onMouseDown = (e: MouseEvent) => onPointerDown(e as unknown as PointerEvent);
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches && e.touches.length > 0) {
-        const t = e.touches[0];
-        updateLast(t.clientX, t.clientY);
-        if (!isReduced) {
-          const u = material.uniforms;
-          const rectW = size.width;
-          const rectH = size.height;
-          (u.u_rippleCenter.value as THREE.Vector2).set(
-            last.current.x / rectW,
-            1 - last.current.y / rectH
-          );
-          u.u_rippleActive.value = 1;
-          u.u_rippleT.value = 0;
-        }
-      }
-    };
-    const onLeave = () => { /* keep last position; dot visibility handled in shader */ };
-
-  const opts: AddEventListenerOptions = { passive: true, capture: true };
-  window.addEventListener('pointermove', onPointerMove, opts);
-  window.addEventListener('pointerdown', onPointerDown, opts);
-  window.addEventListener('mousemove', onMouseMove, opts);
-  window.addEventListener('mousedown', onMouseDown, opts);
-  window.addEventListener('touchmove', onTouchMove, opts);
-  window.addEventListener('touchstart', onTouchStart, opts);
-    window.addEventListener('pointerleave', onLeave);
+    const opts: AddEventListenerOptions = { passive: true, capture: true };
+    window.addEventListener('pointermove', onPointerMove, opts);
+    window.addEventListener('mousemove', onMouseMove, opts);
+    window.addEventListener('touchmove', onTouchMove, opts);
     return () => {
       window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('pointerleave', onLeave);
     };
-  }, [size.width, size.height, material]);
-
-  // Track magnetic hover target
-  const magnetRef = useRef<{active:boolean; cx:number; cy:number}>({active:false, cx:0, cy:0});
-  useEffect(() => {
-    const isReduced = window.matchMedia?.('(prefers-reduced-motion)').matches;
-    if (isReduced) return;
-    const onOverMove = (e: PointerEvent) => {
-      const t = e.target as HTMLElement | null;
-      const hit = t?.closest?.('a,button,[role="button"]');
-      if (hit) {
-        const r = (hit as HTMLElement).getBoundingClientRect();
-        magnetRef.current = { active:true, cx: r.left + r.width/2, cy: r.top + r.height/2 };
-      } else {
-        magnetRef.current.active = false;
-      }
-    };
-    window.addEventListener('pointermove', onOverMove, { passive: true });
-    return () => window.removeEventListener('pointermove', onOverMove);
   }, []);
+
 
   useFrame(({ clock, size, gl }) => {
     const dpr = gl.getPixelRatio();
     const tsec = clock.getElapsedTime();
     material.uniforms.u_time.value = tsec;
     material.uniforms.u_resolution.value.set(size.width * dpr, size.height * dpr);
-    // Smooth mouse easing
+    // Smooth mouse easing - direct tracking without magnet offset
     const u = material.uniforms.u_mouse.value as THREE.Vector2;
     const lastX = last.current.x ?? size.width / 2;
     const lastY = last.current.y ?? size.height / 2;
-    let targetX = lastX;
-    let targetY = lastY;
-    if (magnetRef.current.active) {
-      // Nudge pointer toward centre of hovered interactive element (max 12px)
-      const vx = magnetRef.current.cx - lastX;
-      const vy = magnetRef.current.cy - lastY;
-      const len = Math.hypot(vx, vy) || 1;
-      const maxOffset = 12; // px
-      const k = Math.min(maxOffset, len) / len;
-      targetX = lastX + vx * k * 0.5; // half-strength toward centre
-      targetY = lastY + vy * k * 0.5;
-    }
     const targetUV = new THREE.Vector2(
-      targetX / size.width,
-      1 - targetY / size.height
+      lastX / size.width,
+      1 - lastY / size.height
     );
     u.lerp(targetUV, 0.12);
 
@@ -295,21 +220,6 @@ function FullscreenQuad(props: Props) {
       window.__bg.lastY = last.current.y;
       window.__bg.uMouseX = u.x;
       window.__bg.uMouseY = u.y;
-      const uRip = material.uniforms as unknown as { u_rippleActive: { value: number } };
-      window.__bg.rippleActive = uRip.u_rippleActive.value;
-    }
-
-    // Ripple time update and auto-deactivate
-    const uRip = material.uniforms as unknown as {
-      u_rippleActive: { value: number };
-      u_rippleT: { value: number };
-    };
-    if (uRip.u_rippleActive.value > 0.5) {
-      uRip.u_rippleT.value += 1.0 / 60.0; // approx per-frame advance
-      if (uRip.u_rippleT.value > 1.0) {
-        uRip.u_rippleActive.value = 0;
-        uRip.u_rippleT.value = 0;
-      }
     }
   });
 
