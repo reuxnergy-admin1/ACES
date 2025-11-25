@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <>
       {/* Hero section using consistent SectionBand pattern */}
-      <SectionBand className="pt-44 md:pt-40">
+      <SectionBand className="pt-48 md:pt-44">
         <ContainerWide>
           <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
             <Span cols={12} className="text-center md:text-left">

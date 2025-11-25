@@ -252,12 +252,10 @@ export function Nav() {
   <header
       ref={headerRef}
       className={clsx(
-  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none supports-[backdrop-filter]:backdrop-blur-sm header-interactive',
-        scrolled ? 'bg-black/60' : 'bg-transparent',
+  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none header-interactive bg-black',
         hidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >
-  <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" aria-hidden="true" />
   {/* Header content deliberately not marked as data-app-content so page-transition lock doesn't block nav clicks */}
   <div>
   <div className={clsx('relative grid-shell py-3', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
