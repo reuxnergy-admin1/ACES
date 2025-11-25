@@ -110,7 +110,26 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
-## Recent Changes (Nov 25, 2025 - Website Updates)
+## Recent Changes (Nov 25, 2025 - Security Update & About Page)
+
+### Security Dependency Update
+- Updated `glob` and `playwright` dependencies per security scan
+- Resolved `@swc/helpers` module resolution issue by reinstalling dependencies
+
+### About Page Added
+- Created main `/about/` page with company information from provided PDF
+- Content includes: About ACES intro, How It All Started (founder Dirk Uys), Our Story Since 1994, What We Do, Our Principles (4 cards)
+- Uses same layout patterns as home page: SectionBand, Grid12, SheenCard, Prose
+
+### Button Width Fix
+- Widened "Request a Quote" buttons across the site:
+  - Nav (desktop/mobile): px-4 → px-6
+  - Footer: px-5 → px-8
+- Footer "About" link now points to `/about/` instead of `/about/history/`
+
+---
+
+## Previous Changes (Nov 25, 2025 - Website Updates)
 
 ### Content Updates (from PDF requirements)
 1. **Navigation:**
