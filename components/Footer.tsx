@@ -107,7 +107,7 @@ export function Footer() {
                 <Link href="#main-content" className="link-underline text-white/70 hover:text-white">Back to top</Link>
               </div>
             </div>
-            <div className="mt-3 text-white/40">© {new Date().getFullYear()} ACES Plastics CC t/a ACES Aerodynamics</div>
+            <div className="mt-3 text-white/40">© ACES Plastics CC t/a ACES Aerodynamics</div>
           </Span>
         </div>
       </div>

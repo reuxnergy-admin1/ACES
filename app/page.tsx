@@ -9,8 +9,8 @@ import Prose from '@/components/layout/Prose';
 export default function Page() {
   return (
     <>
-      {/* Hero section - tripled padding for maximum clearance below header */}
-      <SectionBand className="!pt-[270px] sm:!pt-[285px] lg:!pt-[300px]">
+      {/* Hero section - proper clearance below header */}
+      <SectionBand className="!pt-[189px] sm:!pt-[200px] lg:!pt-[210px]">
         <ContainerWide>
           <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
             <Span cols={12} className="text-center md:text-left">
