@@ -83,18 +83,11 @@ export function Footer() {
           </Span>
           <Span cols={12}>
             <div className="mt-10 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-white/50">
-              <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-2"><span className="inline-block w-2 h-2 rounded-full bg-white/60" aria-hidden="true" /> SACAA MP39</span>
-              </div>
+              <div className="text-white/40">© ACES Plastics CC t/a ACES Aerodynamics</div>
               <div className="hidden md:block">
-                <Link href="/products/" className="link-underline text-white/70 hover:text-white">Products</Link>
-                <span className="mx-3">•</span>
-                <Link href="/services/" className="link-underline text-white/70 hover:text-white">Services</Link>
-                <span className="mx-3">•</span>
                 <Link href="#main-content" className="link-underline text-white/70 hover:text-white">Back to top</Link>
               </div>
             </div>
-            <div className="mt-3 text-white/40">© ACES Plastics CC t/a ACES Aerodynamics</div>
           </Span>
         </div>
       </div>
