@@ -44,15 +44,29 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   const clickPos = useRef<Coords | null>(null);
   const pendingColour = useRef<string>('#ffffff');
   const watchdogId = useRef<number | null>(null);
-  const isAutomation = typeof navigator !== 'undefined' && Reflect.get(navigator, 'webdriver') === true;
   const reduceMotionRef = useRef(false);
+  const isAutomationRef = useRef(false);
   const timings = useRef({
-    coverDur: isAutomation ? 600 : 900,
-    revealHold: isAutomation ? 60 : 100,
-    revealDur: isAutomation ? 800 : 900,
-  fallbackRevealAfter: isAutomation ? 700 : 900,
-  watchdogMs: isAutomation ? 3000 : 4000,
+    coverDur: 900,
+    revealHold: 100,
+    revealDur: 900,
+    fallbackRevealAfter: 900,
+    watchdogMs: 4000,
   });
+
+  useEffect(() => {
+    const isAuto = typeof navigator !== 'undefined' && Reflect.get(navigator, 'webdriver') === true;
+    isAutomationRef.current = isAuto;
+    if (isAuto) {
+      timings.current = {
+        coverDur: 600,
+        revealHold: 60,
+        revealDur: 800,
+        fallbackRevealAfter: 700,
+        watchdogMs: 3000,
+      };
+    }
+  }, []);
   // Note: we don't currently depend on pathname changes directly; popstate and overlay state drive reveals.
 
   const clearLocksAndOverlay = useCallback(() => {
@@ -412,7 +426,7 @@ export default function PageTransition({ children }: Readonly<{ children: React.
         {children}
       </div>
       {/* Transition overlay (blob) */}
-      <svg ref={overlayRef} className="pt-blob-svg" aria-hidden={true} focusable={false} data-active="0" data-phase="idle" width="100%" height="100%" viewBox="0 0 1920 1080">
+      <svg ref={overlayRef} className="pt-blob-svg" aria-hidden="true" focusable="false" data-active="0" data-phase="idle" width="100%" height="100%" viewBox="0 0 1920 1080" suppressHydrationWarning>
         <defs>
           <filter id={filterId}>
             <feTurbulence ref={(el: SVGFETurbulenceElement | null) => { noiseRef.current = el; }} type="fractalNoise" numOctaves="2" baseFrequency="0.02" />

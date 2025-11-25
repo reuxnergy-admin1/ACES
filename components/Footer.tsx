@@ -24,7 +24,7 @@ export function Footer() {
   return (
     <footer ref={ref} className="relative border-t border-white/10 mt-24">
       {/* Subtle top sheen inspired by Chronicle */}
-      <div className="footer-sheen" aria-hidden />
+      <div className="footer-sheen" aria-hidden="true" />
       <div className="grid-shell">
         {/* Engagement strip */}
         <div className="container-wide py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10" data-reveal>
@@ -35,7 +35,7 @@ export function Footer() {
             <span aria-hidden="true" className="reveal-line v left" />
             <span aria-hidden="true" className="reveal-line v right" />
             <span className="sr-only">Request a Quote</span>
-            <span aria-hidden>Request a Quote</span>
+            <span aria-hidden="true">Request a Quote</span>
           </Link>
         </div>
         <div className="container-wide py-16 grid-12 gutter text-sm text-white/70">
@@ -99,7 +99,7 @@ export function Footer() {
           <Span cols={12}>
             <div className="mt-10 flex flex-wrap items-center justify-between gap-3 text-white/50">
               <div className="flex items-center gap-3">
-                <span className="inline-flex items-center gap-2"><span className="inline-block w-2 h-2 rounded-full bg-white/60" aria-hidden /> SACAA MP39</span>
+                <span className="inline-flex items-center gap-2"><span className="inline-block w-2 h-2 rounded-full bg-white/60" aria-hidden="true" /> SACAA MP39</span>
               </div>
               <div className="hidden md:block">
                 <Link href="/products/" className="link-underline text-white/70 hover:text-white">Products</Link>

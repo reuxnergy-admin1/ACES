@@ -9,7 +9,7 @@ export default function BackgroundPortal({ children }: { children: React.ReactNo
   useEffect(() => { setHost(document.body); }, []);
   if (!host) return null;
   return createPortal(
-    <div aria-hidden data-vrt-mask className="fixed inset-0 z-bg pointer-events-none">
+    <div aria-hidden="true" data-vrt-mask className="fixed inset-0 z-bg pointer-events-none">
       {children}
     </div>,
     host
