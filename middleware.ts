@@ -39,8 +39,8 @@ export function middleware(req: NextRequest) {
   if (!isProd) {
     // In development, skip CSP to avoid interfering with Next.js dev server, HMR and source maps.
     // Keep a few useful security headers but omit CSP.
+    // Allow framing in development for Replit preview
     res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-    res.headers.set('X-Frame-Options', 'DENY');
     res.headers.set('X-Content-Type-Options', 'nosniff');
     res.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
     return res;
