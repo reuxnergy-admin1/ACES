@@ -10,7 +10,7 @@ export default function Page() {
   return (
     <>
       {/* Hero section - proper clearance below header */}
-      <SectionBand className="!pt-[189px] sm:!pt-[200px] lg:!pt-[210px]">
+      <SectionBand className="!pt-[113px] sm:!pt-[120px] lg:!pt-[126px]">
         <ContainerWide>
           <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
             <Span cols={12} className="text-center md:text-left">

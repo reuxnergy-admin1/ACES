@@ -258,7 +258,7 @@ export function Nav() {
     >
   {/* Header content deliberately not marked as data-app-content so page-transition lock doesn't block nav clicks */}
   <div>
-  <div className={clsx('relative grid-shell py-5', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
+  <div className={clsx('relative grid-shell py-8', scrolled ? 'border-b border-white/10' : 'border-b border-transparent')}>
         <div className="container-wide">
           {/* Chronicle-style nav sheen overlay (feature flagged) */}
           <div ref={sheenRef} className="nav-sheen" aria-hidden="true" />
@@ -267,7 +267,7 @@ export function Nav() {
             <div className="grid-12 gutter items-center">
             <div className="md:col-span-2 flex items-center flex-shrink-0">
               <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={336} height={84} className="h-[67.2px] w-auto" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[134.4px] w-auto" priority />
               </Link>
             </div>
             <nav className="hidden md:flex items-center gap-4 md:col-span-7 justify-self-start" aria-label="Primary"
@@ -322,7 +322,7 @@ export function Nav() {
           {/* Mobile layout: grid for logo and menu button */}
           <div className="grid grid-cols-12 items-center md:hidden">
             <Link href="/" aria-label="ACES home" className="flex items-center col-span-8">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={336} height={84} className="h-[67.2px] w-auto" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[134.4px] w-auto" priority />
             </Link>
             <div className="col-span-4 justify-self-end">
               <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="px-3 h-11" onClick={() => setOpen(!open)}>
