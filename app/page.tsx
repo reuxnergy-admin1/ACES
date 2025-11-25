@@ -9,12 +9,12 @@ import Prose from '@/components/layout/Prose';
 export default function Page() {
   return (
     <>
-      {/* Hero section - header is ~68px, add 20-30px gap below */}
-      <SectionBand className="pt-[90px] sm:pt-[95px] lg:pt-[100px]">
+      {/* Hero section - tripled padding for maximum clearance below header */}
+      <SectionBand className="!pt-[270px] sm:!pt-[285px] lg:!pt-[300px]">
         <ContainerWide>
           <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
             <Span cols={12} className="text-center md:text-left">
-              <h1 className="text-[29.2px] sm:text-[38px] lg:text-[48.6px] font-light tracking-tight leading-[0.95] uc max-w-[22ch] mx-auto md:mx-0 mt-2">
+              <h1 className="text-[29.2px] sm:text-[38px] lg:text-[48.6px] font-light tracking-tight leading-[0.95] uc max-w-[22ch] mx-auto md:mx-0">
                 Aerospace & Motorsport Specialist Engineering Components
               </h1>
               <p className="mt-6 body max-w-reading text-white/70 mx-auto md:mx-0">
