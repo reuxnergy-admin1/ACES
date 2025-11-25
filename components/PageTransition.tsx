@@ -47,11 +47,11 @@ export default function PageTransition({ children }: Readonly<{ children: React.
   const reduceMotionRef = useRef(false);
   const isAutomationRef = useRef(false);
   const timings = useRef({
-    coverDur: 450,
-    revealHold: 60,
-    revealDur: 450,
-    fallbackRevealAfter: 500,
-    watchdogMs: 2500,
+    coverDur: 350,
+    revealHold: 40,
+    revealDur: 350,
+    fallbackRevealAfter: 400,
+    watchdogMs: 1500,
   });
 
   useEffect(() => {
@@ -59,11 +59,11 @@ export default function PageTransition({ children }: Readonly<{ children: React.
     isAutomationRef.current = isAuto;
     if (isAuto) {
       timings.current = {
-        coverDur: 600,
-        revealHold: 60,
-        revealDur: 800,
-        fallbackRevealAfter: 700,
-        watchdogMs: 3000,
+        coverDur: 400,
+        revealHold: 40,
+        revealDur: 500,
+        fallbackRevealAfter: 500,
+        watchdogMs: 2000,
       };
     }
   }, []);

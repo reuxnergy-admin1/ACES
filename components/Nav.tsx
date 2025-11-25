@@ -150,8 +150,9 @@ export function Nav() {
 
   const items: NavItem[] = useMemo(() => ([
     { id: 'home', href: '/', label: 'HOME' },
+    { id: 'about', href: '/about/', label: 'ABOUT' },
+    { id: 'products', href: '/products/', label: 'PRODUCTS' },
     { id: 'insights', href: '/blog/', label: 'INSIGHTS' },
-    { id: 'signin', href: '/signin/', label: 'SIGN IN' },
     { id: 'order', href: '/order/', label: 'ORDER' },
   ]), []);
 
