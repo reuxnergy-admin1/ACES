@@ -20,7 +20,11 @@ export default function CursorTrailGate() {
     const apply = () => {
       const ok = compute();
       setEnabled(ok);
-      document.body.classList.toggle('cursor-hidden', ok);
+      // Don't hide native cursor here - let CursorTrailOverlay do it on first movement
+      // This ensures users always see a cursor (native until custom takes over)
+      if (!ok) {
+        document.body.classList.remove('cursor-hidden');
+      }
       document.documentElement.style.setProperty('--cursor-enabled', ok ? '1' : '0');
     };
     apply();

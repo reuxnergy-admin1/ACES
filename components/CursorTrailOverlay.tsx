@@ -7,7 +7,8 @@ type Ripple = { x: number; y: number; t: number };
 export default function CursorTrailOverlay() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
-  const posRef = useRef({ x: 0, y: 0 });
+  const posRef = useRef({ x: -100, y: -100 }); // Start offscreen until first move
+  const hasMovedRef = useRef(false);
   const ripplesRef = useRef<Ripple[]>([]);
 
   useEffect(() => {
@@ -44,6 +45,11 @@ export default function CursorTrailOverlay() {
     // Track mouse position directly - no smoothing for instant response
     const onMove = (e: PointerEvent) => {
       posRef.current = { x: e.clientX, y: e.clientY };
+      // Hide native cursor only after first movement (so users always see a cursor)
+      if (!hasMovedRef.current) {
+        hasMovedRef.current = true;
+        document.body.classList.add('cursor-hidden');
+      }
     };
     
     // Click ripple effect - centered on cursor position, snappy and responsive
@@ -114,6 +120,7 @@ export default function CursorTrailOverlay() {
       window.removeEventListener("resize", resize);
       canvas.remove();
       canvasRef.current = null;
+      document.body.classList.remove('cursor-hidden');
     };
   }, []);
 
