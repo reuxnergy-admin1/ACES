@@ -10,14 +10,14 @@ export default function Page() {
   return (
     <>
       {/* Hero section using consistent SectionBand pattern */}
-      <SectionBand className="pt-36 md:pt-40">
+      <SectionBand className="pt-44 md:pt-40">
         <ContainerWide>
           <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
-            <Span cols={12}>
-              <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch]">
+            <Span cols={12} className="text-center md:text-left">
+              <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch] mx-auto md:mx-0">
                 Aerospace & Motorsport Specialist Engineering Components
               </h1>
-              <p className="mt-6 body max-w-reading text-white/70">
+              <p className="mt-6 body max-w-reading text-white/70 mx-auto md:mx-0">
                 SACAA-approved (MP39) blanket approval for all certified and NTCA unpressured fixed- and rotary-wing aircraft types. ACES Aerodynamics delivers precision-engineered transparencies and composite components for aviation and motorsport.
               </p>
             </Span>
@@ -29,7 +29,7 @@ export default function Page() {
       <SectionBand id="products-and-services">
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Products and Services</h2></Span>
+            <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">Products and Services</h2></Span>
             {[
               {
                 title: 'Aircraft Transparencies',
@@ -97,7 +97,7 @@ export default function Page() {
       <SectionBand>
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12}><h2 className="text-2xl uc tracking-[0.08em]">Our Three Step Process</h2></Span>
+            <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">Our Three Step Process</h2></Span>
             {[
               ['01', 'Scope', 'Define requirements, constraints, and acceptance criteria.'],
               ['02', 'Production', 'Robust processes, repeatable quality, flight-ready windows.'],
@@ -117,8 +117,8 @@ export default function Page() {
       <SectionBand>
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12}>
-              <Prose>
+            <Span cols={12} className="text-center md:text-left">
+              <Prose className="mx-auto md:mx-0">
                 <h2>Compliance and QA</h2>
                 <p>Documented process control with full traceability and optical inspection. Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.</p>
               </Prose>
