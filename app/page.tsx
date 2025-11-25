@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import SheenCard from '@/components/SheenCard';
-import ClientCarousel from '@/components/ClientCarousel';
 import SectionBand from '@/components/layout/SectionBand';
 import ContainerRow from '@/components/layout/ContainerRow';
 import ContainerWide from '@/components/layout/ContainerWide';
