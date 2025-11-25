@@ -14,7 +14,7 @@ export default function Page() {
         <ContainerWide>
           <Grid12 className="items-start md:items-end" data-reveal-blur-stagger>
             <Span cols={12}>
-              <h1 className="text-5xl md:text-7xl font-light tracking-tight leading-[0.95] uc max-w-[22ch]">
+              <h1 className="text-4xl font-light">
                 About ACES
               </h1>
               <p className="mt-6 body max-w-reading text-white/70">

@@ -10,7 +10,7 @@ export default function Page() {
       <SectionBand className="!pt-[113px] sm:!pt-[120px] lg:!pt-[126px]">
         <ContainerWide>
           <Grid12 data-reveal-blur-stagger>
-            <Span cols={12}><h1 className="text-4xl md:text-5xl font-light">PRODUCTS AND SERVICES</h1></Span>
+            <Span cols={12}><h1 className="text-4xl font-light">PRODUCTS AND SERVICES</h1></Span>
           </Grid12>
         </ContainerWide>
       </SectionBand>
