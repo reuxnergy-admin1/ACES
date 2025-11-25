@@ -78,21 +78,31 @@ export default function CursorTrailOverlay() {
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw ripples first (behind cursor) - always white
+      // Draw ripples first (behind cursor) - always white, 4 concentric circles per click
       for (const ripple of ripplesRef.current) {
         const age = (now - ripple.t) / rippleDurationMs;
         const easeOut = 1 - Math.pow(1 - age, 2.5);
-        const radius = easeOut * rippleMaxRadius;
-        const alpha = Math.max(0, 0.5 * (1 - age));
         
         const rx = Math.round(ripple.x * dpr) / dpr;
         const ry = Math.round(ripple.y * dpr) / dpr;
         
-        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(rx, ry, radius, 0, Math.PI * 2);
-        ctx.stroke();
+        // Draw 4 concentric ripple circles with staggered timing
+        const circleCount = 4;
+        for (let i = 0; i < circleCount; i++) {
+          const delay = i * 0.08; // Stagger each circle
+          const circleAge = Math.max(0, age - delay);
+          if (circleAge <= 0) continue;
+          
+          const circleEase = 1 - Math.pow(1 - Math.min(circleAge / (1 - delay), 1), 2.5);
+          const radius = circleEase * (rippleMaxRadius + i * 15);
+          const alpha = Math.max(0, (0.5 - i * 0.1) * (1 - circleAge / (1 - delay)));
+          
+          ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+          ctx.lineWidth = 1.5 - i * 0.2;
+          ctx.beginPath();
+          ctx.arc(rx, ry, radius, 0, Math.PI * 2);
+          ctx.stroke();
+        }
       }
 
       // Draw cursor dot - always white, always visible

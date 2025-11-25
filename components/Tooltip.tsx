@@ -60,7 +60,7 @@ export function Tooltip({ label, children, placement = "top", delayMs = 120 }: R
         role="tooltip"
   aria-hidden={open ? undefined : true}
         className={clsx(
-          "pointer-events-none absolute z-overlay surface surface--sm surface-90 surface-strong elevate radius-sm px-3 py-1.5 text-[11px] uc tracking-wide text-white/90 whitespace-nowrap",
+          "pointer-events-none absolute z-overlay bg-white/10 backdrop-blur-md border border-white/20 rounded-md px-4 py-2 text-[11px] uc tracking-wide text-white whitespace-nowrap",
           "transition-[opacity,transform] duration-300 ease-[var(--ease-premium)]",
           open ? "opacity-100 scale-100" : "opacity-0 scale-95",
           posClass

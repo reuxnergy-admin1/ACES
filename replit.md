@@ -110,32 +110,33 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
-## Recent Changes (Nov 25, 2025 - Header & Layout Fix)
+## Recent Changes (Nov 25, 2025 - UI Enhancements)
 
-### Header Solid Black Background
-- Header now has solid black background (`bg-black`) instead of transparent/semi-transparent
-- Removed gradient overlay that was blending with page content
-- Header background is now consistent and always visible
+### Header Transparency
+- Header changed to transparent background (`bg-transparent`) 
+- Contour lines now visible through header for premium visual effect
 
-### Hero Section Spacing
-- Increased hero section top padding to `pt-48 md:pt-44` (192px mobile, 176px desktop)
-- Ensures main title text is well below the fixed header on all devices
-- Mobile headings centered with `text-center md:text-left` pattern
+### Click Ripple Effect
+- Enhanced to 4 concentric circles (was 1 before)
+- Staggered animation timing for smooth cascade effect
+- Each circle has slightly different size and opacity
+
+### Tooltip Styling Fix
+- Social media icon tooltips (LinkedIn, Facebook, Instagram, WhatsApp) now properly sized
+- New styling: `bg-white/10 backdrop-blur-md border border-white/20 rounded-md px-4 py-2`
+- Text fits perfectly within tooltip background
 
 ### Logo Update
-- Replaced logo with new PNG featuring icon + "ACES AERODYNAMICS" text
-- New logo file: `/public/aces-logo-new.png`
-- Logo uses responsive sizing: `width={160} height={40}` with `h-8 w-auto` class
+- Updated to new attached logo image
+- Made 5% bigger: `h-[33.6px]` (was `h-8`/32px)
+- Dimensions: `width={168} height={42}`
 
-### Navigation Update
-- Removed ORDER link from navigation
-- Navigation now: HOME, ABOUT, PRODUCTS, INSIGHTS, REQUEST A QUOTE
-- Deleted `/app/order/` page
+### Hero Section
+- Font size reduced by exactly 10%: `text-[32.4px] md:text-[54px]` (was `text-4xl`/36px, `text-6xl`/60px)
+- Top padding calculated for 30px clearance: `pt-[calc(56px+30px)] md:pt-[calc(64px+30px)]`
 
-### Tooltip Fix
-- Fixed social media icon tooltips to properly fit text content
-- Added `whitespace-nowrap` and increased padding (`px-3 py-1.5`)
-- Affected icons: LinkedIn, Facebook, Instagram, WhatsApp
+### Navigation
+- Navigation: HOME, ABOUT, PRODUCTS, INSIGHTS, REQUEST A QUOTE
 
 ---
 

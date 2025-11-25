@@ -252,7 +252,7 @@ export function Nav() {
   <header
       ref={headerRef}
       className={clsx(
-  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none header-interactive bg-black',
+  'fixed top-0 left-0 right-0 z-header transition-transform duration-700 will-change-transform motion-reduce:transition-none motion-reduce:transform-none header-interactive bg-transparent',
         hidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >
@@ -267,7 +267,7 @@ export function Nav() {
             <div className="grid-12 gutter items-center">
             <div className="md:col-span-2 flex items-center flex-shrink-0">
               <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={160} height={40} className="h-8 w-auto" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={168} height={42} className="h-[33.6px] w-auto" priority />
               </Link>
             </div>
             <nav className="hidden md:flex items-center gap-4 md:col-span-7 justify-self-start" aria-label="Primary"
@@ -322,7 +322,7 @@ export function Nav() {
           {/* Mobile layout: grid for logo and menu button */}
           <div className="grid grid-cols-12 items-center md:hidden">
             <Link href="/" aria-label="ACES home" className="flex items-center col-span-8">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={160} height={40} className="h-8 w-auto" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={168} height={42} className="h-[33.6px] w-auto" priority />
             </Link>
             <div className="col-span-4 justify-self-end">
               <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="px-3 h-11" onClick={() => setOpen(!open)}>
