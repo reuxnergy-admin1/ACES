@@ -267,7 +267,7 @@ export function Nav() {
             <div className="grid-12 gutter items-center">
             <div className="md:col-span-4 flex items-center flex-shrink-0">
               <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={360} height={204} className="h-auto w-[360px]" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={324} height={184} className="h-auto w-[324px]" priority />
               </Link>
             </div>
             <nav className="hidden md:flex items-center gap-4 md:col-span-5 justify-self-start" aria-label="Primary"
