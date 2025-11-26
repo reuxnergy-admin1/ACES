@@ -26,14 +26,14 @@ export function Footer() {
       <div className="grid-shell">
         <div className="container-wide py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-white/10" data-reveal>
           <div className="text-lg md:text-xl text-white/90 uc tracking-[0.08em]">Order with ACES</div>
-          <Link href="/contact/" className="button-primary h-11 px-8 whitespace-nowrap">
+          <a href="https://staging-aces.netlify.app/contact/" className="button-primary h-11 px-8 whitespace-nowrap">
             <span aria-hidden="true" className="reveal-line h top" />
             <span aria-hidden="true" className="reveal-line h bottom" />
             <span aria-hidden="true" className="reveal-line v left" />
             <span aria-hidden="true" className="reveal-line v right" />
             <span className="sr-only">Request a Quote</span>
             <span aria-hidden="true">Request a Quote</span>
-          </Link>
+          </a>
         </div>
         <div className="container-wide py-16 grid-12 gutter text-sm text-white/70">
           <Span cols={4}>
@@ -59,9 +59,9 @@ export function Footer() {
           <Span cols={4}>
             <div className="uc tracking-wider text-white/60 text-xs">Company</div>
             <div className="mt-2 space-y-2">
-              <Link className="link-underline text-white/85 hover:text-white block" href="/about/">About</Link>
-              <Link className="link-underline text-white/85 hover:text-white block" href="/products/">Products and Services</Link>
-              <Link className="link-underline text-white/85 hover:text-white block" href="/blog/">Insights</Link>
+              <a className="link-underline text-white/85 hover:text-white block" href="https://staging-aces.netlify.app/about/">About</a>
+              <a className="link-underline text-white/85 hover:text-white block" href="https://staging-aces.netlify.app/products/">Products and Services</a>
+              <a className="link-underline text-white/85 hover:text-white block" href="https://staging-aces.netlify.app/blog/">Insights</a>
             </div>
           </Span>
           <Span cols={4}>

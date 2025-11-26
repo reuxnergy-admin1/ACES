@@ -307,14 +307,14 @@ export function Nav() {
               </div>
             </nav>
               <div className="hidden md:flex md:col-span-3 justify-self-end">
-                <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-5 whitespace-nowrap text-sm flex-shrink-0">
+                <a href="https://staging-aces.netlify.app/contact/" className="button-primary uc tracking-[0.08em] h-11 px-5 whitespace-nowrap text-sm flex-shrink-0">
                   <span aria-hidden="true" className="reveal-line h top" />
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
                   <span aria-hidden="true" className="reveal-line v right" />
                   <span className="sr-only">Request a Quote</span>
                   <span aria-hidden="true">REQUEST A QUOTE</span>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -441,14 +441,14 @@ export function Nav() {
                 </Link>
               );
             })}
-            <Link href="/contact/" className="button-primary uc tracking-[0.08em] h-11 px-6 whitespace-nowrap">
+            <a href="https://staging-aces.netlify.app/contact/" className="button-primary uc tracking-[0.08em] h-11 px-6 whitespace-nowrap">
               <span aria-hidden="true" className="reveal-line h top" />
               <span aria-hidden="true" className="reveal-line h bottom" />
               <span aria-hidden="true" className="reveal-line v left" />
               <span aria-hidden="true" className="reveal-line v right" />
               <span className="sr-only">Request a Quote</span>
               <span aria-hidden="true">REQUEST A QUOTE</span>
-            </Link>
+            </a>
           </div>
         </div>
       </dialog>

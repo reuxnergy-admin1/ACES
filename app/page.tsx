@@ -78,7 +78,7 @@ export default function Page() {
             ))}
             <Span cols={12}>
               <div className="mt-8 flex justify-center">
-                <Link href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
+                <a href="https://staging-aces.netlify.app/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
                   <span aria-hidden="true" className="reveal-line h top" />
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
@@ -86,7 +86,7 @@ export default function Page() {
                   <span className="sr-only">Request a Quote</span>
                   <span aria-hidden="true">Request a Quote</span>
                   <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
-                </Link>
+                </a>
               </div>
             </Span>
           </Grid12>
