@@ -60,7 +60,7 @@ export function Footer() {
             <div className="uc tracking-wider text-white/60 text-xs">Company</div>
             <div className="mt-2 space-y-2">
               <Link className="link-underline text-white/85 hover:text-white block" href="/about/">About</Link>
-              <a className="link-underline text-white/85 hover:text-white block" href="#products-and-services">Products and Services</a>
+              <Link className="link-underline text-white/85 hover:text-white block" href="/products/">Products and Services</Link>
               <Link className="link-underline text-white/85 hover:text-white block" href="/blog/">Insights</Link>
             </div>
           </Span>
