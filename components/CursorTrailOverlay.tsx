@@ -53,8 +53,26 @@ export default function CursorTrailOverlay() {
     };
     
     // Click ripple effect - centered on cursor position, snappy and responsive
+    // Skip ripple when clicking on text/links (white text elements)
     const onPointerDown = (e: PointerEvent) => {
       if (isReducedMotion) return;
+      
+      const target = e.target as HTMLElement;
+      if (target) {
+        const tagName = target.tagName?.toLowerCase();
+        const isTextElement = tagName === 'a' || tagName === 'button' || 
+                              tagName === 'span' || tagName === 'p' || 
+                              tagName === 'h1' || tagName === 'h2' || 
+                              tagName === 'h3' || tagName === 'h4' || 
+                              tagName === 'h5' || tagName === 'h6' ||
+                              tagName === 'li' || tagName === 'label';
+        const isNavOrLink = target.closest('a') || target.closest('button') || target.closest('nav');
+        
+        if (isTextElement || isNavOrLink) {
+          return;
+        }
+      }
+      
       const now = performance.now();
       ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: now });
       if (ripplesRef.current.length > 3) {
