@@ -265,12 +265,12 @@ export function Nav() {
           {/* Desktop layout: wrapper hidden on mobile; inner uses our 12-col grid. Avoid conflict between hidden and grid-12. */}
           <div className="hidden md:block">
             <div className="grid-12 gutter items-center">
-            <div className="md:col-span-2 flex items-center flex-shrink-0">
+            <div className="md:col-span-4 flex items-center flex-shrink-0">
               <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={120} height={68} className="h-auto w-[120px]" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={360} height={204} className="h-auto w-[360px]" priority />
               </Link>
             </div>
-            <nav className="hidden md:flex items-center gap-4 md:col-span-7 justify-self-start" aria-label="Primary"
+            <nav className="hidden md:flex items-center gap-4 md:col-span-5 justify-self-start" aria-label="Primary"
         onMouseEnter={cancelClose}
         onMouseLeave={scheduleClose}>
       <div
