@@ -267,7 +267,7 @@ export function Nav() {
             <div className="grid-12 gutter items-center">
             <div className="md:col-span-2 flex items-center flex-shrink-0">
               <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[134.4px] w-auto" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={120} height={68} className="h-auto w-[120px]" priority />
               </Link>
             </div>
             <nav className="hidden md:flex items-center gap-4 md:col-span-7 justify-self-start" aria-label="Primary"
@@ -322,7 +322,7 @@ export function Nav() {
           {/* Mobile layout: logo left, menu button right */}
           <div className="flex items-center justify-between md:hidden">
             <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[80px] w-auto" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[134.4px] w-auto" priority />
             </Link>
             <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="p-3 h-11 w-11 flex flex-col items-center justify-center" onClick={() => setOpen(!open)}>
               <span className="sr-only">Toggle menu</span>
