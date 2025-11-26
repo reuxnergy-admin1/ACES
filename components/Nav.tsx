@@ -319,18 +319,16 @@ export function Nav() {
             </div>
           </div>
 
-          {/* Mobile layout: grid for logo and menu button */}
-          <div className="grid grid-cols-12 items-center md:hidden">
-            <Link href="/" aria-label="ACES home" className="flex items-center col-span-8">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[134.4px] w-auto" priority />
+          {/* Mobile layout: logo left, menu button right */}
+          <div className="flex items-center justify-between md:hidden">
+            <Link href="/" aria-label="ACES home" className="flex items-center">
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[80px] w-auto" priority />
             </Link>
-            <div className="col-span-4 justify-self-end">
-              <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="px-3 h-11" onClick={() => setOpen(!open)}>
-                <span className="sr-only">Toggle menu</span>
-                <div className={clsx('w-6 h-px bg-white transition-transform duration-700', open ? 'translate-y-[3px] rotate-45' : 'rotate-0 mb-1')}></div>
-                <div className={clsx('w-6 h-px bg-white transition-transform duration-700', open ? '-translate-y-[3px] -rotate-45' : 'rotate-0')}></div>
-              </button>
-            </div>
+            <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="p-3 h-11 w-11 flex flex-col items-center justify-center" onClick={() => setOpen(!open)}>
+              <span className="sr-only">Toggle menu</span>
+              <div className={clsx('w-5 h-[1.5px] bg-white transition-all duration-500 origin-center', open ? 'translate-y-[3px] rotate-45' : 'rotate-0 mb-[5px]')}></div>
+              <div className={clsx('w-5 h-[1.5px] bg-white transition-all duration-500 origin-center', open ? '-translate-y-[3px] -rotate-45' : 'rotate-0')}></div>
+            </button>
           </div>
         </div>
   </div>
