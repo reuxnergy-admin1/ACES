@@ -27,6 +27,8 @@ export default function CursorTrailOverlay() {
     if (!ctx) return () => {};
     
     let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    const rippleDurationMs = 350;
+    const rippleMaxRadius = 60;
 
     const resize = () => {
       const w = window.innerWidth;
@@ -39,57 +41,6 @@ export default function CursorTrailOverlay() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       needsRenderRef.current = true;
     };
-    resize();
-    window.addEventListener("resize", resize, { passive: true });
-    document.body.appendChild(canvas);
-
-    const scheduleRender = () => {
-      if (!rafRef.current) {
-        rafRef.current = requestAnimationFrame(render);
-      }
-    };
-    
-    // Initial render to show cursor immediately
-    scheduleRender();
-
-    const onMove = (e: PointerEvent) => {
-      posRef.current = { x: e.clientX, y: e.clientY };
-      needsRenderRef.current = true;
-      if (!hasMovedRef.current) {
-        hasMovedRef.current = true;
-        document.body.classList.add('cursor-hidden');
-      }
-      scheduleRender();
-    };
-    
-    const onPointerDown = (e: PointerEvent) => {
-      if (isReducedMotion) return;
-      
-      const target = e.target as HTMLElement;
-      if (target) {
-        const tagName = target.tagName?.toLowerCase();
-        const isTextElement = tagName === 'a' || tagName === 'button' || 
-                              tagName === 'span' || tagName === 'p' || 
-                              tagName === 'h1' || tagName === 'h2' || 
-                              tagName === 'h3' || tagName === 'h4' || 
-                              tagName === 'h5' || tagName === 'h6' ||
-                              tagName === 'li' || tagName === 'label';
-        const isNavOrLink = target.closest('a') || target.closest('button') || target.closest('nav');
-        
-        if (isTextElement || isNavOrLink) return;
-      }
-      
-      ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: performance.now() });
-      if (ripplesRef.current.length > 3) ripplesRef.current.shift();
-      needsRenderRef.current = true;
-      scheduleRender();
-    };
-    
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("pointerdown", onPointerDown, { passive: true });
-
-    const rippleDurationMs = 350;
-    const rippleMaxRadius = 60;
 
     const render = () => {
       rafRef.current = null;
@@ -143,6 +94,51 @@ export default function CursorTrailOverlay() {
         rafRef.current = requestAnimationFrame(render);
       }
     };
+
+    const scheduleRender = () => {
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(render);
+      }
+    };
+
+    const onMove = (e: PointerEvent) => {
+      posRef.current = { x: e.clientX, y: e.clientY };
+      needsRenderRef.current = true;
+      if (!hasMovedRef.current) {
+        hasMovedRef.current = true;
+        document.body.classList.add('cursor-hidden');
+      }
+      scheduleRender();
+    };
+    
+    const onPointerDown = (e: PointerEvent) => {
+      if (isReducedMotion) return;
+      
+      const target = e.target as HTMLElement;
+      if (target) {
+        const tagName = target.tagName?.toLowerCase();
+        const isTextElement = tagName === 'a' || tagName === 'button' || 
+                              tagName === 'span' || tagName === 'p' || 
+                              tagName === 'h1' || tagName === 'h2' || 
+                              tagName === 'h3' || tagName === 'h4' || 
+                              tagName === 'h5' || tagName === 'h6' ||
+                              tagName === 'li' || tagName === 'label';
+        const isNavOrLink = target.closest('a') || target.closest('button') || target.closest('nav');
+        
+        if (isTextElement || isNavOrLink) return;
+      }
+      
+      ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+      if (ripplesRef.current.length > 3) ripplesRef.current.shift();
+      needsRenderRef.current = true;
+      scheduleRender();
+    };
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+    document.body.appendChild(canvas);
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);

@@ -78,8 +78,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const chronicleOn = cookieStore.get('feature-chronicle-ui')?.value === '1';
   const nonce = await getRequestNonce();
   return (
-    <html lang="en" className={chronicleOn ? 'feature-chronicle-ui' : undefined}>
-      <head>
+    <html lang="en" className={chronicleOn ? 'feature-chronicle-ui' : undefined} suppressHydrationWarning>
+      <head suppressHydrationWarning>
         <meta name="theme-color" content="#000000" />
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
