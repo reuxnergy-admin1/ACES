@@ -17,7 +17,7 @@ export default function Page() {
               <h1 className="text-[29.2px] sm:text-[38px] lg:text-[48.6px] font-light tracking-tight leading-[0.95] uc max-w-[22ch] mx-auto md:mx-0 md:ml-0">
                 Aerospace & Motorsport Specialist Engineering Components
               </h1>
-              <p className="mt-6 body max-w-reading text-white/70 text-left md:text-left mx-auto md:mx-0 md:ml-0">
+              <p className="mt-6 body max-w-reading text-white/70 text-center md:text-left mx-auto md:mx-0 md:ml-0">
                 SACAA-approved (MP39) blanket approval for all certified and NTCA unpressured fixed- and rotary-wing aircraft types. ACES Aerodynamics delivers precision-engineered transparencies and composite components for aviation and motorsport.
               </p>
             </Span>
@@ -69,8 +69,8 @@ export default function Page() {
               },
             ].map((c) => (
               <SheenCard key={c.title} className="md:col-span-4" data-reveal>
-                <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline h-full text-justify md:text-left">
-                  <div className="text-xl text-center md:text-left">{c.title}</div>
+                <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline h-full text-center md:text-left">
+                  <div className="text-xl">{c.title}</div>
                   <div className="mt-2 text-white/60 text-sm">{c.subtitle}</div>
                   <div className="mt-2 text-white/50 text-sm">{c.details}</div>
                 </Link>
@@ -103,9 +103,9 @@ export default function Page() {
               ['02', 'Production', 'Robust processes, repeatable quality, flight-ready windows.'],
               ['03', 'QA, Documentation, Delivery', 'Optical checks and release documentation delivered with pace.'],
             ].map(([n, t, d]) => (
-              <div key={n} className="md:col-span-4 border-t border-white/10 pt-4 text-justify md:text-left">
-                <div className="text-white/50 text-sm uc tracking-[0.12em] text-center md:text-left">{n}</div>
-                <div className="mt-1 body text-white text-center md:text-left">{t}</div>
+              <div key={n} className="md:col-span-4 border-t border-white/10 pt-4 text-center md:text-left">
+                <div className="text-white/50 text-sm uc tracking-[0.12em]">{n}</div>
+                <div className="mt-1 body text-white">{t}</div>
                 <div className="mt-1 body text-white/60 text-sm">{d}</div>
               </div>
             ))}
@@ -120,18 +120,18 @@ export default function Page() {
             <Span cols={12} className="text-center md:text-left">
               <Prose className="mx-auto md:mx-0 md:ml-0">
                 <h2 className="text-center md:text-left mb-4">Compliance and QA</h2>
-                <p className="text-justify md:text-left">Documented process control with full traceability and optical inspection. Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.</p>
+                <p className="text-center md:text-left">Documented process control with full traceability and optical inspection. Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.</p>
               </Prose>
             </Span>
             <SheenCard className="md:col-span-6" data-reveal>
-              <div className="block border border-white/10 rounded-2xl p-7 text-justify md:text-left">
-                <div className="text-xl text-center md:text-left">MP39 - SACAA Approved</div>
+              <div className="block border border-white/10 rounded-2xl p-7 text-center md:text-left">
+                <div className="text-xl">MP39 - SACAA Approved</div>
                 <div className="mt-2 text-white/60">Proven Quality - 99.9% First Pass Yield Rate</div>
               </div>
             </SheenCard>
             <SheenCard className="md:col-span-6" data-reveal>
-              <div className="block border border-white/10 rounded-2xl p-7 text-justify md:text-left">
-                <div className="text-xl text-center md:text-left">CA21-19 Airworthiness Approval Tag</div>
+              <div className="block border border-white/10 rounded-2xl p-7 text-center md:text-left">
+                <div className="text-xl">CA21-19 Airworthiness Approval Tag</div>
                 <div className="mt-2 text-white/60">Effortless Compliance</div>
               </div>
             </SheenCard>

@@ -17,10 +17,10 @@ export default function Page() {
               <h1 className="text-4xl font-light">
                 About ACES
               </h1>
-              <p className="mt-6 body max-w-reading text-white/70 text-left md:text-left mx-auto md:mx-0">
+              <p className="mt-6 body max-w-reading text-white/70 text-center md:text-left mx-auto md:mx-0">
                 Acrylic and Composite Engineering Services (ACES) is a South African group built around one simple idea: aircraft parts should inspire confidence every time you fly. We specialise in aircraft windows and composite components, from well-known production parts to custom pieces for prototype and special-build aircraft.
               </p>
-              <p className="mt-4 body max-w-reading text-white/70 text-left md:text-left mx-auto md:mx-0">
+              <p className="mt-4 body max-w-reading text-white/70 text-center md:text-left mx-auto md:mx-0">
                 If it needs to fly, and it needs to be right, that&apos;s the work we enjoy most.
               </p>
             </Span>
@@ -33,7 +33,7 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">How It All Started</h2></Span>
-            <Span cols={12} className="md:col-span-8 text-left md:text-left mx-auto md:mx-0">
+            <Span cols={12} className="md:col-span-8 text-center md:text-left mx-auto md:mx-0">
               <Prose>
                 <p>ACES Plastics CC t/a ACES Aerodynamics was started by Dirk Uys, whose career in aerospace stretches over decades. Before launching ACES, Dirk worked at CSIR and Atlas (now Denel), where he was involved in everything from materials and tooling to helicopter and jet design and builds.</p>
                 <p>Over the years he has helped write the reference books and manuals on composite components used by aviation artisans and has contributed to standards and regulations for the South African aviation industry.</p>
@@ -50,7 +50,7 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">Our Story Since 1994</h2></Span>
-            <Span cols={12} className="md:col-span-8 text-left md:text-left mx-auto md:mx-0">
+            <Span cols={12} className="md:col-span-8 text-center md:text-left mx-auto md:mx-0">
               <Prose>
                 <p>The ACES group was founded in 1994, and from the beginning the focus has been on delivering reliable, high-quality components. We&apos;ve supplied popular aircraft parts that many owners know well, as well as one-off and customised components for prototype aircraft and special projects.</p>
                 <p>We work with aircraft maintenance, builders, and designers who want more than just a part number, people who appreciate honest advice, practical solutions and long-term performance.</p>
@@ -65,7 +65,7 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">What We Do</h2></Span>
-            <Span cols={12} className="md:col-span-8 text-left md:text-left mx-auto md:mx-0">
+            <Span cols={12} className="md:col-span-8 text-center md:text-left mx-auto md:mx-0">
               <Prose>
                 <p>Our windows are built for clarity, durability and safety, and our composite components are designed with weight, strength and real operational use in mind. Whether you&apos;re maintaining an existing aircraft, restoring a classic, or bringing a new design to life, we aim to be the team you can rely on for well-made, well-thought-out parts.</p>
               </Prose>
@@ -79,7 +79,7 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">Our Principles</h2></Span>
-            <Span cols={12} className="text-left md:text-left">
+            <Span cols={12} className="text-center md:text-left">
               <p className="body text-white/70 max-w-reading mx-auto md:mx-0 md:ml-0">Dirk&apos;s principles are embedded in every window and composite component we manufacture:</p>
             </Span>
             {[
@@ -101,7 +101,7 @@ export default function Page() {
               },
             ].map((principle) => (
               <SheenCard key={principle.title} className="md:col-span-6 mx-auto md:mx-0" data-reveal>
-                <div className="block border border-white/10 rounded-2xl p-7 text-left md:text-left">
+                <div className="block border border-white/10 rounded-2xl p-7 text-center md:text-left">
                   <div className="text-xl">{principle.title}</div>
                   <div className="mt-2 text-white/60">{principle.description}</div>
                 </div>
@@ -115,7 +115,7 @@ export default function Page() {
       <SectionBand>
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12} className="text-left md:text-left">
+            <Span cols={12} className="text-center md:text-left">
               <Prose className="mx-auto md:mx-0">
                 <p>If you need aircraft/motorsport windows or composite components made by people who genuinely care about performance and safety, you&apos;re in the right place.</p>
               </Prose>
