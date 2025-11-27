@@ -110,6 +110,30 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
+## Recent Changes (Nov 27, 2025 - Lighthouse Optimizations)
+
+### Viewport Export Fix
+- Moved `themeColor` from metadata export to viewport export per Next.js 15 requirements
+- Fixed console warning about unsupported metadata configuration
+
+### Font Preloading
+- Added preload hints for Typekit (Adobe Fonts) and Google Fonts stylesheets
+- Helps reduce render-blocking behavior during font loading
+
+### Text Contrast Improvements
+- Improved accessibility by adjusting text opacity values across all pages
+- Changed `white/40` → `white/50` and `white/50` → `white/55` for better contrast ratios
+
+### Image Aspect Ratio
+- Added proper `style={{ height: 'auto' }}` and `style={{ width: 'auto' }}` to logo images
+- Maintains correct aspect ratio when CSS overrides dimensions
+
+### Note on Adobe Fonts
+- font-display: swap for Articulat CF requires configuration in Adobe Fonts dashboard
+- This setting cannot be controlled via CSS - requires Adobe account access
+
+---
+
 ## Recent Changes (Nov 25, 2025 - UI Enhancements)
 
 ### Header Transparency
