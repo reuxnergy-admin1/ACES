@@ -116,17 +116,6 @@ h2 { letter-spacing: 0.06em; line-height: 1.18; }
 
 /* Native cursor is hidden via inline style on <body> in layout.tsx to avoid !important warnings */
 
-/* Ensure text remains visible during webfont load */
-@font-face {
-  font-family: 'articulat-cf-fallback';
-  src: local('Arial');
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Open Sans';
-  font-display: swap;
-}
-
 /* Articulat CF for headings and navigation, Open Sans for body text */
 body { font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
 h1, h2, h3, h4, h5, h6, .font-heading, nav, .uc, .button-primary, .button-solid { font-family: articulat-cf, system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
@@ -466,7 +455,7 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 @keyframes pageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-.page-fade { animation: pageFadeIn 300ms cubic-bezier(0.22, 1, 0.36, 1); }
+.page-fade { animation: pageFadeIn 700ms cubic-bezier(0.22, 1, 0.36, 1); }
 
 /* Blob page-transition overlay */
 .pt-blob-overlay {
@@ -481,7 +470,7 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
   --r: 0%;
   clip-path: circle(var(--r) at var(--cx) var(--cy));
   will-change: clip-path, opacity;
-  transition: clip-path 280ms var(--easing-ui), opacity 200ms var(--easing-ui);
+  transition: clip-path 520ms var(--easing-ui), opacity var(--duration-normal) var(--easing-ui);
   contain: layout paint;
   transform: translateZ(0); /* promote */
   pointer-events: none;
@@ -494,32 +483,32 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 
 .fade-stagger > * {
   opacity: 0;
-  animation: fadeUp 400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: fadeUp 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-.fade-stagger > *:nth-child(1) { animation-delay: 0ms; }
-.fade-stagger > *:nth-child(2) { animation-delay: 50ms; }
-.fade-stagger > *:nth-child(3) { animation-delay: 100ms; }
-.fade-stagger > *:nth-child(4) { animation-delay: 150ms; }
-.fade-stagger > *:nth-child(5) { animation-delay: 200ms; }
-.fade-stagger > *:nth-child(6) { animation-delay: 250ms; }
-.fade-stagger > *:nth-child(7) { animation-delay: 300ms; }
-.fade-stagger > *:nth-child(8) { animation-delay: 350ms; }
+.fade-stagger > *:nth-child(1) { animation-delay: 80ms; }
+.fade-stagger > *:nth-child(2) { animation-delay: 160ms; }
+.fade-stagger > *:nth-child(3) { animation-delay: 240ms; }
+.fade-stagger > *:nth-child(4) { animation-delay: 320ms; }
+.fade-stagger > *:nth-child(5) { animation-delay: 400ms; }
+.fade-stagger > *:nth-child(6) { animation-delay: 480ms; }
+.fade-stagger > *:nth-child(7) { animation-delay: 560ms; }
+.fade-stagger > *:nth-child(8) { animation-delay: 640ms; }
 
 @media (prefers-reduced-motion) {
   .page-fade, .fade-stagger > * { animation: none; filter: none; transform: none; }
 }
 
 /* In-view reveal (premium subtle motion) */
-[data-reveal] { opacity: 0; transform: translateY(10px); transition: opacity 300ms var(--easing-ui), transform 300ms var(--easing-ui); }
+[data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity var(--duration-slow) var(--easing-ui), transform var(--duration-slow) var(--easing-ui); }
 [data-reveal].is-inview { opacity: 1; transform: none; }
-[data-reveal-stagger] > * { opacity: 0; transform: translateY(10px); transition: opacity 300ms var(--easing-ui), transform 300ms var(--easing-ui); }
+[data-reveal-stagger] > * { opacity: 0; transform: translateY(14px); transition: opacity var(--duration-slow) var(--easing-ui), transform var(--duration-slow) var(--easing-ui); }
 [data-reveal-stagger].is-inview > * { opacity: 1; transform: none; }
-[data-reveal-stagger].is-inview > *:nth-child(1) { transition-delay: 0ms; }
-[data-reveal-stagger].is-inview > *:nth-child(2) { transition-delay: 50ms; }
-[data-reveal-stagger].is-inview > *:nth-child(3) { transition-delay: 100ms; }
-[data-reveal-stagger].is-inview > *:nth-child(4) { transition-delay: 150ms; }
-[data-reveal-stagger].is-inview > *:nth-child(5) { transition-delay: 200ms; }
-[data-reveal-stagger].is-inview > *:nth-child(6) { transition-delay: 250ms; }
+[data-reveal-stagger].is-inview > *:nth-child(1) { transition-delay: 80ms; }
+[data-reveal-stagger].is-inview > *:nth-child(2) { transition-delay: 200ms; }
+[data-reveal-stagger].is-inview > *:nth-child(3) { transition-delay: 320ms; }
+[data-reveal-stagger].is-inview > *:nth-child(4) { transition-delay: 440ms; }
+[data-reveal-stagger].is-inview > *:nth-child(5) { transition-delay: 560ms; }
+[data-reveal-stagger].is-inview > *:nth-child(6) { transition-delay: 680ms; }
 @media (prefers-reduced-motion) {
   [data-reveal], [data-reveal-stagger] > * { transition: none; transform: none; opacity: 1; }
 }

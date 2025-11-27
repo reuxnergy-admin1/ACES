@@ -3,14 +3,13 @@ import { useEffect, useRef } from "react";
 
 type Ripple = { x: number; y: number; t: number };
 
+// A crisp, canvas-based cursor - always white, never disappears, instant tracking.
 export default function CursorTrailOverlay() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
-  const posRef = useRef({ x: -100, y: -100 });
-  const lastPosRef = useRef({ x: -100, y: -100 });
+  const posRef = useRef({ x: -100, y: -100 }); // Start offscreen until first move
   const hasMovedRef = useRef(false);
   const ripplesRef = useRef<Ripple[]>([]);
-  const needsRenderRef = useRef(false);
 
   useEffect(() => {
     const isReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
@@ -24,11 +23,10 @@ export default function CursorTrailOverlay() {
       zIndex: String(200000),
     });
     const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return () => {};
-    
+    if (!ctx) {
+      return () => {};
+    }
     let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const rippleDurationMs = 350;
-    const rippleMaxRadius = 60;
 
     const resize = () => {
       const w = window.innerWidth;
@@ -39,35 +37,77 @@ export default function CursorTrailOverlay() {
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      needsRenderRef.current = true;
     };
+    resize();
+    window.addEventListener("resize", resize);
+    document.body.appendChild(canvas);
 
-    const render = () => {
-      rafRef.current = null;
-      const now = performance.now();
+    // Track mouse position directly - no smoothing for instant response
+    const onMove = (e: PointerEvent) => {
+      posRef.current = { x: e.clientX, y: e.clientY };
+      // Hide native cursor only after first movement (so users always see a cursor)
+      if (!hasMovedRef.current) {
+        hasMovedRef.current = true;
+        document.body.classList.add('cursor-hidden');
+      }
+    };
+    
+    // Click ripple effect - centered on cursor position, snappy and responsive
+    // Skip ripple when clicking on text/links (white text elements)
+    const onPointerDown = (e: PointerEvent) => {
+      if (isReducedMotion) return;
       
-      const prevRippleCount = ripplesRef.current.length;
-      ripplesRef.current = ripplesRef.current.filter((r) => now - r.t <= rippleDurationMs);
-      const hasActiveRipples = ripplesRef.current.length > 0;
-      
-      const { x, y } = posRef.current;
-      const posChanged = x !== lastPosRef.current.x || y !== lastPosRef.current.y;
-      lastPosRef.current = { x, y };
-      
-      if (!needsRenderRef.current && !posChanged && !hasActiveRipples && prevRippleCount === 0) {
-        return;
+      const target = e.target as HTMLElement;
+      if (target) {
+        const tagName = target.tagName?.toLowerCase();
+        const isTextElement = tagName === 'a' || tagName === 'button' || 
+                              tagName === 'span' || tagName === 'p' || 
+                              tagName === 'h1' || tagName === 'h2' || 
+                              tagName === 'h3' || tagName === 'h4' || 
+                              tagName === 'h5' || tagName === 'h6' ||
+                              tagName === 'li' || tagName === 'label';
+        const isNavOrLink = target.closest('a') || target.closest('button') || target.closest('nav');
+        
+        if (isTextElement || isNavOrLink) {
+          return;
+        }
       }
       
-      needsRenderRef.current = false;
+      const now = performance.now();
+      ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: now });
+      if (ripplesRef.current.length > 3) {
+        ripplesRef.current.shift();
+      }
+    };
+    
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+
+    // Faster ripple for snappier clicks
+    const rippleDurationMs = 350;
+    const rippleMaxRadius = 60;
+
+    // Continuous render loop - never stops, cursor always visible
+    const render = () => {
+      const now = performance.now();
+      
+      // Clean up expired ripples
+      ripplesRef.current = ripplesRef.current.filter((r) => now - r.t <= rippleDurationMs);
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Draw ripples first (behind cursor) - always white, 4 concentric circles per click
       for (const ripple of ripplesRef.current) {
         const age = (now - ripple.t) / rippleDurationMs;
+        const easeOut = 1 - Math.pow(1 - age, 2.5);
+        
         const rx = Math.round(ripple.x * dpr) / dpr;
         const ry = Math.round(ripple.y * dpr) / dpr;
         
-        for (let i = 0; i < 4; i++) {
-          const delay = i * 0.08;
+        // Draw 4 concentric ripple circles with staggered timing
+        const circleCount = 4;
+        for (let i = 0; i < circleCount; i++) {
+          const delay = i * 0.08; // Stagger each circle
           const circleAge = Math.max(0, age - delay);
           if (circleAge <= 0) continue;
           
@@ -83,62 +123,23 @@ export default function CursorTrailOverlay() {
         }
       }
 
+      // Draw cursor dot - always white, always visible
+      const { x, y } = posRef.current;
       if (x > 0 || y > 0) {
+        const r = 5.0;
         ctx.fillStyle = 'rgba(255,255,255,0.94)';
+        const ax = Math.round(x * dpr) / dpr;
+        const ay = Math.round(y * dpr) / dpr;
         ctx.beginPath();
-        ctx.arc(Math.round(x * dpr) / dpr, Math.round(y * dpr) / dpr, 5, 0, Math.PI * 2);
+        ctx.arc(ax, ay, r, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      if (hasActiveRipples) {
-        rafRef.current = requestAnimationFrame(render);
-      }
+      // Continuous animation loop - never stops
+      rafRef.current = requestAnimationFrame(render);
     };
 
-    const scheduleRender = () => {
-      if (!rafRef.current) {
-        rafRef.current = requestAnimationFrame(render);
-      }
-    };
-
-    const onMove = (e: PointerEvent) => {
-      posRef.current = { x: e.clientX, y: e.clientY };
-      needsRenderRef.current = true;
-      if (!hasMovedRef.current) {
-        hasMovedRef.current = true;
-        document.body.classList.add('cursor-hidden');
-      }
-      scheduleRender();
-    };
-    
-    const onPointerDown = (e: PointerEvent) => {
-      if (isReducedMotion) return;
-      
-      const target = e.target as HTMLElement;
-      if (target) {
-        const tagName = target.tagName?.toLowerCase();
-        const isTextElement = tagName === 'a' || tagName === 'button' || 
-                              tagName === 'span' || tagName === 'p' || 
-                              tagName === 'h1' || tagName === 'h2' || 
-                              tagName === 'h3' || tagName === 'h4' || 
-                              tagName === 'h5' || tagName === 'h6' ||
-                              tagName === 'li' || tagName === 'label';
-        const isNavOrLink = target.closest('a') || target.closest('button') || target.closest('nav');
-        
-        if (isTextElement || isNavOrLink) return;
-      }
-      
-      ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: performance.now() });
-      if (ripplesRef.current.length > 3) ripplesRef.current.shift();
-      needsRenderRef.current = true;
-      scheduleRender();
-    };
-
-    resize();
-    window.addEventListener("resize", resize, { passive: true });
-    document.body.appendChild(canvas);
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+    rafRef.current = requestAnimationFrame(render);
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);

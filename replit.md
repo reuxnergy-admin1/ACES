@@ -110,30 +110,6 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
-## Recent Changes (Nov 27, 2025 - Security & Performance Audit)
-
-### Security Hardening (CSP)
-- Replaced `'unsafe-inline'` with nonce-based script allowance (`'nonce-${nonce}'`)
-- Added `'strict-dynamic'` for enhanced XSS protection
-- Removed insecure `http:` scheme from CSP - now HTTPS only
-- Added `upgrade-insecure-requests` directive
-- All inline scripts properly use CSP nonce from server
-
-### Performance Optimizations
-- Cursor animation loop now event-driven (was continuous 60fps)
-- Only renders when mouse moves or ripples are active
-- Reduced main thread blocking significantly
-- Added font preloading for faster font display
-- Added `font-display: swap` for text visibility during font load
-
-### Code Quality
-- Fixed unused imports in about/page.tsx and products/page.tsx
-- Added theme-color meta tag for PWA
-- Fixed mobile logo aspect ratio consistency (324x184)
-- All external resources use HTTPS
-
----
-
 ## Recent Changes (Nov 25, 2025 - UI Enhancements)
 
 ### Header Transparency
