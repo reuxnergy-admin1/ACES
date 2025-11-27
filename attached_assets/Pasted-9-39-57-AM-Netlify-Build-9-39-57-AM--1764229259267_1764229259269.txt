@@ -1,0 +1,49 @@
+9:39:57 AM: Netlify Build                                                 
+9:39:57 AM: ────────────────────────────────────────────────────────────────
+9:39:57 AM: ​
+9:39:57 AM: ❯ Version
+9:39:57 AM:   @netlify/build 35.5.2
+9:39:57 AM: ​
+9:39:57 AM: ❯ Flags
+9:39:57 AM:   accountId: 68d38a763d8cd81e4f828a1a
+9:39:57 AM:   baseRelDir: true
+9:39:57 AM:   buildId: 69280014b9ffbc0008df81ea
+9:39:57 AM:   deployId: 69280014b9ffbc0008df81ec
+9:39:57 AM: ​
+9:39:57 AM: ❯ Current directory
+9:39:57 AM:   /opt/build/repo
+9:39:57 AM: ​
+9:39:57 AM: ❯ Config file
+9:39:57 AM:   /opt/build/repo/netlify.toml
+9:39:57 AM: ​
+9:39:57 AM: ❯ Context
+9:39:57 AM:   production
+9:39:57 AM: ​
+9:39:57 AM: ❯ Installing extensions
+9:39:57 AM:    - simpleanalytics
+9:39:57 AM:    - neon
+9:39:59 AM: ​
+9:39:59 AM: ❯ Using Next.js Runtime - v5.14.7
+9:39:59 AM: ​
+9:39:59 AM: ❯ Loading plugins
+9:39:59 AM:    - @netlify/plugin-lighthouse@6.0.1 from Netlify app
+9:39:59 AM: ​
+9:39:59 AM: ❯ Loading extensions
+9:39:59 AM:    - simpleanalytics
+9:39:59 AM:    - neon
+9:40:02 AM: Next.js cache restored
+9:40:02 AM: ​
+9:40:02 AM: build.command from netlify.toml                               
+9:40:02 AM: ────────────────────────────────────────────────────────────────
+9:40:02 AM: ​
+9:40:02 AM: $ pnpm build
+9:40:02 AM: > aces-aerodynamics-site@0.1.0 build /opt/build/repo
+9:40:02 AM: > next build
+9:40:03 AM:    ▲ Next.js 15.5.2
+9:40:03 AM:    Creating an optimized production build ...
+9:40:09 AM:  ✓ Compiled successfully in 4.3s
+9:40:09 AM:    Linting and checking validity of types ...
+9:40:12 AM: ./app/layout.tsx
+9:40:12 AM: 90:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+9:40:12 AM: 91:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+9:40:12 AM: info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules

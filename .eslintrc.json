@@ -7,6 +7,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "jsx-a11y/no-autofocus": "warn",
-    "jsx-a11y/anchor-is-valid": "warn"
+    "jsx-a11y/anchor-is-valid": "warn",
+    "@next/next/no-page-custom-font": "off"
   }
 }
