@@ -87,7 +87,7 @@ export function Footer() {
           </Span>
           <Span cols={12}>
             <div className="mt-10 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-white/50">
-              <div className="text-white/40">© ACES Plastics CC t/a ACES Aerodynamics</div>
+              <div className="text-white/50">© ACES Plastics CC t/a ACES Aerodynamics</div>
               <div className="hidden md:block">
                 <Link href="#main-content" className="link-underline text-white/70 hover:text-white">Back to top</Link>
               </div>

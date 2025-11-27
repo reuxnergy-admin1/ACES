@@ -72,7 +72,7 @@ export default function Page() {
                 <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline h-full text-center md:text-left">
                   <div className="text-xl">{c.title}</div>
                   <div className="mt-2 text-white/60 text-sm">{c.subtitle}</div>
-                  <div className="mt-2 text-white/50 text-sm">{c.details}</div>
+                  <div className="mt-2 text-white/55 text-sm">{c.details}</div>
                 </Link>
               </SheenCard>
             ))}
@@ -104,7 +104,7 @@ export default function Page() {
               ['03', 'QA, Documentation, Delivery', 'Optical checks and release documentation delivered with pace.'],
             ].map(([n, t, d]) => (
               <div key={n} className="md:col-span-4 border-t border-white/10 pt-4 text-center md:text-left">
-                <div className="text-white/50 text-sm uc tracking-[0.12em]">{n}</div>
+                <div className="text-white/55 text-sm uc tracking-[0.12em]">{n}</div>
                 <div className="mt-1 body text-white">{t}</div>
                 <div className="mt-1 body text-white/60 text-sm">{d}</div>
               </div>

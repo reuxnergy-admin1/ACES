@@ -21,9 +21,9 @@ export default function Page(){
             <Span cols={12} className="md:col-span-6 lg:col-span-4">
               <article className="border border-white/10 rounded-2xl p-6 hover:border-white/30 transition-colors text-center md:text-left">
                 <h2 className="text-xl font-medium mb-1 text-white">Article Title Coming Soon</h2>
-                <div className="text-white/50 text-xs mb-4">Coming Soon</div>
+                <div className="text-white/55 text-xs mb-4">Coming Soon</div>
                 <div className="aspect-[4/3] bg-white/10 rounded-xl flex items-center justify-center mb-4 border border-white/10">
-                  <span className="text-white/50 text-sm uc tracking-wider">Image</span>
+                  <span className="text-white/55 text-sm uc tracking-wider">Image</span>
                 </div>
                 <p className="text-white/70 text-sm">
                   Introductory text for the upcoming article will appear here.

@@ -25,7 +25,7 @@ export default function Page() {
               <div className="text-white/60 space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Aircraft Types</p>
-                <p className="text-white/40 mt-2">Windows | Windshields | Side Windows</p>
+                <p className="text-white/50 mt-2">Windows | Windshields | Side Windows</p>
               </div>
             </div>
 
@@ -35,7 +35,7 @@ export default function Page() {
               <div className="text-white/60 space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Helicopter Types</p>
-                <p className="text-white/40 mt-2">Canopy | Bubble | Side Windows</p>
+                <p className="text-white/50 mt-2">Canopy | Bubble | Side Windows</p>
               </div>
             </div>
 
