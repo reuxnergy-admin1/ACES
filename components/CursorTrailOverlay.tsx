@@ -48,6 +48,9 @@ export default function CursorTrailOverlay() {
         rafRef.current = requestAnimationFrame(render);
       }
     };
+    
+    // Initial render to show cursor immediately
+    scheduleRender();
 
     const onMove = (e: PointerEvent) => {
       posRef.current = { x: e.clientX, y: e.clientY };
