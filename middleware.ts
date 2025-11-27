@@ -55,10 +55,11 @@ export function middleware(req: NextRequest) {
     "frame-ancestors 'none'",
     "object-src 'none'",
     "img-src 'self' data: blob: https:",
-    "font-src 'self' https://use.typekit.net https://p.typekit.net",
-    "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net",
-    `script-src 'self' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} blob: data: https: http:`.trim(),
-    isProd ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
+    "font-src 'self' https://use.typekit.net https://p.typekit.net https://fonts.gstatic.com https://fonts.googleapis.com",
+    "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net https://fonts.googleapis.com",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https:`.trim(),
+    isProd ? "connect-src 'self' https:" : "connect-src 'self' ws: wss: https:",
+    "upgrade-insecure-requests",
   ];
 
 
