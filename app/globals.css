@@ -116,6 +116,17 @@ h2 { letter-spacing: 0.06em; line-height: 1.18; }
 
 /* Native cursor is hidden via inline style on <body> in layout.tsx to avoid !important warnings */
 
+/* Ensure text remains visible during webfont load */
+@font-face {
+  font-family: 'articulat-cf-fallback';
+  src: local('Arial');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-display: swap;
+}
+
 /* Articulat CF for headings and navigation, Open Sans for body text */
 body { font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
 h1, h2, h3, h4, h5, h6, .font-heading, nav, .uc, .button-primary, .button-solid { font-family: articulat-cf, system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }

@@ -322,7 +322,7 @@ export function Nav() {
           {/* Mobile layout: logo left, menu button right */}
           <div className="flex items-center justify-between md:hidden">
             <Link href="/" aria-label="ACES home" className="flex items-center">
-              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={672} height={168} className="h-[134.4px] w-auto" priority />
+              <Image src="/aces-logo-new.png" alt="ACES Aerodynamics" width={324} height={184} className="h-[134.4px] w-auto" priority />
             </Link>
             <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="p-3 h-11 w-11 flex flex-col items-center justify-center" onClick={() => setOpen(!open)}>
               <span className="sr-only">Toggle menu</span>
