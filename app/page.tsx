@@ -119,7 +119,7 @@ export default function Page() {
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left">
               <Prose className="mx-auto md:mx-0 md:ml-0">
-                <h2 className="text-center md:text-left">Compliance and QA</h2>
+                <h2 className="text-center md:text-left mb-4">Compliance and QA</h2>
                 <p className="text-justify md:text-left">Documented process control with full traceability and optical inspection. Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.</p>
               </Prose>
             </Span>
