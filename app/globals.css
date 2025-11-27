@@ -8,6 +8,7 @@
   --color-subtle: #1a1a1a;
   --color-line: #2a2a2a;
   --font-articulat: "articulat-cf", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-open-sans: "Open Sans", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --ease-premium: cubic-bezier(0.2, 0.8, 0.2, 1);
   --easing-ui: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 180ms;
@@ -115,8 +116,9 @@ h2 { letter-spacing: 0.06em; line-height: 1.18; }
 
 /* Native cursor is hidden via inline style on <body> in layout.tsx to avoid !important warnings */
 
-/* Articulat CF will come from Adobe Fonts link in _document. */
-body { font-family: articulat-cf, system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
+/* Articulat CF for headings and navigation, Open Sans for body text */
+body { font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
+h1, h2, h3, h4, h5, h6, .font-heading, nav, .uc, .button-primary, .button-solid { font-family: articulat-cf, system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
 
 /* Always use default arrow cursor for interactive elements (no hand pointer) */
 :where(a, button, [role="button"], summary) { cursor: default; }
