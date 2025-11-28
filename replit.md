@@ -110,20 +110,7 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
-## Recent Changes (Nov 28, 2025 - CSP & Performance Optimizations)
-
-### CSP (Content Security Policy) Hardening
-- Updated middleware.ts to use nonce-based script-src with 'strict-dynamic'
-- Added proper request header propagation for nonces (cloned headers pattern)
-- Added Google Fonts domains: fonts.googleapis.com (style-src), fonts.gstatic.com (font-src)
-- Added Simple Analytics domains: scripts.simpleanalyticscdn.com, queue.simpleanalyticscdn.com
-- Removed broad 'https:' and 'http:' allowances from script-src in production
-
-### Font Loading Optimization
-- Added dns-prefetch for all font sources (Typekit and Google Fonts)
-- Proper preconnect ordering for font domains
-- Restored font preload for both Typekit and Google Fonts CSS
-- Google Fonts URL includes display=swap for font-display: swap
+## Recent Changes (Nov 28, 2025 - Performance Optimizations)
 
 ### Animation Loop Optimization
 - Added visibility change detection to CursorTrailOverlay
