@@ -326,8 +326,8 @@ export function Nav() {
             </Link>
             <button ref={menuBtnRef} type="button" aria-label="Menu" aria-controls={menuId} aria-expanded={open} className="p-3 h-11 w-11 flex flex-col items-center justify-center" onClick={() => setOpen(!open)}>
               <span className="sr-only">Toggle menu</span>
-              <div className={clsx('w-5 h-[1.5px] bg-white transition-all duration-500 origin-center', open ? 'translate-y-[3px] rotate-45' : 'rotate-0 mb-[5px]')}></div>
-              <div className={clsx('w-5 h-[1.5px] bg-white transition-all duration-500 origin-center', open ? '-translate-y-[3px] -rotate-45' : 'rotate-0')}></div>
+              <div className={clsx('w-5 h-[1.5px] bg-white transition-all duration-300 origin-center', open ? 'translate-y-1 rotate-45' : 'rotate-0 mb-1')}></div>
+              <div className={clsx('w-5 h-[1.5px] bg-white transition-all duration-300 origin-center', open ? '-translate-y-1 -rotate-45' : 'rotate-0')}></div>
             </button>
           </div>
         </div>
@@ -382,7 +382,7 @@ export function Nav() {
         aria-labelledby={`${menuId}-title`}
         aria-label="Menu"
         className={clsx(
-            'md:hidden fixed inset-0 z-overlay m-0 p-0 surface surface-opaque surface--sm surface-strong elevate border-t border-white/12',
+            'md:hidden fixed inset-0 z-overlay m-0 p-0 w-screen h-screen surface surface-opaque surface--sm surface-strong elevate border-t border-white/12',
           'transition-opacity duration-500 ease-[var(--ease-premium)]',
           open ? 'opacity-100' : 'opacity-0'
         )}

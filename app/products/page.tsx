@@ -54,8 +54,10 @@ export default function Page() {
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Aerospace Components</div>
               <div className="text-white/60 space-y-1">
-                <p>Wing Tips | Elevator Tips | Rudder Caps</p>
-                <p>Wheel Spats | Strut-Cuffs | Tail Cones</p>
+                <p>Wing Tips | Elevator Tips</p>
+                <p className="md:inline md:after:content-['_|_']">Rudder Caps</p>
+                <p className="hidden md:inline">Wheel Spats | Strut-Cuffs | Tail Cones</p>
+                <p className="md:hidden">Wheel Spats | Strut-Cuffs | Tail Cones</p>
                 <p>Cowlings | Fairings</p>
               </div>
             </div>
@@ -65,7 +67,8 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">Prototyping</div>
               <div className="text-white/60 space-y-1">
                 <p>Prototype Component Development to</p>
-                <p>meet your needs & specifications</p>
+                <p>meet your needs</p>
+                <p>& specifications</p>
                 <p className="mt-2">Project Advice & Consultation Services</p>
               </div>
             </div>
@@ -82,7 +85,7 @@ export default function Page() {
           </div>
 
           {/* Centered Request a Quote button */}
-          <div className="mt-12 flex justify-center">
+          <div className="mt-12 flex justify-center md:justify-start">
             <a href="https://staging-aces.netlify.app/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
               <span aria-hidden="true" className="reveal-line h top" />
               <span aria-hidden="true" className="reveal-line h bottom" />
