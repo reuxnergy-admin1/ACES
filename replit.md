@@ -110,7 +110,13 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
-## Recent Changes (Nov 27, 2025 - Lighthouse Optimizations)
+## Recent Changes (Nov 28, 2025 - Performance Optimizations)
+
+### Animation Loop Optimization
+- Added visibility change detection to CursorTrailOverlay
+- RAF (requestAnimationFrame) loop now pauses when browser tab is hidden
+- Resumes automatically when tab becomes visible again
+- Reduces "Other" scripting time in Lighthouse by stopping unnecessary background work
 
 ### Viewport Export Fix
 - Moved `themeColor` from metadata export to viewport export per Next.js 15 requirements
