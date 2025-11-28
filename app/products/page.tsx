@@ -22,27 +22,27 @@ export default function Page() {
             {/* Aircraft Transparencies */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Aircraft Transparencies</div>
-              <div className="text-white/60 space-y-1">
+              <div className="text-white space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Aircraft Types</p>
-                <p className="text-white/50 mt-2">Windows | Windshields | Side Windows</p>
+                <p className="mt-2">Windows | Windshields | Side Windows</p>
               </div>
             </div>
 
             {/* Helicopter Transparencies */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Helicopter Transparencies</div>
-              <div className="text-white/60 space-y-1">
+              <div className="text-white space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Helicopter Types</p>
-                <p className="text-white/50 mt-2">Canopy | Bubble | Side Windows</p>
+                <p className="mt-2">Canopy | Bubble | Side Windows</p>
               </div>
             </div>
 
             {/* Motorsport Components */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Motorsport Components</div>
-              <div className="text-white/60 space-y-1">
+              <div className="text-white space-y-1">
                 <p>Saloon | Rally Racing Windows</p>
                 <p>NACA Ducts</p>
                 <p>Headlight Lenses</p>
@@ -53,7 +53,7 @@ export default function Page() {
             {/* Aerospace Components */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Aerospace Components</div>
-              <div className="text-white/60 space-y-1">
+              <div className="text-white space-y-1">
                 <p>Wing Tips | Elevator Tips</p>
                 <p className="md:inline md:after:content-['_|_']">Rudder Caps</p>
                 <p className="hidden md:inline">Wheel Spats | Strut-Cuffs | Tail Cones</p>
@@ -65,7 +65,7 @@ export default function Page() {
             {/* Prototyping */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Prototyping</div>
-              <div className="text-white/60 space-y-1">
+              <div className="text-white space-y-1">
                 <p>Prototype Component Development to</p>
                 <p>meet your needs</p>
                 <p>& specifications</p>
@@ -76,7 +76,7 @@ export default function Page() {
             {/* Retrofitting and Reverse Engineering */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Retrofitting and Reverse Engineering</div>
-              <div className="text-white/60 space-y-1">
+              <div className="text-white space-y-1">
                 <p>Discontinued Aircraft Windows and</p>
                 <p>Composite Components to restore</p>
                 <p>with Precision and Certification.</p>

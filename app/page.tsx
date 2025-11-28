@@ -17,7 +17,7 @@ export default function Page() {
               <h1 className="text-[29.2px] sm:text-[38px] lg:text-[48.6px] font-light tracking-tight leading-[0.95] uc max-w-[22ch] mx-auto md:mx-0 md:ml-0">
                 Aerospace & Motorsport Specialist Engineering Components
               </h1>
-              <p className="mt-6 body max-w-reading text-white/70 text-center md:text-left mx-auto md:mx-0 md:ml-0">
+              <p className="mt-6 body max-w-reading text-white text-center md:text-left mx-auto md:mx-0 md:ml-0">
                 SACAA-approved (MP39) blanket approval for all certified and NTCA unpressured fixed- and rotary-wing aircraft types. ACES Aerodynamics delivers precision-engineered transparencies and composite components for aviation and motorsport.
               </p>
             </Span>
@@ -71,8 +71,8 @@ export default function Page() {
               <SheenCard key={c.title} className="md:col-span-4" data-reveal>
                 <Link href={c.href} className="group block border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors link-underline h-full text-center md:text-left">
                   <div className="text-xl">{c.title}</div>
-                  <div className="mt-2 text-white/60 text-sm">{c.subtitle}</div>
-                  <div className="mt-2 text-white/55 text-sm">{c.details}</div>
+                  <div className="mt-2 text-white text-sm">{c.subtitle}</div>
+                  <div className="mt-2 text-white text-sm">{c.details}</div>
                 </Link>
               </SheenCard>
             ))}
@@ -104,9 +104,9 @@ export default function Page() {
               ['03', 'QA, Documentation, Delivery', 'Optical checks and release documentation delivered with pace.'],
             ].map(([n, t, d]) => (
               <div key={n} className="md:col-span-4 border-t border-white/10 pt-4 text-center md:text-left">
-                <div className="text-white/55 text-sm uc tracking-[0.12em]">{n}</div>
+                <div className="text-white text-sm uc tracking-[0.12em]">{n}</div>
                 <div className="mt-1 body text-white">{t}</div>
-                <div className="mt-1 body text-white/60 text-sm">{d}</div>
+                <div className="mt-1 body text-white text-sm">{d}</div>
               </div>
             ))}
           </Grid12>
@@ -126,13 +126,13 @@ export default function Page() {
             <SheenCard className="md:col-span-6" data-reveal>
               <div className="block border border-white/10 rounded-2xl p-7 text-center md:text-left">
                 <div className="text-xl">MP39 - SACAA Approved</div>
-                <div className="mt-2 text-white/60">Proven Quality - 99.9% First Pass Yield Rate</div>
+                <div className="mt-2 text-white">Proven Quality - 99.9% First Pass Yield Rate</div>
               </div>
             </SheenCard>
             <SheenCard className="md:col-span-6" data-reveal>
               <div className="block border border-white/10 rounded-2xl p-7 text-center md:text-left">
                 <div className="text-xl">CA21-19 Airworthiness Approval Tag</div>
-                <div className="mt-2 text-white/60">Effortless Compliance</div>
+                <div className="mt-2 text-white">Effortless Compliance</div>
               </div>
             </SheenCard>
           </Grid12>
