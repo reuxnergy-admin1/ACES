@@ -87,8 +87,24 @@ export default function CursorTrailOverlay() {
     const rippleDurationMs = 350;
     const rippleMaxRadius = 60;
 
-    // Continuous render loop - never stops, cursor always visible
+    // Visibility state - pause RAF when tab is hidden to save resources
+    let isVisible = !document.hidden;
+    const onVisibilityChange = () => {
+      isVisible = !document.hidden;
+      if (isVisible && rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    // Render loop - pauses when tab is hidden
     const render = () => {
+      // Skip rendering if tab is hidden
+      if (!isVisible) {
+        rafRef.current = null;
+        return;
+      }
+      
       const now = performance.now();
       
       // Clean up expired ripples
@@ -135,7 +151,6 @@ export default function CursorTrailOverlay() {
         ctx.fill();
       }
 
-      // Continuous animation loop - never stops
       rafRef.current = requestAnimationFrame(render);
     };
 
@@ -143,6 +158,7 @@ export default function CursorTrailOverlay() {
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("resize", resize);
