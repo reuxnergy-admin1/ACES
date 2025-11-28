@@ -24,9 +24,16 @@ function genNonce(bytes = 16) {
 }
 
 export function middleware(req: NextRequest) {
-  const res = NextResponse.next();
   const nonce = genNonce(16);
   const isProd = process.env.NODE_ENV === 'production';
+
+  // Clone request headers and add nonce for server components to read
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-nonce', nonce);
+
+  const res = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
 
   // Feature flag cookie for Chronicle UI controlled via ?ui=chronicle|default
   const ui = req.nextUrl.searchParams.get('ui');
@@ -46,7 +53,7 @@ export function middleware(req: NextRequest) {
     return res;
   }
 
-  // Expose nonce to the app (can be read in server components via headers())
+  // Expose nonce on response header as well for debugging/verification
   res.headers.set('x-nonce', nonce);
 
   const directives: string[] = [
@@ -55,10 +62,10 @@ export function middleware(req: NextRequest) {
     "frame-ancestors 'none'",
     "object-src 'none'",
     "img-src 'self' data: blob: https:",
-    "font-src 'self' https://use.typekit.net https://p.typekit.net",
-    "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net",
-    `script-src 'self' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} blob: data: https: http:`.trim(),
-    isProd ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
+    "font-src 'self' https://use.typekit.net https://p.typekit.net https://fonts.gstatic.com",
+    "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net https://fonts.googleapis.com",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://scripts.simpleanalyticscdn.com`,
+    "connect-src 'self' https://simpleanalyticscdn.com https://queue.simpleanalyticscdn.com",
   ];
 
 
