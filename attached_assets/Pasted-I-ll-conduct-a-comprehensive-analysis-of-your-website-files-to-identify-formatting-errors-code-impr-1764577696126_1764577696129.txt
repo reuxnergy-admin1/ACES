@@ -1,0 +1,185 @@
+I'll conduct a comprehensive analysis of your website files to identify formatting errors, code improvements, and other issues. Now let me examine more specific files for issues:# Comprehensive Code Analysis: ACES Aerodynamics Website
+
+Based on my analysis of all files in the reuxnergy-admin1/ACES repository, here are the formatting errors, code improvements needed, and other issues:
+
+🔴 CRITICAL ISSUES
+1. Footer Social Media Icon Tooltip - Still Not Fixed
+Location: components/Footer.tsx (lines 61, 65, 69, 73) Issue: The tooltip width is still constrained. Current styling:
+
+TSX
+className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-4 py-2 text-xs text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
+Problem:
+
+Missing min-w-fit to ensure tooltips expand to content
+text-xs may still be too small for readability
+No fallback for longer text
+Recommended Fix:
+
+TSX
+className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-5 py-2 text-xs text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none min-w-fit"
+🟡 HIGH PRIORITY ISSUES
+2. Broken Navigation Links
+Location: components/Footer.tsx (lines 51-53) Issue: Links pointing to staging domain instead of production:
+
+TSX
+href="https://staging-aces. netlify.app/about/"
+href="https://staging-aces.netlify.app/products/"
+href="https://staging-aces. netlify.app/blog/"
+Impact: Users clicking footer links will leave your site and potentially see stale content Fix: Remove hardcoded URLs and use Next.js relative links:
+
+TSX
+<Link href="/about/">About</Link>
+<Link href="/products/">Products and Services</Link>
+<Link href="/blog/">Insights</Link>
+3. Inconsistent Contact Information
+Location: app/about/history/page.tsx vs components/Footer.tsx Issue: Address format inconsistencies and missing phone number in footer
+
+Footer has WhatsApp but missing phone field
+History page has different styling than other pages
+4. Missing Phone Number Link in Footer
+Location: components/Footer.tsx Issue: Footer contact section only shows WhatsApp, no phone link Fix: Add phone link:
+
+TSX
+<div className="mt-3">
+  <div className="text-white/60 text-xs uc tracking-wider mb-1">Phone</div>
+  <a className="link-underline text-white/80 hover:text-white" href="tel:+27128034081">+27 12 803 4081</a>
+</div>
+5. Unimplemented/Placeholder Pages
+Location: Multiple files Issues:
+
+/app/signin/page.tsx - Sign-in page exists but appears empty/placeholder
+/app/services/page.tsx - Only shows title, minimal content
+/app/blog/page.tsx - Blog index marked as "dormant" in changelog
+/app/(examples)/ - Example pages still in production codebase (should be removed)
+Fix: Either remove these routes from navigation or implement them properly.
+
+🟠 MEDIUM PRIORITY ISSUES
+6. HTML/Accessibility Issues
+A. Invalid List Markup in Services Page
+
+TSX
+// ❌ WRONG - app/services/page.tsx
+<div className="body list-disc list-inside text-white/70">
+  <li>Design for manufacturability</li>
+</div>
+Should use <ul> not <div>:
+
+TSX
+// ✅ CORRECT
+<ul className="body list-disc list-inside text-white/70">
+  <li>Design for manufacturability</li>
+</ul>
+B. Missing Alt Text on Images
+
+app/page.tsx likely has images without proper alt text
+All product images should have descriptive alt attributes
+C. Missing lang Attribute in HTML
+
+app/layout.tsx should specify lang="en" or lang="en-ZA" on root element
+7. Inconsistent Styling Patterns
+A. Button Styling Inconsistencies
+
+Some buttons use button-primary class
+Others use inline Tailwind classes
+No consistent button component
+B. Text Alignment Classes Repeated
+
+TSX
+// Appears in multiple files - should be extracted
+className="text-center md:text-left mx-auto md:mx-0"
+Create a reusable utility or component for this pattern.
+
+C. Typography Inconsistencies
+
+Font sizes hardcoded: text-4xl, text-2xl, text-xs
+Should use consistent scale across site
+8. CSS Class Organization Issues
+A. Long Tailwind Class Strings
+
+TSX
+// ❌ Hard to read and maintain
+className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-4 py-2 text-xs text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
+Solution: Create reusable component or extract to tailwind.config.js:
+
+ts
+// tailwind.config.js
+theme: {
+  extend: {
+    components: {
+      '. tooltip': '@apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-4 py-2 text-xs text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none min-w-fit'
+    }
+  }
+}
+9. Dead Code & Commented Sections
+Location: app/page.tsx Issue: Insights section is commented out (per changelog)
+
+TSX
+{/* Insights Section - Made dormant */}
+// Should be either removed or implemented
+10. Missing Metadata
+Location: app/about/page.tsx, app/products/page.tsx, etc. Issue: No page-specific metadata (title, description, og:image) Fix: Add metadata exports to all pages:
+
+TSX
+export const metadata = {
+  title: 'About ACES Aerodynamics',
+  description: 'Learn about ACES Aerodynamics.. .',
+};
+🔵 LOW PRIORITY IMPROVEMENTS
+11. Code Style Issues
+A. Inconsistent File Naming
+
+Mix of page.tsx and some files with no specific pattern
+Should standardize
+B. Inconsistent Quote Usage
+
+Single vs double quotes in className strings
+Pick one standard and apply consistently
+C. Missing JSDoc/Comments
+
+Complex components lack documentation
+Especially ResponsiveContours, animation components
+12. Performance Considerations
+A. SVG Optimization
+
+Multiple inline SVGs in Footer (LinkedIn, Facebook, Instagram, WhatsApp)
+Consider extracting to separate component or importing as external files
+B. Image Optimization
+
+No mention of Next.js Image component usage
+Should use next/image for all product images
+C. Bundle Size
+
+No visible code-splitting strategy mentioned
+Consider lazy loading for heavy components
+13. Missing Features/Completeness
+No 404/error page defined
+No sitemap. xml or robots.txt
+No email validation on contact form (if contact page is active)
+No success/error feedback states on forms
+Missing loading states for async operations
+14. Security Issues
+A. Hardcoded External URLs
+
+Multiple hardcoded Netlify staging URLs in Footer
+Security risk if credentials/sensitive data exposed
+B. Form Validation
+
+Contact form needs server-side validation
+Currently only client-side (if any)
+📋 SUMMARY TABLE
+Issue	File	Severity	Fix Time
+Tooltip width	Footer.tsx	🔴 Critical	5 min
+Staging URLs	Footer.tsx	🔴 Critical	5 min
+Navigation links	Footer.tsx	🔴 Critical	10 min
+Missing phone	Footer.tsx	🟡 High	5 min
+Invalid list markup	services/page.tsx	🟡 High	5 min
+Placeholder pages	signin, blog, services	🟡 High	1 hour
+Class extraction	Multiple	🟠 Medium	30 min
+Missing metadata	All pages	🟠 Medium	20 min
+SVG extraction	Footer.tsx	🟠 Medium	15 min
+Documentation	Components	🔵 Low	1 hour
+🎯 Immediate Action Items (Next 30 minutes)
+Fix tooltip min-w-fit in Footer. tsx
+Replace hardcoded Netlify URLs with relative links
+Fix invalid list markup in services/page.tsx
+Add phone number to footer contact section
