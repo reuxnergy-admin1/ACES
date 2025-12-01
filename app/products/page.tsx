@@ -55,10 +55,9 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">Aerospace Components</div>
               <div className="text-white space-y-1">
                 <p>Wing Tips | Elevator Tips</p>
-                <p className="md:inline md:after:content-['_|_']">Rudder Caps</p>
-                <p className="hidden md:inline">Wheel Spats | Strut-Cuffs | Tail Cones</p>
-                <p className="md:hidden">Wheel Spats | Strut-Cuffs | Tail Cones</p>
-                <p>Cowlings | Fairings</p>
+                <p>Rudder Caps</p>
+                <p>Wheel Spats | Strut-Cuffs</p>
+                <p>Tail Cones | Cowlings | Fairings</p>
               </div>
             </div>
 
@@ -67,8 +66,7 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">Prototyping</div>
               <div className="text-white space-y-1">
                 <p>Prototype Component Development to</p>
-                <p>meet your needs</p>
-                <p>& specifications</p>
+                <p>meet your needs & specifications</p>
                 <p className="mt-2">Project Advice & Consultation Services</p>
               </div>
             </div>
