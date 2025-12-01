@@ -18,7 +18,10 @@ export default function Page() {
                 Aerospace & Motorsport Specialist Engineering Components
               </h1>
               <p className="mt-6 body max-w-reading text-white text-center md:text-left mx-auto md:mx-0 md:ml-0">
-                SACAA-approved (MP39) blanket approval for all certified and NTCA unpressured fixed- and rotary-wing aircraft types. ACES Aerodynamics delivers precision-engineered transparencies and composite components for aviation and motorsport.
+                SACAA-approved (MP39) blanket approval for all certified and NTCA unpressured fixed- and rotary-wing aircraft types.
+              </p>
+              <p className="mt-4 body max-w-reading text-white text-center md:text-left mx-auto md:mx-0 md:ml-0">
+                ACES Aerodynamics delivers precision-engineered transparencies and composite components for aviation and motorsport.
               </p>
             </Span>
           </Grid12>
@@ -77,8 +80,8 @@ export default function Page() {
               </SheenCard>
             ))}
             <Span cols={12}>
-              <div className="mt-8 flex justify-center md:justify-start">
-                <a href="https://staging-aces.netlify.app/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
+              <div className="mt-8 flex justify-center">
+                <a href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
                   <span aria-hidden="true" className="reveal-line h top" />
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
@@ -136,6 +139,24 @@ export default function Page() {
               </div>
             </SheenCard>
           </Grid12>
+        </ContainerRow>
+      </SectionBand>
+
+      {/* Order with ACES CTA */}
+      <SectionBand>
+        <ContainerRow>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <h2 className="text-2xl uc tracking-[0.08em] text-left">Order with ACES</h2>
+            <a href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap self-start md:self-auto">
+              <span aria-hidden="true" className="reveal-line h top" />
+              <span aria-hidden="true" className="reveal-line h bottom" />
+              <span aria-hidden="true" className="reveal-line v left" />
+              <span aria-hidden="true" className="reveal-line v right" />
+              <span className="sr-only">Request a Quote</span>
+              <span aria-hidden="true">Request a Quote</span>
+              <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
+            </a>
+          </div>
         </ContainerRow>
       </SectionBand>
 
