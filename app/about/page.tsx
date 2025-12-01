@@ -33,13 +33,11 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">How It All Started</h2></Span>
-            <Span cols={12} className="md:col-span-8 text-left mx-auto md:mx-0">
-              <Prose>
-                <p className="text-white">ACES Plastics CC t/a ACES Aerodynamics was started by Dirk Uys, whose career in aerospace stretches over decades. Before launching ACES, Dirk worked at CSIR and Atlas (now Denel), where he was involved in everything from materials and tooling to helicopter and jet design and builds.</p>
-                <p className="text-white">Over the years he has helped write the reference books and manuals on composite components used by aviation artisans and has contributed to standards and regulations for the South African aviation industry.</p>
-                <p className="text-white">Dirk has also consulted on many aircraft project design and builds, including aerobatic aircraft and special-mission aircraft, and has quietly built a reputation as someone who understands both the engineering and the real-world demands of aviation. That experience is at the core of what ACES does today.</p>
-                <p className="text-white">Through this work, Dirk has firmly cemented his influence in the South African aviation community, and that expertise flows directly into every product we deliver.</p>
-              </Prose>
+            <Span cols={12} className="text-center md:text-left">
+              <p className="body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">ACES Plastics CC t/a ACES Aerodynamics was started by Dirk Uys, whose career in aerospace stretches over decades. Before launching ACES, Dirk worked at CSIR and Atlas (now Denel), where he was involved in everything from materials and tooling to helicopter and jet design and builds.</p>
+              <p className="mt-4 body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">Over the years he has helped write the reference books and manuals on composite components used by aviation artisans and has contributed to standards and regulations for the South African aviation industry.</p>
+              <p className="mt-4 body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">Dirk has also consulted on many aircraft project design and builds, including aerobatic aircraft and special-mission aircraft, and has quietly built a reputation as someone who understands both the engineering and the real-world demands of aviation. That experience is at the core of what ACES does today.</p>
+              <p className="mt-4 body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">Through this work, Dirk has firmly cemented his influence in the South African aviation community, and that expertise flows directly into every product we deliver.</p>
             </Span>
           </Grid12>
         </ContainerRow>
@@ -50,11 +48,9 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">Our Story Since 1994</h2></Span>
-            <Span cols={12} className="md:col-span-8 text-left mx-auto md:mx-0">
-              <Prose>
-                <p className="text-white">The ACES group was founded in 1994, and from the beginning the focus has been on delivering reliable, high-quality components. We&apos;ve supplied popular aircraft parts that many owners know well, as well as one-off and customised components for prototype aircraft and special projects.</p>
-                <p className="text-white">We work with aircraft maintenance, builders, and designers who want more than just a part number, people who appreciate honest advice, practical solutions and long-term performance.</p>
-              </Prose>
+            <Span cols={12} className="text-center md:text-left">
+              <p className="body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">The ACES group was founded in 1994, and from the beginning the focus has been on delivering reliable, high-quality components. We&apos;ve supplied popular aircraft parts that many owners know well, as well as one-off and customised components for prototype aircraft and special projects.</p>
+              <p className="mt-4 body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">We work with aircraft maintenance, builders, and designers who want more than just a part number, people who appreciate honest advice, practical solutions and long-term performance.</p>
             </Span>
           </Grid12>
         </ContainerRow>
@@ -65,10 +61,8 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">What We Do</h2></Span>
-            <Span cols={12} className="md:col-span-8 text-left mx-auto md:mx-0">
-              <Prose>
-                <p className="text-white">Our windows are built for clarity, durability and safety, and our composite components are designed with weight, strength and real operational use in mind. Whether you&apos;re maintaining an existing aircraft, restoring a classic, or bringing a new design to life, we aim to be the team you can rely on for well-made, well-thought-out parts.</p>
-              </Prose>
+            <Span cols={12} className="text-center md:text-left">
+              <p className="body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">Our windows are built for clarity, durability and safety, and our composite components are designed with weight, strength and real operational use in mind. Whether you&apos;re maintaining an existing aircraft, restoring a classic, or bringing a new design to life, we aim to be the team you can rely on for well-made, well-thought-out parts.</p>
             </Span>
           </Grid12>
         </ContainerRow>
@@ -116,9 +110,7 @@ export default function Page() {
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center md:text-left">
-              <Prose className="mx-auto md:mx-0">
-                <p className="text-white">If you need aircraft/motorsport windows or composite components made by people who genuinely care about performance and safety, you&apos;re in the right place.</p>
-              </Prose>
+              <p className="body max-w-reading text-white text-center md:text-left mx-auto md:mx-0">If you need aircraft/motorsport windows or composite components made by people who genuinely care about performance and safety, you&apos;re in the right place.</p>
             </Span>
             <Span cols={12}>
               <div className="mt-8 flex justify-center md:justify-start">
