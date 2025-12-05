@@ -147,7 +147,7 @@ export default function Page() {
       <SectionBand>
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12} className="text-center md:text-left">
+            <Span cols={12} className="text-center">
               <h2 className="text-2xl uc tracking-[0.08em]">Trusted By</h2>
             </Span>
           </Grid12>
