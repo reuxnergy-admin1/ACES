@@ -1,0 +1,92 @@
+# Fix Social Media Tooltip Width Issue - CRITICAL UPDATE
+
+## Problem Description
+The social media tooltip section contains 4 icons (WhatsApp, Facebook, Instagram, LinkedIn) with hover tooltips. When hovering over these icons on desktop/web, a popup/tooltip appears showing the platform name, but the container width is STILL too small even after the previous fix attempt.
+
+## Current Behavior (AFTER FIRST FIX ATTEMPT)
+- Looking at the WhatsApp tooltip image: the text "WhatsApp" is still cramped
+- The tooltip background/container is not wide enough to properly contain the text
+- The text appears to be touching or very close to the edges of the tooltip
+- Previous attempts to fix this have NOT worked
+
+## Required Fix - DETAILED INVESTIGATION NEEDED
+
+**IMPORTANT: The previous fix attempt did not work. We need a more thorough approach.**
+
+Please perform the following detailed investigation and fix:
+
+### Step 1: Locate the EXACT tooltip code
+Find and share the complete code for the tooltip component. Look for:
+- The tooltip wrapper/container element
+- All className properties applied to the tooltip
+- Any parent containers that might be constraining width
+- Any CSS modules or styled-components affecting this element
+
+### Step 2: Check for these specific issues:
+
+**A. Insufficient Padding:**
+```jsx
+// WRONG - text touching edges
+className="px-1 py-1"  // Too little padding
+// CORRECT - proper spacing
+className="px-4 py-2"  // or even px-6 py-2
+```
+
+**B. Width constraints from parent:**
+```jsx
+// Check if tooltip is inside a constrained parent like:
+<div className="w-20"> // Parent limiting width
+  <div className="tooltip">WhatsApp</div>
+</div>
+// Parent should not constrain tooltip width
+```
+
+**C. Using fixed width instead of auto:**
+```jsx
+// WRONG approaches:
+className="w-24"  // Fixed 96px width
+className="w-20"  // Fixed 80px width
+className="max-w-xs truncate"  // Might truncate text
+
+// CORRECT approaches:
+className="w-fit px-6 py-2"
+className="w-auto px-6 py-2 whitespace-nowrap"
+className="min-w-max px-6 py-2"
+```
+
+**D. Font size too large for container:**
+```jsx
+// Make sure text size is reasonable
+className="text-sm px-4 py-2"  // Not text-lg or text-xl
+```
+
+### Step 3: Apply this COMPREHENSIVE fix
+
+Replace the tooltip className with this exact combination:
+```jsx
+className="absolute bg-black text-white text-sm font-medium px-6 py-2 rounded-lg whitespace-nowrap w-auto min-w-fit shadow-lg"
+```
+
+**Explanation of each class:**
+- `px-6` - Generous horizontal padding (24px)
+- `py-2` - Vertical padding (8px)
+- `whitespace-nowrap` - Prevents text wrapping
+- `w-auto` - Allows width to grow with content
+- `min-w-fit` - Ensures minimum width fits content
+- `text-sm` - Reasonable text size
+- `rounded-lg` - Rounded corners
+- `shadow-lg` - Drop shadow for better visibility
+
+## Files to Check
+- Look for files containing social media components, typically in:
+  - `/components/SocialMedia.tsx` or `.jsx`
+  - `/components/Footer.tsx` or `/components/Header.tsx`
+  - `/app/` or `/pages/` directories
+  - Any file with "social", "tooltip", or "share" in the name
+
+## Additional Context
+- Tech stack: Next.js, React, Tailwind CSS
+- Issue occurs on web/desktop view with hover interaction
+- Four social platforms: WhatsApp, Facebook, Instagram, LinkedIn
+
+Please analyze the code, identify the root cause, implement the fix, and confirm the tooltips now display correctly with proper width.
