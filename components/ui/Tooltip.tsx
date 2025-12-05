@@ -29,7 +29,6 @@ export function Tooltip({
             className="z-[9999] px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-lg border border-gray-200 animate-in fade-in-0 zoom-in-95"
           >
             {content}
-            <TooltipPrimitive.Arrow className="fill-white" />
           </TooltipPrimitive.Content>
         </TooltipPrimitive.Portal>
       </TooltipPrimitive.Root>
