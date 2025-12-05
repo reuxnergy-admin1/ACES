@@ -1,75 +1,88 @@
 'use client';
 import clsx from 'clsx';
 
-type Logo = {
+type Client = {
   name: string;
+  url: string;
 };
 
-const logos: Logo[] = [
-  { name: 'Airbus' },
-  { name: 'Denel' },
-  { name: 'CSIR' },
-  { name: 'Safair' },
-  { name: 'SAA' },
-  { name: 'Paramount' },
-  { name: 'NAC' },
-  { name: 'Cessna' },
+const clients: Client[] = [
+  { name: 'Lanseria Flight Centre', url: 'https://www.flylfc.com' },
+  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaviation.co.za' },
+  { name: 'Aviation Rebuilders', url: 'https://aviation-rebuilders-cc.business.site' },
+  { name: 'Skytrim', url: 'https://skytrim.co.za' },
+  { name: 'National Airways Corporation', url: 'https://www.nac.co.za' },
+  { name: 'Alton Aero Engineering', url: 'https://www.altonaero.co.za' },
+  { name: 'Wingman Aircraft Maintenance', url: 'https://wingmansa.co.za' },
+  { name: 'Pablo Clark', url: 'https://www.pabloclark.com' },
+  { name: 'WCT Engineering', url: 'https://www.wct.engineering' },
+  { name: '208 Aviation', url: 'https://www.208aviation.com' },
+  { name: 'Acher Aviation Helicopters', url: 'https://www.acheraviation.com' },
+  { name: 'Skyhawk Aviation', url: 'https://skyhawk.co.za' },
+  { name: 'Orion Aircraft', url: 'https://orioncub.com' },
+  { name: 'Emperor Aviation', url: 'https://emperoraviation.co.za' },
 ];
 
-function PlaceholderLogo({ label }: Readonly<{ label: string }>) {
+function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
   return (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      className="h-8 md:h-10 w-auto text-white/60"
-      viewBox="0 0 160 40"
-      fill="none"
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block hover:opacity-100 transition-opacity"
     >
-      <rect x="0.5" y="0.5" width="159" height="39" rx="8" stroke="currentColor" strokeOpacity="0.18" />
-      <text
-        x="50%"
-        y="50%"
-        dominantBaseline="middle"
-        textAnchor="middle"
-        fontSize="14"
-        fill="currentColor"
-        fillOpacity="0.7"
-        style={{ letterSpacing: '0.08em' }}
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        className="h-10 md:h-12 w-auto text-white"
+        viewBox="0 0 200 48"
+        fill="none"
       >
-        {label.toUpperCase()}
-      </text>
-    </svg>
+        <rect x="0.5" y="0.5" width="199" height="47" rx="8" stroke="currentColor" strokeOpacity="0.4" />
+        <text
+          x="50%"
+          y="50%"
+          dominantBaseline="middle"
+          textAnchor="middle"
+          fontSize="12"
+          fill="currentColor"
+          fillOpacity="0.9"
+          style={{ letterSpacing: '0.05em' }}
+        >
+          {name.toUpperCase()}
+        </text>
+      </svg>
+    </a>
   );
 }
 
 export default function ClientCarousel({ className, reveal = false }: Readonly<{ className?: string; reveal?: boolean }>) {
-  // Duplicate with stable ids for seamless looping without index keys
   const looped = [
-    ...logos.map((l) => ({ ...l, id: `${l.name}-a` })),
-    ...logos.map((l) => ({ ...l, id: `${l.name}-b` })),
+    ...clients.map((c) => ({ ...c, id: `${c.name}-a` })),
+    ...clients.map((c) => ({ ...c, id: `${c.name}-b` })),
   ];
   const trackStyle: React.CSSProperties & { ['--marquee-duration']?: string } = {
-    ['--marquee-duration']: '36s',
+    ['--marquee-duration']: '60s',
   };
   return (
-    <section aria-label="Client partnerships" className={clsx('container-row w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
-      {/* Animated marquee with no backdrop; floats over site background */}
-      <div className="overflow-hidden py-3 md:py-4">
+    <section aria-label="Our clients and partners" className={clsx('w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
+      <div className="overflow-hidden py-4 md:py-6">
         <div className="marquee" aria-hidden="true">
           <ul className="marquee-track" style={trackStyle}>
-            {looped.map((l) => (
-              <li key={l.id} className="marquee-item">
-                <PlaceholderLogo label={l.name} />
+            {looped.map((c) => (
+              <li key={c.id} className="marquee-item">
+                <ClientBlock name={c.name} url={c.url} />
               </li>
             ))}
           </ul>
         </div>
       </div>
 
-      {/* Static, accessible list for screen readers */}
       <ul className="sr-only">
-        {logos.map((l) => (
-          <li key={l.name}>{l.name}</li>
+        {clients.map((c) => (
+          <li key={c.name}>
+            <a href={c.url} target="_blank" rel="noopener noreferrer">{c.name}</a>
+          </li>
         ))}
       </ul>
     </section>

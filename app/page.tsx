@@ -5,6 +5,7 @@ import ContainerRow from '@/components/layout/ContainerRow';
 import ContainerWide from '@/components/layout/ContainerWide';
 import { Grid12, Span } from '@/components/layout/Grid12';
 import Prose from '@/components/layout/Prose';
+import ClientCarousel from '@/components/ClientCarousel';
 
 export default function Page() {
   return (
@@ -140,6 +141,18 @@ export default function Page() {
             </SheenCard>
           </Grid12>
         </ContainerRow>
+      </SectionBand>
+
+      {/* Trusted By - Client Carousel */}
+      <SectionBand>
+        <ContainerRow>
+          <Grid12 data-reveal-stagger>
+            <Span cols={12} className="text-center md:text-left">
+              <h2 className="text-2xl uc tracking-[0.08em]">Trusted By</h2>
+            </Span>
+          </Grid12>
+        </ContainerRow>
+        <ClientCarousel reveal />
       </SectionBand>
 
       {/* Order with ACES CTA */}
