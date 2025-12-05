@@ -24,6 +24,12 @@ const clients: Client[] = [
 ];
 
 function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
+  const words = name.toUpperCase().split(' ');
+  const midpoint = Math.ceil(words.length / 2);
+  const line1 = words.slice(0, midpoint).join(' ');
+  const line2 = words.slice(midpoint).join(' ');
+  const isTwoLines = words.length > 2;
+
   return (
     <a
       href={url}
@@ -34,23 +40,52 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       <svg
         aria-hidden="true"
         focusable="false"
-        className="h-10 md:h-12 w-auto text-white"
-        viewBox="0 0 200 48"
+        className="h-16 md:h-20 w-auto text-white"
+        viewBox="0 0 240 72"
         fill="none"
       >
-        <rect x="0.5" y="0.5" width="199" height="47" rx="8" stroke="currentColor" strokeOpacity="0.4" />
-        <text
-          x="50%"
-          y="50%"
-          dominantBaseline="middle"
-          textAnchor="middle"
-          fontSize="12"
-          fill="currentColor"
-          fillOpacity="0.9"
-          style={{ letterSpacing: '0.05em' }}
-        >
-          {name.toUpperCase()}
-        </text>
+        <rect x="1" y="1" width="238" height="70" rx="10" stroke="currentColor" strokeOpacity="0.7" strokeWidth="1.5" />
+        {isTwoLines ? (
+          <>
+            <text
+              x="50%"
+              y="40%"
+              dominantBaseline="middle"
+              textAnchor="middle"
+              fontSize="11"
+              fill="currentColor"
+              fillOpacity="1"
+              style={{ letterSpacing: '0.06em' }}
+            >
+              {line1}
+            </text>
+            <text
+              x="50%"
+              y="65%"
+              dominantBaseline="middle"
+              textAnchor="middle"
+              fontSize="11"
+              fill="currentColor"
+              fillOpacity="1"
+              style={{ letterSpacing: '0.06em' }}
+            >
+              {line2}
+            </text>
+          </>
+        ) : (
+          <text
+            x="50%"
+            y="50%"
+            dominantBaseline="middle"
+            textAnchor="middle"
+            fontSize="11"
+            fill="currentColor"
+            fillOpacity="1"
+            style={{ letterSpacing: '0.06em' }}
+          >
+            {name.toUpperCase()}
+          </text>
+        )}
       </svg>
     </a>
   );
