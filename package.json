@@ -27,6 +27,7 @@
     "merge:utility": "node ./scripts/branch-merge-utility.mjs"
   },
   "dependencies": {
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/fiber": "^9.3.0",
     "clsx": "2.1.1",
     "framer-motion": "^12.23.12",

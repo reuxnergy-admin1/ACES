@@ -1,0 +1,162 @@
+The tooltip text "WhatsApp" displays correctly, but the background container/block is completely missing or not visible. There should be a visible rounded rectangular box behind the text, but it's not showing up at all.
+What Should Appear
+
+White or dark rounded rectangle box
+Text centered inside the box
+Visible padding around the text
+Shadow for depth
+Rounded corners on the box
+
+What's Actually Showing
+
+Only the text "WhatsApp" is visible
+NO background box/container
+NO rounded corners visible
+The block is NOT transparent - it's simply NOT RENDERING
+
+
+INVESTIGATION REQUIRED - DO THIS FIRST
+Step 1: Find and Share the Current Code
+Before making ANY changes, locate the tooltip code and share:
+
+The complete JSX/TSX code for the social media icons section
+The exact element that contains the tooltip text
+All className values on the tooltip element
+The parent container structure
+
+Step 2: Inspect in Browser DevTools
+While hovering over an icon to show the tooltip, inspect the tooltip element and report:
+
+What HTML element is the tooltip? (<span>, <div>, <p>)
+What is the computed background-color in DevTools? (Should NOT be transparent)
+What is the computed border-radius? (Should be > 0)
+Is there a box-shadow applied?
+What are ALL the classes applied to this element?
+Take a screenshot of the DevTools Elements panel showing the tooltip
+
+
+LIKELY ROOT CAUSES TO CHECK
+Issue 1: Wrong Element or Structure
+The tooltip might be applied to the wrong element:
+jsx// WRONG - styling on wrapper instead of visible element
+<div className="bg-white rounded-lg shadow-xl"> 
+  <span className="absolute">WhatsApp</span>  // This has no background
+</div>
+
+// CORRECT - styling on the actual tooltip element
+<div className="relative">
+  <span className="absolute bg-white rounded-lg shadow-xl px-6 py-2">
+    WhatsApp
+  </span>
+</div>
+Issue 2: Using a Library Component
+Are you using a tooltip library (like Radix UI, Headless UI, React Tooltip)?
+jsx// If using a library like:
+<Tooltip.Root>
+  <Tooltip.Content>WhatsApp</Tooltip.Content>
+</Tooltip.Root>
+
+// The styling must go on the Content component, not elsewhere
+<Tooltip.Content className="bg-white rounded-lg shadow-xl px-6 py-2 border">
+  WhatsApp
+</Tooltip.Content>
+Issue 3: CSS Module or External Stylesheet Override
+Check if there's custom CSS removing the background:
+css/* Check for rules like these in CSS files: */
+.tooltip { background: none !important; }
+[class*="tooltip"] { background-color: transparent; }
+span[class*="absolute"] { background: inherit; }
+Issue 4: Pseudo-element Tooltip
+Is the tooltip created with ::before or ::after?
+jsx// If using pseudo-elements, the styling must be in CSS, not className:
+<button className="has-tooltip">Icon</button>
+
+/* CSS needed: */
+.has-tooltip::after {
+  content: attr(data-tooltip);
+  background: white;
+  border-radius: 8px;
+  padding: 8px 16px;
+  /* etc */
+}
+
+SOLUTION: Complete Working Implementation
+Replace the entire tooltip implementation with this EXACT code:
+jsx// For each social media icon:
+<div className="relative inline-flex items-center justify-center group">
+  {/* The clickable icon button */}
+  <a 
+    href="https://wa.me/YOUR_NUMBER" 
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-gray-100 transition-colors"
+  >
+    {/* Icon SVG or Image */}
+    <svg className="w-6 h-6" /* ... */>
+      {/* WhatsApp icon */}
+    </svg>
+  </a>
+  
+  {/* THE TOOLTIP - This is the critical part */}
+  <span 
+    className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 transition-opacity group-hover:opacity-100 whitespace-nowrap"
+    style={{
+      // Fallback inline styles to ensure visibility
+      backgroundColor: '#ffffff',
+      color: '#111827',
+      borderRadius: '0.5rem',
+      padding: '0.5rem 1rem',
+      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+      border: '1px solid #e5e7eb'
+    }}
+  >
+    WhatsApp
+  </span>
+</div>
+Repeat for all 4 social icons (WhatsApp, Instagram, LinkedIn, Facebook)
+
+Alternative: If Using Tailwind @apply
+If you're using CSS with @apply, create this in your CSS file:
+css/* In your CSS file (globals.css or component CSS) */
+.social-tooltip {
+  @apply absolute left-1/2 -translate-x-1/2 bottom-full mb-2;
+  @apply px-4 py-2 text-sm font-medium text-gray-900;
+  @apply bg-white rounded-lg shadow-lg border border-gray-200;
+  @apply opacity-0 transition-opacity whitespace-nowrap pointer-events-none;
+  
+  /* Force these in case of conflicts */
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+}
+
+.group:hover .social-tooltip {
+  @apply opacity-100;
+}
+Then use it:
+jsx<div className="relative inline-flex group">
+  <a href="..." className="...">Icon</a>
+  <span className="social-tooltip">WhatsApp</span>
+</div>
+
+DEBUG CHECKLIST
+Before responding that it's fixed, verify ALL of these:
+
+ Can you see a WHITE or COLORED background box when hovering?
+ Are the corners of the box rounded?
+ Is there visible padding space around the text inside the box?
+ Is there a subtle shadow around the box?
+ Does the box have a border outline?
+ Does the background completely surround the text?
+ Test on all 4 icons (WhatsApp, Instagram, LinkedIn, Facebook)
+
+
+If Still Not Working
+If the above doesn't work, there may be a fundamental structural issue. In that case:
+
+Share the COMPLETE file containing the social media icons
+Share any CSS files that might affect tooltips
+Check tailwind.config.js - ensure the tooltip classes aren't being purged
+Try a completely different approach - use a proven tooltip library like react-tooltip or @radix-ui/react-tooltip
+
+The background box MUST be visible - this is not a transparency issue, it's a rendering issue.
