@@ -1,0 +1,90 @@
+# Fix Social Media Tooltip - Missing Background/Border Issue
+
+## Problem Description
+The social media tooltip section contains 4 icons (WhatsApp, Facebook, Instagram, LinkedIn) with hover tooltips. The WIDTH issue has been resolved, but now the tooltip is missing its visual container - there is NO white/colored background block with rounded corners visible around the text.
+
+## Current Behavior (AFTER SECOND FIX ATTEMPT)
+- Looking at the WhatsApp tooltip: only the text "WhatsApp" is visible
+- The background container (white/gray block with rounded corners) is NOT showing
+- The text appears to be floating without any background box
+- The rounded corner container that should wrap the text is missing or invisible
+
+## Required Fix - MISSING BACKGROUND CONTAINER
+
+**IMPORTANT: The tooltip text is showing but the background box/container is missing.**
+
+### Step 1: Diagnose the background issue
+
+The tooltip container needs VISIBLE styling. Check these issues:
+
+**A. Missing background color:**
+```jsx
+// WRONG - no visible background
+className="text-white"  // Only text color, no background
+
+// CORRECT - visible background
+className="bg-gray-900 text-white"  // Dark background with white text
+// OR
+className="bg-white text-gray-900 border border-gray-300"  // White background with dark text
+```
+
+**B. Transparent or invisible background:**
+```jsx
+// Check if background is set but transparent
+className="bg-transparent"  // WRONG - invisible
+className="bg-opacity-0"    // WRONG - invisible
+
+// Should be solid
+className="bg-gray-900"     // CORRECT - visible dark background
+className="bg-white"        // CORRECT - visible white background
+```
+
+**C. Missing rounded corners:**
+```jsx
+// Should include border-radius
+className="rounded-lg"      // Large rounded corners
+// or
+className="rounded-md"      // Medium rounded corners
+```
+
+**D. Missing shadow (helps visibility):**
+```jsx
+// Add shadow to make tooltip stand out
+className="shadow-lg"       // Large shadow
+className="shadow-xl"       // Extra large shadow
+```
+
+### Step 2: Apply the COMPLETE tooltip styling
+
+Replace the tooltip element's className with this EXACT combination that includes ALL visual properties:
+
+```jsx
+className="absolute px-6 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-xl whitespace-nowrap w-auto min-w-fit"
+```
+
+**If you want a white/light tooltip instead:**
+```jsx
+className="absolute px-6 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-lg shadow-xl border border-gray-200 whitespace-nowrap w-auto min-w-fit"
+```
+
+**Explanation of VISUAL classes:**
+- `bg-gray-900` - Dark background (or `bg-white` for light)
+- `text-white` - White text (or `text-gray-900` for dark text on light bg)
+- `rounded-lg` - Rounded corners
+- `shadow-xl` - Drop shadow for depth
+- `border border-gray-200` - (Optional) Border for white backgrounds
+- `px-6 py-2.5` - Padding inside the box
+
+## Files to Check
+- Look for files containing social media components, typically in:
+  - `/components/SocialMedia.tsx` or `.jsx`
+  - `/components/Footer.tsx` or `/components/Header.tsx`
+  - `/app/` or `/pages/` directories
+  - Any file with "social", "tooltip", or "share" in the name
+
+## Additional Context
+- Tech stack: Next.js, React, Tailwind CSS
+- Issue occurs on web/desktop view with hover interaction
+- Four social platforms: WhatsApp, Facebook, Instagram, LinkedIn
+
+Please analyze the code, identify the root cause, implement the fix, and confirm the tooltips now display correctly with proper width.
