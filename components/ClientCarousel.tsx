@@ -101,7 +101,7 @@ export default function ClientCarousel({ className, reveal = false }: Readonly<{
   };
   return (
     <section aria-label="Our clients and partners" className={clsx('w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
-      <div className="overflow-hidden py-4 md:py-6">
+      <div className="overflow-hidden py-16 md:py-24 min-h-[500px] md:min-h-[600px]">
         <div className="marquee" aria-hidden="true">
           <ul className="marquee-track" style={trackStyle}>
             {looped.map((c) => (

@@ -1,0 +1,219 @@
+# Fix Carousel Container - Allow Full Block Visibility
+
+## The Real Problem:
+The carousel blocks are 3X bigger, but the container height is limiting visibility. We need to increase the container height and spacing so only 4 blocks are visible at once (not 7).
+
+## Solution:
+
+### 1. Increase Container Padding (Top/Bottom)
+
+Find the carousel container wrapper and increase vertical padding:
+```tsx
+// Find this in ClientCarousel.tsx or the parent component:
+<div className="w-full overflow-hidden py-16">
+
+// Change to (MUCH MORE padding):
+<div className="w-full overflow-hidden py-32 md:py-40">
+// py-32 = 128px top/bottom
+// py-40 = 160px top/bottom on desktop
+```
+
+### 2. Ensure Container Doesn't Clip Height
+
+Make sure the overflow container allows full block height:
+```tsx
+// The carousel track container should be:
+<div className="relative overflow-hidden" style={{ minHeight: '500px' }}>
+  <div className="flex gap-8 animate-scroll">
+    {/* blocks here */}
+  </div>
+</div>
+
+// Or with Tailwind:
+<div className="relative overflow-hidden min-h-[500px] md:min-h-[600px]">
+  <div className="flex gap-8 animate-scroll">
+    {/* blocks here */}
+  </div>
+</div>
+```
+
+### 3. Increase Gap Between Blocks
+
+To ensure only 4 blocks visible at once, increase spacing:
+```tsx
+// Change from:
+<div className="flex gap-8 animate-scroll">
+
+// To (larger gap):
+<div className="flex gap-12 md:gap-16 animate-scroll">
+// gap-12 = 48px between blocks
+// gap-16 = 64px between blocks on desktop
+```
+
+### 4. Complete Updated ClientCarousel Component
+
+Replace the entire component with this:
+```tsx
+'use client';
+import clsx from 'clsx';
+
+const clients = [
+  { name: 'Lanseria Flight Centre', url: 'https://flylfc.co.za' },
+  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaircraftparts.com' },
+  { name: 'Aviation Rebuilders', url: 'https://aviationrebuilders.co.za' },
+  { name: 'Skytrim', url: 'https://skytrim.co.za' },
+  { name: 'NAC', url: 'https://nac.co.za' },
+  { name: 'Alton Aero Engineering', url: 'https://altonaero.co.za' },
+  { name: 'Wingman Aircraft Maintenance', url: 'https://wingman.co.za' },
+  { name: 'Pablo Clark', url: 'https://pabloclark.com' },
+  { name: 'WCT Engineering', url: 'https://wctengineering.co.za' },
+  { name: '208 Aviation', url: 'https://208aviation.com' },
+  { name: 'Acher Aviation', url: 'https://archeraviation.co.za' },
+  { name: 'Skyhawk Aviation', url: 'https://skyhawkaviation.co.za' },
+  { name: 'Orion Aircraft', url: 'https://orioncub.com' },
+  { name: 'Emperor Aviation', url: 'https://emperoraviation.co.za' },
+];
+
+export function ClientCarousel() {
+  return (
+    <div className="w-full overflow-hidden py-32 md:py-40">
+      <h2 className="text-center text-white text-5xl md:text-6xl font-bold mb-16">
+        TRUSTED BY
+      </h2>
+      
+      <div className="relative overflow-hidden min-h-[500px] md:min-h-[600px]">
+        <div className="flex gap-12 md:gap-16 animate-scroll items-center">
+          {/* First set */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0 transition-transform hover:scale-105"
+              >
+                <svg 
+                  className="h-96 md:h-[432px] w-auto" 
+                  viewBox="0 0 1140 390"
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <rect 
+                    x="3" 
+                    y="3" 
+                    width="1134" 
+                    height="384" 
+                    rx="42"
+                    stroke="white" 
+                    strokeWidth="6" 
+                    strokeOpacity="0.85" 
+                    fill="none"
+                  />
+                  
+                  <text 
+                    fontSize="54"
+                    fontWeight="500"
+                    letterSpacing="0.06em" 
+                    fill="white" 
+                    fillOpacity="1" 
+                    textAnchor="middle"
+                  >
+                    {isTwoLines ? (
+                      <>
+                        <tspan x="570" y="38%">{firstLine}</tspan>
+                        <tspan x="570" y="62%">{secondLine}</tspan>
+                      </>
+                    ) : (
+                      <tspan x="570" y="50%">{client.name}</tspan>
+                    )}
+                  </text>
+                </svg>
+              </a>
+            );
+          })}
+          
+          {/* Duplicate for seamless loop */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-dup-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0 transition-transform hover:scale-105"
+              >
+                <svg 
+                  className="h-96 md:h-[432px] w-auto" 
+                  viewBox="0 0 1140 390"
+                  preserveAspectRatio="xMidYMid meet"
+                >
+                  <rect 
+                    x="3" 
+                    y="3" 
+                    width="1134" 
+                    height="384" 
+                    rx="42"
+                    stroke="white" 
+                    strokeWidth="6" 
+                    strokeOpacity="0.85" 
+                    fill="none"
+                  />
+                  
+                  <text 
+                    fontSize="54"
+                    fontWeight="500"
+                    letterSpacing="0.06em" 
+                    fill="white" 
+                    fillOpacity="1" 
+                    textAnchor="middle"
+                  >
+                    {isTwoLines ? (
+                      <>
+                        <tspan x="570" y="38%">{firstLine}</tspan>
+                        <tspan x="570" y="62%">{secondLine}</tspan>
+                      </>
+                    ) : (
+                      <tspan x="570" y="50%">{client.name}</tspan>
+                    )}
+                  </text>
+                </svg>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Key Changes:
+
+1. **Container padding**: `py-32 md:py-40` (much more vertical space)
+2. **Container min-height**: `min-h-[500px] md:min-h-[600px]` (allows full block visibility)
+3. **Block spacing**: `gap-12 md:gap-16` (larger gaps between blocks)
+4. **Title size**: Increased to `text-5xl md:text-6xl` to match larger blocks
+5. **Title margin**: Increased to `mb-16` for more spacing
+6. **Added `items-center`**: Vertically centers blocks in container
+7. **Added `preserveAspectRatio`**: Ensures SVG renders at correct size
+8. **Added hover effect**: `hover:scale-105` for interactive feedback
+
+## Result:
+- Only **4 blocks visible** at once on desktop (not 7)
+- Full block height visible (not clipped)
+- More prominent carousel section
+- Proper spacing above and below
+
+After applying these changes, clear cache and hard refresh!
