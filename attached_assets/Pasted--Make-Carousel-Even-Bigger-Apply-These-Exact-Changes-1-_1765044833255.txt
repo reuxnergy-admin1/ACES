@@ -1,0 +1,119 @@
+# Make Carousel Even Bigger
+
+## Apply These Exact Changes:
+
+### 1. SVG Container Height
+```jsx
+// Change from:
+<svg className="h-48 md:h-56 w-auto">
+
+// To (MUCH BIGGER):
+<svg className="h-96 md:h-[28rem] w-auto">
+```
+
+### 2. ViewBox Dimensions
+```jsx
+// Change from:
+viewBox="0 0 672 212"
+
+// To (DOUBLE):
+viewBox="0 0 1344 424"
+```
+
+### 3. Rect (Border Box) Size
+```jsx
+// Change from:
+<rect 
+  x="1" 
+  y="1" 
+  width="668" 
+  height="208"
+  rx="28"
+  stroke="white"
+  strokeWidth="4"
+
+// To (DOUBLE):
+<rect 
+  x="2" 
+  y="2" 
+  width="1336" 
+  height="416"
+  rx="56"
+  stroke="white"
+  strokeWidth="8"
+```
+
+### 4. Text Font Size
+```jsx
+// Change from:
+<text fontSize="30" ...>
+
+// To (DOUBLE):
+<text fontSize="60" ...>
+```
+
+### 5. Text X Position (for centering)
+```jsx
+// Change from:
+<tspan x="336" y="50%">  // or whatever the current x value is
+
+// To (DOUBLE - to match new viewBox width of 1344):
+<tspan x="672" y="50%">  // 1344 / 2 = 672
+```
+
+### 6. Two-Line Text Positions
+```jsx
+// For two-line names, update x position:
+<tspan x="672" y="38%">{firstLine}</tspan>
+<tspan x="672" y="62%">{secondLine}</tspan>
+```
+
+## Complete Updated SVG Example:
+```jsx
+<svg className="h-96 md:h-[28rem] w-auto" viewBox="0 0 1344 424">
+  <rect 
+    x="2" 
+    y="2" 
+    width="1336" 
+    height="416" 
+    rx="56"
+    stroke="white" 
+    strokeWidth="8" 
+    strokeOpacity="0.85" 
+    fill="none"
+  />
+  
+  <text 
+    fontSize="60" 
+    fontWeight="500"
+    letterSpacing="0.06em" 
+    fill="white" 
+    fillOpacity="1" 
+    textAnchor="middle"
+  >
+    {/* Single line */}
+    <tspan x="672" y="50%">{client.name}</tspan>
+    
+    {/* OR for two lines */}
+    <tspan x="672" y="38%">{firstLine}</tspan>
+    <tspan x="672" y="62%">{secondLine}</tspan>
+  </text>
+</svg>
+```
+
+## Summary of All Changes:
+
+| Property | Before | After |
+|----------|--------|-------|
+| SVG Height | `h-48 md:h-56` | `h-96 md:h-[28rem]` |
+| ViewBox | `672 x 212` | `1344 x 424` |
+| Rect Size | `668 x 208` | `1336 x 416` |
+| Border Radius | `rx="28"` | `rx="56"` |
+| Stroke Width | `4px` | `8px` |
+| Font Size | `30` | `60` |
+| Text X Position | `336` | `672` |
+| Rect Offset | `x="1" y="1"` | `x="2" y="2"` |
+
+All text remains consistent at `fontSize="60"` across single-line and two-line names.
+
+This will make the carousel blocks significantly larger and more prominent!
