@@ -1,24 +1,19 @@
 'use client';
 import clsx from 'clsx';
 
-type Client = {
-  name: string;
-  url: string;
-};
-
-const clients: Client[] = [
-  { name: 'Lanseria Flight Centre', url: 'https://www.flylfc.com' },
-  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaviation.co.za' },
-  { name: 'Aviation Rebuilders', url: 'https://aviation-rebuilders-cc.business.site' },
+const clients = [
+  { name: 'Lanseria Flight Centre', url: 'https://flylfc.co.za' },
+  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaircraftparts.com' },
+  { name: 'Aviation Rebuilders', url: 'https://aviationrebuilders.co.za' },
   { name: 'Skytrim', url: 'https://skytrim.co.za' },
-  { name: 'National Airways Corporation', url: 'https://www.nac.co.za' },
-  { name: 'Alton Aero Engineering', url: 'https://www.altonaero.co.za' },
-  { name: 'Wingman Aircraft Maintenance', url: 'https://wingmansa.co.za' },
-  { name: 'Pablo Clark', url: 'https://www.pabloclark.com' },
-  { name: 'WCT Engineering', url: 'https://www.wct.engineering' },
-  { name: '208 Aviation', url: 'https://www.208aviation.com' },
-  { name: 'Acher Aviation Helicopters', url: 'https://www.acheraviation.com' },
-  { name: 'Skyhawk Aviation', url: 'https://skyhawk.co.za' },
+  { name: 'NAC', url: 'https://nac.co.za' },
+  { name: 'Alton Aero Engineering', url: 'https://altonaero.co.za' },
+  { name: 'Wingman Aircraft Maintenance', url: 'https://wingman.co.za' },
+  { name: 'Pablo Clark', url: 'https://pabloclark.com' },
+  { name: 'WCT Engineering', url: 'https://wctengineering.co.za' },
+  { name: '208 Aviation', url: 'https://208aviation.com' },
+  { name: 'Acher Aviation', url: 'https://archeraviation.co.za' },
+  { name: 'Skyhawk Aviation', url: 'https://skyhawkaviation.co.za' },
   { name: 'Orion Aircraft', url: 'https://orioncub.com' },
   { name: 'Emperor Aviation', url: 'https://emperoraviation.co.za' },
 ];
@@ -40,11 +35,11 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       <svg
         aria-hidden="true"
         focusable="false"
-        className="h-24 md:h-28 w-auto text-white"
-        viewBox="0 0 336 106"
+        className="h-32 md:h-36 w-auto text-white"
+        viewBox="0 0 380 130"
         fill="none"
       >
-        <rect x="1" y="1" width="334" height="104" rx="14" stroke="currentColor" strokeOpacity="0.85" strokeWidth="2" />
+        <rect x="1" y="1" width="378" height="128" rx="14" stroke="currentColor" strokeOpacity="0.85" strokeWidth="2" />
         {isTwoLines ? (
           <>
             <text
@@ -52,7 +47,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
               y="38%"
               dominantBaseline="middle"
               textAnchor="middle"
-              fontSize="15"
+              fontSize="18"
               fill="currentColor"
               fillOpacity="1"
               style={{ letterSpacing: '0.06em' }}
@@ -64,7 +59,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
               y="62%"
               dominantBaseline="middle"
               textAnchor="middle"
-              fontSize="15"
+              fontSize="18"
               fill="currentColor"
               fillOpacity="1"
               style={{ letterSpacing: '0.06em' }}
@@ -78,7 +73,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
             y="50%"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize="15"
+            fontSize="18"
             fill="currentColor"
             fillOpacity="1"
             style={{ letterSpacing: '0.06em' }}
@@ -100,8 +95,8 @@ export default function ClientCarousel({ className, reveal = false }: Readonly<{
     ['--marquee-duration']: '60s',
   };
   return (
-    <section aria-label="Our clients and partners" className={clsx('w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
-      <div className="overflow-hidden py-4 md:py-6">
+    <section aria-label="Trusted clients" className={clsx('container-row w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
+      <div className="overflow-hidden py-3 md:py-4">
         <div className="marquee" aria-hidden="true">
           <ul className="marquee-track" style={trackStyle}>
             {looped.map((c) => (
@@ -115,9 +110,7 @@ export default function ClientCarousel({ className, reveal = false }: Readonly<{
 
       <ul className="sr-only">
         {clients.map((c) => (
-          <li key={c.name}>
-            <a href={c.url} target="_blank" rel="noopener noreferrer">{c.name}</a>
-          </li>
+          <li key={c.name}>{c.name}</li>
         ))}
       </ul>
     </section>
