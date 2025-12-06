@@ -230,7 +230,11 @@ export function Nav() {
     anchors[nextIdx]?.focus();
   }, [items]);
   // Feature flag check: only enable sheen interaction when html has .feature-chronicle-ui
-  const chronicleOn = typeof document !== 'undefined' ? document.documentElement.classList.contains('feature-chronicle-ui') : false;
+  const [chronicleOn, setChronicleOn] = useState(false);
+  
+  useEffect(() => {
+    setChronicleOn(document.documentElement.classList.contains('feature-chronicle-ui'));
+  }, []);
 
   useEffect(() => {
     if (!chronicleOn) return;

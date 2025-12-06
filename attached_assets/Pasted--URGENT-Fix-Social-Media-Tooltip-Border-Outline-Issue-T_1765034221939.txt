@@ -1,0 +1,208 @@
+# URGENT: Fix Social Media Tooltip Border/Outline Issue
+
+## The Actual Problem
+The tooltip text "WhatsApp" displays correctly, but **the BORDER/OUTLINE box around the text is not visible**. 
+
+### What Should Appear:
+- Text "WhatsApp" (white or colored text) ✓ WORKING
+- **A visible BORDER/OUTLINE** forming a rounded rectangle around the text ✗ NOT SHOWING
+- Transparent/clear background inside the box (this is correct)
+- Rounded corners on the border
+- The border should fully enclose the text with padding
+
+### What's Currently Showing:
+- Only the text "WhatsApp" is visible
+- NO border/outline box around the text
+- Background is correctly transparent, but there's no visible border frame
+
+---
+
+## THE FIX - Add Border/Outline to Tooltip
+
+The tooltip needs a **visible border**, not a background. Here's what to do:
+
+### Step 1: Locate the Tooltip Element
+Find the tooltip span/div that contains the text "WhatsApp", "Instagram", etc.
+
+### Step 2: Add Border Classes
+
+**If currently the tooltip has classes like:**
+```jsx
+className="absolute px-4 py-2 text-white rounded-lg"
+```
+
+**Change it to include BORDER:**
+```jsx
+className="absolute px-4 py-2 text-white rounded-lg border-2 border-white"
+```
+
+**Key classes needed:**
+- `border-2` or `border` - Creates the border line
+- `border-white` - Makes border white (or `border-gray-300` for light border)
+- `rounded-lg` - Rounded corners
+- `px-4 py-2` - Padding inside the border
+
+---
+
+## COMPLETE SOLUTION - Copy This Exact Code
+
+Replace your tooltip implementation with this:
+
+```jsx
+<div className="relative inline-flex items-center justify-center group">
+  {/* Icon button */}
+  <a 
+    href="https://wa.me/YOUR_NUMBER" 
+    className="flex items-center justify-center w-12 h-12 rounded-full hover:bg-gray-100 transition-colors"
+  >
+    {/* Icon SVG */}
+    <svg className="w-6 h-6">
+      {/* WhatsApp icon */}
+    </svg>
+  </a>
+  
+  {/* TOOLTIP WITH VISIBLE BORDER - NO BACKGROUND */}
+  <span 
+    className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-4 py-2 text-sm font-medium text-white rounded-lg border-2 border-white opacity-0 transition-opacity group-hover:opacity-100 whitespace-nowrap"
+  >
+    WhatsApp
+  </span>
+</div>
+```
+
+**Critical classes for visible border:**
+- `border-2` - 2px thick border
+- `border-white` - White border color
+- `rounded-lg` - Rounded corners  
+- **NO `bg-*` class** - Keeps background transparent
+- `text-white` - White text
+
+---
+
+## Alternative Border Styles
+
+### Option 1: White border with white text (for dark backgrounds)
+```jsx
+className="absolute px-4 py-2 text-white text-sm font-medium rounded-lg border-2 border-white opacity-0 group-hover:opacity-100 whitespace-nowrap"
+```
+
+### Option 2: Dark border with dark text (for light backgrounds)
+```jsx
+className="absolute px-4 py-2 text-gray-900 text-sm font-medium rounded-lg border-2 border-gray-900 opacity-0 group-hover:opacity-100 whitespace-nowrap"
+```
+
+### Option 3: Gray border with shadow
+```jsx
+className="absolute px-4 py-2 text-gray-900 text-sm font-medium rounded-lg border-2 border-gray-300 shadow-lg opacity-0 group-hover:opacity-100 whitespace-nowrap"
+```
+
+### Option 4: Thicker border (more visible)
+```jsx
+className="absolute px-4 py-2 text-white text-sm font-medium rounded-lg border-[3px] border-white opacity-0 group-hover:opacity-100 whitespace-nowrap"
+```
+
+---
+
+## If Tailwind Border Classes Don't Work
+
+Use inline styles as a fallback:
+
+```jsx
+<span 
+  className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-4 py-2 text-sm font-medium text-white rounded-lg opacity-0 transition-opacity group-hover:opacity-100 whitespace-nowrap"
+  style={{
+    border: '2px solid white',
+    borderRadius: '0.5rem',
+    backgroundColor: 'transparent'
+  }}
+>
+  WhatsApp
+</span>
+```
+
+---
+
+## Debug Checklist
+
+When hovering over the icon, verify in browser DevTools:
+
+- [ ] Does the tooltip element have `border-width: 2px` (or similar)?
+- [ ] Does it have `border-color: white` (or another color)?
+- [ ] Is `border-style: solid`?
+- [ ] Does it have `border-radius` for rounded corners?
+- [ ] Is `background-color: transparent` or `rgba(0,0,0,0)`?
+
+If any of these are missing or set to `none`/`0`, that's the problem.
+
+---
+
+## Common Issues That Prevent Borders from Showing
+
+### Issue 1: Border color matches background
+```jsx
+// WRONG - white border on white background (invisible)
+<div className="bg-white">
+  <span className="border-2 border-white">Text</span>
+</div>
+
+// CORRECT - contrasting border color
+<div className="bg-white">
+  <span className="border-2 border-gray-900">Text</span>
+</div>
+```
+
+### Issue 2: Border width is 0 or not set
+```jsx
+// WRONG - no border width
+className="border-white"  // border-width defaults to 0
+
+// CORRECT - explicit border width
+className="border-2 border-white"  // 2px border
+```
+
+### Issue 3: CSS reset removing borders
+```css
+/* Check if your CSS has: */
+* { border: none; }  /* This removes all borders */
+span { border: 0; }   /* This removes borders on spans */
+```
+
+---
+
+## Final Implementation
+
+**For DARK background websites (border should be WHITE):**
+```jsx
+<span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-5 py-2 text-sm font-medium text-white rounded-lg border-2 border-white opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity duration-200">
+  WhatsApp
+</span>
+```
+
+**For LIGHT background websites (border should be DARK):**
+```jsx
+<span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-5 py-2 text-sm font-medium text-gray-900 rounded-lg border-2 border-gray-900 opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none transition-opacity duration-200">
+  WhatsApp
+</span>
+```
+
+Choose based on your website's background color where the icons appear.
+
+---
+
+## Verification Steps
+
+After implementing, hover over each icon and confirm:
+
+1. ✓ Text is visible
+2. ✓ A border/outline box surrounds the text
+3. ✓ The border has rounded corners
+4. ✓ There is padding space between text and border
+5. ✓ Background inside the border is transparent/clear
+6. ✓ Border is clearly visible against the page background
+
+If the border is still not showing, the issue is likely:
+- Wrong border color (same as background, making it invisible)
+- CSS override removing borders
+- Border width set to 0
+
+**In that case, share a screenshot of the DevTools inspection of the tooltip element while hovering.**

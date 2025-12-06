@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web", "python-3.11"]
+modules = ["web", "python-3.11", "nodejs-22"]
 [agent]
 expertMode = true
 integrations = ["github:1.0.0"]
@@ -23,21 +23,21 @@ args = "Next.js Development Server"
 name = "Next.js Development Server"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "pnpm dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 33207
-externalPort = 3001
+localPort = 34231
+externalPort = 6000
 
 [[ports]]
 localPort = 34769
@@ -50,6 +50,10 @@ externalPort = 3000
 [[ports]]
 localPort = 37521
 externalPort = 4200
+
+[[ports]]
+localPort = 39467
+externalPort = 3001
 
 [[ports]]
 localPort = 40479
