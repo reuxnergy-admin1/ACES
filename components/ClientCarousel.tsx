@@ -40,11 +40,11 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       <svg
         aria-hidden="true"
         focusable="false"
-        className="h-96 md:h-[432px] w-auto text-white"
-        viewBox="0 0 1140 390"
+        className="h-[640px] md:h-[720px] w-auto text-white"
+        viewBox="0 0 1900 650"
         fill="none"
       >
-        <rect x="3" y="3" width="1134" height="384" rx="42" stroke="currentColor" strokeOpacity="0.85" strokeWidth="6" />
+        <rect x="5" y="5" width="1890" height="640" rx="70" stroke="currentColor" strokeOpacity="0.85" strokeWidth="10" />
         {isTwoLines ? (
           <>
             <text
@@ -52,7 +52,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
               y="38%"
               dominantBaseline="middle"
               textAnchor="middle"
-              fontSize="54"
+              fontSize="90"
               fill="currentColor"
               fillOpacity="1"
               style={{ letterSpacing: '0.06em' }}
@@ -64,7 +64,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
               y="62%"
               dominantBaseline="middle"
               textAnchor="middle"
-              fontSize="54"
+              fontSize="90"
               fill="currentColor"
               fillOpacity="1"
               style={{ letterSpacing: '0.06em' }}
@@ -101,7 +101,7 @@ export default function ClientCarousel({ className, reveal = false }: Readonly<{
   };
   return (
     <section aria-label="Our clients and partners" className={clsx('w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
-      <div className="overflow-hidden py-16 md:py-24 min-h-[500px] md:min-h-[600px]">
+      <div className="overflow-hidden py-12">
         <div className="marquee" aria-hidden="true">
           <ul className="marquee-track" style={trackStyle}>
             {looped.map((c) => (
