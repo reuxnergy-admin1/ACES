@@ -78,7 +78,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
             y="50%"
             dominantBaseline="middle"
             textAnchor="middle"
-            fontSize="60"
+            fontSize="54"
             fill="currentColor"
             fillOpacity="1"
             style={{ letterSpacing: '0.06em' }}
