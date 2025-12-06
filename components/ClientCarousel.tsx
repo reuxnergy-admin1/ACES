@@ -40,11 +40,11 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       <svg
         aria-hidden="true"
         focusable="false"
-        className="h-96 md:h-[28rem] w-auto text-white"
-        viewBox="0 0 1344 424"
+        className="h-96 md:h-[432px] w-auto text-white"
+        viewBox="0 0 1140 390"
         fill="none"
       >
-        <rect x="2" y="2" width="1336" height="416" rx="56" stroke="currentColor" strokeOpacity="0.85" strokeWidth="8" />
+        <rect x="3" y="3" width="1134" height="384" rx="42" stroke="currentColor" strokeOpacity="0.85" strokeWidth="6" />
         {isTwoLines ? (
           <>
             <text
@@ -52,7 +52,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
               y="38%"
               dominantBaseline="middle"
               textAnchor="middle"
-              fontSize="60"
+              fontSize="54"
               fill="currentColor"
               fillOpacity="1"
               style={{ letterSpacing: '0.06em' }}
@@ -64,7 +64,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
               y="62%"
               dominantBaseline="middle"
               textAnchor="middle"
-              fontSize="60"
+              fontSize="54"
               fill="currentColor"
               fillOpacity="1"
               style={{ letterSpacing: '0.06em' }}
