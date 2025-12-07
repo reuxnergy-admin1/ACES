@@ -109,7 +109,7 @@ export default function Page() {
             ].map(([n, t, d]) => (
               <div key={n} className="md:col-span-4 border-t border-white/10 pt-4">
                 <div className="text-white text-sm uc tracking-[0.12em] text-center md:text-left">{n}</div>
-                <div className="mt-1 body text-white text-left">{t}</div>
+                <div className="mt-1 body text-white text-center md:text-left">{t}</div>
                 <div className="mt-1 body text-white text-sm text-left">{d}</div>
               </div>
             ))}
@@ -124,7 +124,7 @@ export default function Page() {
             <Span cols={12} className="text-center md:text-left">
               <Prose className="mx-auto md:mx-0 md:ml-0">
                 <h2 className="text-center md:text-left mb-4">Compliance and QA</h2>
-                <p className="text-center md:text-left">Documented process control with full traceability and optical inspection. Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.</p>
+                <p className="text-left">Documented process control with full traceability and optical inspection. Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.</p>
               </Prose>
             </Span>
             <SheenCard className="md:col-span-6" data-reveal>
