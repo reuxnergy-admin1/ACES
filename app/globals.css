@@ -608,7 +608,7 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   width: max-content;
   white-space: nowrap;
   animation: marquee-linear var(--marquee-duration, 36s) linear infinite;
-  animation-play-state: paused;
+  will-change: transform;
 }
 .marquee-item { flex: 0 0 auto; opacity: 0.85; }
 .marquee-item:hover { opacity: 1; }
@@ -621,9 +621,6 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 @media (prefers-reduced-motion) {
   .marquee-track { animation: none; }
 }
-
-/* When carousel enters view, start marquee */
-[data-reveal].is-inview .marquee-track { animation-play-state: running; }
 
 /* SVG blob overlay container */
 .pt-blob-svg { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
