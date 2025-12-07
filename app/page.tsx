@@ -107,10 +107,10 @@ export default function Page() {
               ['02', 'Production', 'Robust processes, repeatable quality, flight-ready windows.'],
               ['03', 'QA, Documentation, Delivery', 'Optical checks and release documentation delivered with pace.'],
             ].map(([n, t, d]) => (
-              <div key={n} className="md:col-span-4 border-t border-white/10 pt-4 text-center md:text-left">
-                <div className="text-white text-sm uc tracking-[0.12em]">{n}</div>
-                <div className="mt-1 body text-white">{t}</div>
-                <div className="mt-1 body text-white text-sm">{d}</div>
+              <div key={n} className="md:col-span-4 border-t border-white/10 pt-4">
+                <div className="text-white text-sm uc tracking-[0.12em] text-center md:text-left">{n}</div>
+                <div className="mt-1 body text-white text-left">{t}</div>
+                <div className="mt-1 body text-white text-sm text-left">{d}</div>
               </div>
             ))}
           </Grid12>
@@ -157,20 +157,22 @@ export default function Page() {
 
       {/* Order with ACES CTA */}
       <SectionBand>
-        <ContainerRow>
-          <div className="border-t border-b border-white/10 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <h2 className="text-2xl uc tracking-[0.08em] text-left">Order with ACES</h2>
-            <a href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap self-start md:self-auto">
-              <span aria-hidden="true" className="reveal-line h top" />
-              <span aria-hidden="true" className="reveal-line h bottom" />
-              <span aria-hidden="true" className="reveal-line v left" />
-              <span aria-hidden="true" className="reveal-line v right" />
-              <span className="sr-only">Request a Quote</span>
-              <span aria-hidden="true">Request a Quote</span>
-              <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
-            </a>
-          </div>
-        </ContainerRow>
+        <div className="border-t border-b border-white/10">
+          <ContainerRow>
+            <div className="py-8 flex flex-col items-center text-center md:flex-row md:items-center md:justify-between md:text-left gap-4">
+              <h2 className="text-2xl uc tracking-[0.08em]">Order with ACES</h2>
+              <a href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
+                <span aria-hidden="true" className="reveal-line h top" />
+                <span aria-hidden="true" className="reveal-line h bottom" />
+                <span aria-hidden="true" className="reveal-line v left" />
+                <span aria-hidden="true" className="reveal-line v right" />
+                <span className="sr-only">Request a Quote</span>
+                <span aria-hidden="true">Request a Quote</span>
+                <span className="arrow" aria-hidden="true" style={{ marginLeft: '0.4rem' }}>→</span>
+              </a>
+            </div>
+          </ContainerRow>
+        </div>
       </SectionBand>
 
       {/* Insights - Dormant until first article */}
