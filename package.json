@@ -27,6 +27,7 @@
     "merge:utility": "node ./scripts/branch-merge-utility.mjs"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^16.0.7",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/fiber": "^9.3.0",
     "clsx": "2.1.1",

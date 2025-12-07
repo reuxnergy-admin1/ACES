@@ -1,4 +1,10 @@
 @import "tailwindcss";
+
+/* Force font-display swap for faster text rendering */
+@font-face {
+  font-display: swap;
+}
+
 /* Theme tokens (moved from @theme to :root to avoid unknown at-rule warnings) */
 :root {
   color-scheme: dark;

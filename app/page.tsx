@@ -1,11 +1,16 @@
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import SheenCard from '@/components/SheenCard';
 import SectionBand from '@/components/layout/SectionBand';
 import ContainerRow from '@/components/layout/ContainerRow';
 import ContainerWide from '@/components/layout/ContainerWide';
 import { Grid12, Span } from '@/components/layout/Grid12';
 import Prose from '@/components/layout/Prose';
-import ClientCarousel from '@/components/ClientCarousel';
+
+const ClientCarousel = dynamic(() => import('@/components/ClientCarousel'), {
+  loading: () => <div className="h-32 animate-pulse bg-white/5 rounded-lg" />,
+  ssr: true,
+});
 
 export default function Page() {
   return (
