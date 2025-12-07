@@ -9,7 +9,7 @@ type Client = {
 const clients: Client[] = [
   { name: 'Lanseria Flight Centre', url: 'https://www.flylfc.com' },
   { name: 'Absolute Aircraft Parts', url: 'https://absoluteaviation.co.za' },
-  { name: 'Aviation Rebuilders', url: 'https://aviation-rebuilders-cc.business.site' },
+  { name: 'Aviation Rebuilders', url: 'https://focusedmedia.my.canva.site/aviationrebuilders' },
   { name: 'Skytrim', url: 'https://skytrim.co.za' },
   { name: 'National Airways Corporation', url: 'https://www.nac.co.za' },
   { name: 'Alton Aero Engineering', url: 'https://www.altonaero.co.za' },
@@ -35,9 +35,9 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex-shrink-0 inline-flex items-center justify-center px-3 py-1.5 md:px-7 md:py-3.5 border-2 border-white/85 rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[126px] md:min-w-[180px] h-[43px] md:h-[58px]"
+      className="flex-shrink-0 inline-flex items-center justify-center px-3 py-1.5 md:px-7 md:py-3.5 border-2 border-white/85 rounded-lg hover:border-white transition-colors min-w-[126px] md:min-w-[180px] h-[43px] md:h-[58px]"
     >
-      <span className="text-white text-xs md:text-sm font-medium text-center leading-tight tracking-wider hover:text-gray-900">
+      <span className="text-white text-xs md:text-sm font-medium text-center leading-tight tracking-wider">
         {isTwoLines ? (
           <>
             {line1}
