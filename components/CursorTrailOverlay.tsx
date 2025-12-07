@@ -115,7 +115,6 @@ export default function CursorTrailOverlay() {
       // Draw ripples first (behind cursor) - always white, 4 concentric circles per click
       for (const ripple of ripplesRef.current) {
         const age = (now - ripple.t) / rippleDurationMs;
-        const easeOut = 1 - Math.pow(1 - age, 2.5);
         
         const rx = Math.round(ripple.x * dpr) / dpr;
         const ry = Math.round(ripple.y * dpr) / dpr;

@@ -1,10 +1,8 @@
-import Link from 'next/link';
 import SheenCard from '@/components/SheenCard';
 import SectionBand from '@/components/layout/SectionBand';
 import ContainerRow from '@/components/layout/ContainerRow';
 import ContainerWide from '@/components/layout/ContainerWide';
 import { Grid12, Span } from '@/components/layout/Grid12';
-import Prose from '@/components/layout/Prose';
 
 export default function Page() {
   return (

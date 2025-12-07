@@ -1,7 +1,6 @@
 import ContainerWide from '@/components/layout/ContainerWide';
 import SectionBand from '@/components/layout/SectionBand';
 import { Grid12, Span } from '@/components/layout/Grid12';
-import Link from 'next/link';
 
 export default function Page() {
   return (

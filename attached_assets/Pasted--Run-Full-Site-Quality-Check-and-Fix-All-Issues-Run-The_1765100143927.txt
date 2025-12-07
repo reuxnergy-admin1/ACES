@@ -1,0 +1,162 @@
+# Run Full Site Quality Check and Fix All Issues
+
+## Run These Checks in Order:
+
+### 1. TypeScript Type Checking
+```bash
+# Check for TypeScript errors
+npx tsc --noEmit
+```
+Fix any type errors reported.
+
+### 2. ESLint (Code Quality & Formatting)
+```bash
+# Run ESLint to find issues
+npm run lint
+
+# Or with pnpm:
+pnpm lint
+
+# Auto-fix what can be fixed automatically
+npm run lint -- --fix
+# or
+pnpm lint --fix
+```
+
+### 3. Prettier (Code Formatting)
+```bash
+# Check formatting issues
+npx prettier --check .
+
+# Auto-fix formatting
+npx prettier --write .
+```
+
+### 4. Build Test
+```bash
+# Test if the site builds successfully
+npm run build
+# or
+pnpm build
+```
+This will catch any build-time errors.
+
+### 5. Check for Common Issues
+
+**A. Missing Dependencies:**
+```bash
+# Update dependencies if needed
+pnpm install
+```
+
+**B. Unused Imports:**
+Look for and remove any unused imports in files, especially:
+- `components/ClientCarousel.tsx`
+- `components/Footer.tsx`
+- `components/SocialIcons.tsx`
+
+**C. Console Errors:**
+Start the dev server and check browser console:
+```bash
+pnpm dev
+```
+Open browser DevTools console and look for:
+- React warnings
+- Hydration errors
+- 404 errors for missing resources
+
+### 6. Accessibility Check
+
+Check for basic a11y issues:
+- All images have `alt` attributes
+- Links have descriptive text or `aria-label`
+- Proper heading hierarchy (h1, h2, h3)
+- Color contrast is sufficient
+
+### 7. Performance Check
+
+Look for:
+- Large image files that should be optimized
+- Unused CSS or JavaScript
+- Too many re-renders in React components
+
+### 8. Specific Recent Changes Check
+
+Review these files we just modified:
+- `components/ClientCarousel.tsx` - Check for:
+  - Proper TypeScript types
+  - No console errors
+  - SVG rendering correctly
+  - Animation working smoothly
+- `components/Footer.tsx` - Check for:
+  - Tooltip logic working
+  - No hydration mismatches
+- `components/SocialIcons.tsx` - Check for:
+  - All social links working
+  - Proper hover states
+
+## Common Fixes:
+
+### Fix 1: Missing Types
+```typescript
+// If you get type errors, add proper types:
+interface Client {
+  name: string;
+  url: string;
+}
+
+const clients: Client[] = [
+  { name: 'Company Name', url: 'https://...' }
+];
+```
+
+### Fix 2: ESLint Rule Violations
+```typescript
+// Remove unused variables
+// Add missing dependencies to useEffect
+// Fix any React hooks rule violations
+```
+
+### Fix 3: Formatting Issues
+```bash
+# Let Prettier auto-fix everything
+npx prettier --write "**/*.{ts,tsx,js,jsx,json,css,md}"
+```
+
+### Fix 4: Build Errors
+If build fails:
+1. Check for syntax errors
+2. Verify all imports exist
+3. Check for missing environment variables
+4. Clear `.next` cache and rebuild:
+```bash
+rm -rf .next
+pnpm build
+```
+
+## Final Verification Checklist:
+
+After running all checks and fixes:
+
+- [ ] `pnpm lint` passes with no errors
+- [ ] `pnpm build` completes successfully
+- [ ] TypeScript has no type errors (`npx tsc --noEmit`)
+- [ ] Prettier formatting is consistent
+- [ ] Dev server runs without console errors
+- [ ] Carousel displays correctly at 3X size
+- [ ] Tooltips work properly
+- [ ] All links are functional
+- [ ] No hydration errors in browser console
+- [ ] Mobile responsive design works
+- [ ] Animations are smooth
+
+## Report Back:
+
+Please provide:
+1. Output of `pnpm lint`
+2. Output of `pnpm build`
+3. Any errors from `npx tsc --noEmit`
+4. Any console errors when running `pnpm dev`
+5. List of files that were modified to fix issues
+
+This will ensure the site is production-ready with no formatting, type, or runtime issues.
