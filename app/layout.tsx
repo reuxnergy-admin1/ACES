@@ -95,8 +95,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <head>
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
-        <link rel="preload" href="https://use.typekit.net/szi2mge.css" as="style" />
-        <link rel="stylesheet" href="https://use.typekit.net/szi2mge.css" />
+        <link rel="preload" href="https://use.typekit.net/szi2mge.css?display=swap" as="style" />
+        <link rel="stylesheet" href="https://use.typekit.net/szi2mge.css?display=swap" />
   {/* Pre-hydration capture script with CSP nonce - only modifies body classes to avoid SVG hydration mismatch */}
   <script nonce={nonce}>{`(()=>{try{var reduce=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)===true;if(reduce)return;function isInternal(a){if(!a)return false;var h=a.getAttribute?(a.getAttribute('href')||''):'';return h.indexOf('/')===0&&h.indexOf('/#')!==0}function clear(){document.body.classList.remove('cursor-hide-transition','pt-disable-scroll','pt-no-events')}function onClick(e){var t=e.target;if(!t||!t.closest)return;var a=t.closest('a[href]');if(!isInternal(a))return;document.body.classList.add('cursor-hide-transition','pt-disable-scroll','pt-no-events')}document.addEventListener('click',onClick,true)}catch(_){}})();`}</script>
       </head>

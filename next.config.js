@@ -10,7 +10,10 @@ const nextConfig = {
   trailingSlash: true,
   turbopack: {
     // Optional: configure Turbopack here.
-  }
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
 };
 
 module.exports = {
