@@ -101,15 +101,15 @@ export default function Page() {
       <SectionBand>
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12} className="text-center md:text-left"><h2 className="text-2xl uc tracking-[0.08em]">Our Three Step Process</h2></Span>
+            <Span cols={12} className="text-left"><h2 className="text-2xl uc tracking-[0.08em]">Our Three Step Process</h2></Span>
             {[
               ['01', 'Scope', 'Define requirements, constraints, and acceptance criteria.'],
               ['02', 'Production', 'Robust processes, repeatable quality, flight-ready windows.'],
               ['03', 'QA, Documentation, Delivery', 'Optical checks and release documentation delivered with pace.'],
             ].map(([n, t, d]) => (
               <div key={n} className="md:col-span-4 border-t border-white/10 pt-4">
-                <div className="text-white text-sm uc tracking-[0.12em] text-center md:text-left">{n}</div>
-                <div className="mt-1 body text-white text-center md:text-left">{t}</div>
+                <div className="text-white text-sm uc tracking-[0.12em] text-left">{n}</div>
+                <div className="mt-1 body text-white text-left">{t}</div>
                 <div className="mt-1 body text-white text-sm text-left">{d}</div>
               </div>
             ))}
@@ -121,20 +121,20 @@ export default function Page() {
       <SectionBand>
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12} className="text-center md:text-left">
-              <Prose className="mx-auto md:mx-0 md:ml-0">
-                <h2 className="text-center md:text-left mb-4">Compliance and QA</h2>
+            <Span cols={12} className="text-left">
+              <Prose className="md:mx-0 md:ml-0">
+                <h2 className="text-left mb-4">Compliance and QA</h2>
                 <p className="text-left">Documented process control with full traceability and optical inspection. Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.</p>
               </Prose>
             </Span>
             <SheenCard className="md:col-span-6" data-reveal>
-              <div className="block border border-white/10 rounded-2xl p-7 text-center md:text-left">
+              <div className="block border border-white/10 rounded-2xl p-7 text-left">
                 <div className="text-xl">MP39 - SACAA Approved</div>
                 <div className="mt-2 text-white">Proven Quality - 99.9% First Pass Yield Rate</div>
               </div>
             </SheenCard>
             <SheenCard className="md:col-span-6" data-reveal>
-              <div className="block border border-white/10 rounded-2xl p-7 text-center md:text-left">
+              <div className="block border border-white/10 rounded-2xl p-7 text-left">
                 <div className="text-xl">CA21-19 Airworthiness Approval Tag</div>
                 <div className="mt-2 text-white">Effortless Compliance</div>
               </div>
