@@ -1,0 +1,172 @@
+# Adjust Carousel - Increase Speed and Reduce Mobile Size
+
+## Changes Needed:
+
+### 1. Increase Animation Speed by 1.5X
+
+Find the CSS animation (in `globals.css` or `tailwind.config.js`):
+
+**Current:**
+```css
+.animate-scroll {
+  animation: scroll 60s linear infinite;
+}
+```
+
+**Change to (1.5X faster):**
+```css
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
+/* 60s ÷ 1.5 = 40s */
+```
+
+**Or if in tailwind.config.js:**
+```js
+animation: {
+  scroll: 'scroll 40s linear infinite'  // was 60s
+}
+```
+
+### 2. Reduce Block Size (Especially Mobile)
+
+In `components/ClientCarousel.tsx`, update the block className:
+
+**Current:**
+```tsx
+className="flex-shrink-0 inline-flex items-center justify-center px-8 py-4 border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[200px] h-16"
+```
+
+**Change to (smaller on mobile, normal on desktop):**
+```tsx
+className="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 md:px-8 md:py-4 border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[140px] md:min-w-[200px] h-12 md:h-16"
+```
+
+### 3. Reduce Text Size on Mobile
+
+**Current:**
+```tsx
+<span className="text-white text-sm font-medium text-center leading-tight">
+```
+
+**Change to (smaller on mobile):**
+```tsx
+<span className="text-white text-xs md:text-sm font-medium text-center leading-tight">
+```
+
+### 4. Complete Updated Component
+
+Replace the entire `ClientCarousel` component with this:
+```tsx
+'use client';
+
+const clients = [
+  { name: 'Lanseria Flight Centre', url: 'https://flylfc.co.za' },
+  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaircraftparts.com' },
+  { name: 'Aviation Rebuilders', url: 'https://aviationrebuilders.co.za' },
+  { name: 'Skytrim', url: 'https://skytrim.co.za' },
+  { name: 'NAC', url: 'https://nac.co.za' },
+  { name: 'Alton Aero Engineering', url: 'https://altonaero.co.za' },
+  { name: 'Wingman Aircraft Maintenance', url: 'https://wingman.co.za' },
+  { name: 'Pablo Clark', url: 'https://pabloclark.com' },
+  { name: 'WCT Engineering', url: 'https://wctengineering.co.za' },
+  { name: '208 Aviation', url: 'https://208aviation.com' },
+  { name: 'Acher Aviation', url: 'https://archeraviation.co.za' },
+  { name: 'Skyhawk Aviation', url: 'https://skyhawkaviation.co.za' },
+  { name: 'Orion Aircraft', url: 'https://orioncub.com' },
+  { name: 'Emperor Aviation', url: 'https://emperoraviation.co.za' },
+];
+
+export function ClientCarousel() {
+  return (
+    <div className="w-full overflow-hidden py-12 md:py-16">
+      <h2 className="text-center text-white text-2xl md:text-3xl font-bold mb-8 md:mb-12">
+        TRUSTED BY
+      </h2>
+      
+      <div className="relative overflow-hidden">
+        <div className="flex gap-4 md:gap-6 animate-scroll items-center">
+          {/* First set */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 md:px-8 md:py-4 border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[140px] md:min-w-[200px] h-12 md:h-16"
+              >
+                <span className="text-white text-xs md:text-sm font-medium text-center leading-tight">
+                  {isTwoLines ? (
+                    <>
+                      {firstLine}
+                      <br />
+                      {secondLine}
+                    </>
+                  ) : (
+                    client.name
+                  )}
+                </span>
+              </a>
+            );
+          })}
+          
+          {/* Duplicate for seamless loop */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-dup-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 md:px-8 md:py-4 border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[140px] md:min-w-[200px] h-12 md:h-16"
+              >
+                <span className="text-white text-xs md:text-sm font-medium text-center leading-tight">
+                  {isTwoLines ? (
+                    <>
+                      {firstLine}
+                      <br />
+                      {secondLine}
+                    </>
+                  ) : (
+                    client.name
+                  )}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Summary of Changes:
+
+| Property | Mobile | Desktop |
+|----------|--------|---------|
+| **Height** | `h-12` (48px) | `h-16` (64px) |
+| **Padding** | `px-4 py-2` | `px-8 py-4` |
+| **Min Width** | `min-w-[140px]` | `min-w-[200px]` |
+| **Text Size** | `text-xs` (12px) | `text-sm` (14px) |
+| **Gap** | `gap-4` (16px) | `gap-6` (24px) |
+| **Animation Speed** | **40s** (was 60s - 1.5X faster) |
+
+After applying:
+1. Carousel will scroll 1.5X faster
+2. Blocks will be smaller on mobile (but still readable)
+3. Blocks remain full size on desktop
+4. Better mobile experience overall

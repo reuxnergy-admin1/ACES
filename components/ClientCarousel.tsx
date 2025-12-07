@@ -35,9 +35,9 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex-shrink-0 inline-flex items-center justify-center px-8 py-4 border-2 border-white/85 rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[200px] h-16"
+      className="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 md:px-8 md:py-4 border-2 border-white/85 rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[140px] md:min-w-[200px] h-12 md:h-16"
     >
-      <span className="text-white text-sm font-medium text-center leading-tight tracking-wider hover:text-gray-900">
+      <span className="text-white text-xs md:text-sm font-medium text-center leading-tight tracking-wider hover:text-gray-900">
         {isTwoLines ? (
           <>
             {line1}
@@ -58,7 +58,7 @@ export default function ClientCarousel({ className, reveal = false }: Readonly<{
     ...clients.map((c) => ({ ...c, id: `${c.name}-b` })),
   ];
   const trackStyle: React.CSSProperties & { ['--marquee-duration']?: string } = {
-    ['--marquee-duration']: '60s',
+    ['--marquee-duration']: '40s',
   };
   return (
     <section aria-label="Our clients and partners" className={clsx('w-full', className)} {...(reveal ? { 'data-reveal': true } : {})}>
