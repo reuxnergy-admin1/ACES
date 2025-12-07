@@ -1,0 +1,109 @@
+# Update Next.js for Security - PRESERVE ALL FUNCTIONALITY
+
+## ⚠️ CRITICAL REQUIREMENTS:
+- **DO NOT change any text, layout, animations, or styling**
+- **DO NOT modify any components except if they break**
+- **DO NOT change any UI/UX elements**
+- **ONLY update Next.js version to fix security vulnerability**
+
+## Step 1: Backup Current State
+```bash
+# Create a backup branch first
+git checkout -b backup-before-nextjs-update
+git push origin backup-before-nextjs-update
+
+# Go back to main
+git checkout main
+```
+
+This ensures you can rollback if anything breaks.
+
+## Step 2: Check Current Next.js Version
+```bash
+cat package.json | grep "next"
+```
+
+## Step 3: Update ONLY Next.js (Minimal Update)
+```bash
+# Update to the minimum secure version (not latest, to minimize changes)
+pnpm update next@^15.0.3
+
+# DO NOT update React or other dependencies unless required
+```
+
+## Step 4: Test IMMEDIATELY After Update
+```bash
+# Clear cache
+rm -rf .next
+
+# Build and check for errors
+pnpm build
+```
+
+**If build succeeds:**
+- Start dev server: `pnpm dev`
+- Check EVERY page in the browser
+- Verify carousel animation works
+- Verify tooltips work
+- Verify all text is unchanged
+- Verify all layouts are identical
+
+**If build fails with errors:**
+Report the EXACT error messages - DO NOT try to fix by changing components.
+
+## Step 5: If Everything Works, Commit
+```bash
+git add package.json pnpm-lock.yaml
+
+git commit -m "Update Next.js to fix security vulnerability (no functional changes)"
+
+git push origin main
+```
+
+## Step 6: Watch Netlify Deploy Carefully
+
+After pushing:
+1. Watch the Netlify build log
+2. If deploy succeeds, immediately check the live site
+3. Verify everything looks and works EXACTLY the same
+
+## If ANYTHING Breaks or Changes:
+
+**STOP IMMEDIATELY and rollback:**
+```bash
+# Revert the commit
+git revert HEAD
+
+# Push the revert
+git push origin main
+
+# Or restore from backup branch
+git checkout backup-before-nextjs-update
+git checkout -b main-restored
+git push origin main-restored --force
+```
+
+Then report what broke so we can find a different solution.
+
+## What to Check After Deploy:
+
+- [ ] Carousel animation speed is still 1.5X (40s)
+- [ ] Carousel blocks are correct size
+- [ ] Carousel text is correct size
+- [ ] Social media tooltips show correctly
+- [ ] Tooltip borders work
+- [ ] All company names display correctly
+- [ ] No layout shifts anywhere
+- [ ] No font changes
+- [ ] No color changes
+- [ ] No spacing changes
+- [ ] All animations work smoothly
+- [ ] Mobile responsive design unchanged
+
+## Expected Result:
+
+- Security vulnerability fixed ✅
+- Site deploys to Netlify successfully ✅
+- **ZERO visual or functional changes** ✅
+
+If there are ANY changes to appearance or functionality, we need to rollback and try a different approach.
