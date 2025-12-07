@@ -1,6 +1,7 @@
 import './globals.css';
 import { cookies } from 'next/headers';
 import type { ReactNode } from 'react';
+import { Open_Sans } from 'next/font/google';
 import ContoursSVG from '@/components/ContoursSVG';
 import CursorTrailGate from '@/components/CursorTrailGate';
 import InViewReveals from '@/components/InViewReveals';
@@ -11,6 +12,14 @@ import ResponsiveContours from '@/components/ResponsiveContours';
 import ToastProvider from '@/components/ui/ToastProvider';
 import SkipLink from '@/components/SkipLink';
 import { getRequestNonce } from '@/lib/csp';
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-open-sans',
+});
 
 export const viewport = {
   themeColor: '#000000',
@@ -82,16 +91,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const chronicleOn = cookieStore.get('feature-chronicle-ui')?.value === '1';
   const nonce = await getRequestNonce();
   return (
-    <html lang="en" className={chronicleOn ? 'feature-chronicle-ui' : undefined}>
+    <html lang="en" className={`${openSans.variable} ${chronicleOn ? 'feature-chronicle-ui' : ''}`}>
       <head>
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="" />
         <link rel="preconnect" href="https://p.typekit.net" crossOrigin="" />
         <link rel="preload" href="https://use.typekit.net/szi2mge.css" as="style" />
         <link rel="stylesheet" href="https://use.typekit.net/szi2mge.css" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" as="style" />
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet" />
   {/* Pre-hydration capture script with CSP nonce - only modifies body classes to avoid SVG hydration mismatch */}
   <script nonce={nonce}>{`(()=>{try{var reduce=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)===true;if(reduce)return;function isInternal(a){if(!a)return false;var h=a.getAttribute?(a.getAttribute('href')||''):'';return h.indexOf('/')===0&&h.indexOf('/#')!==0}function clear(){document.body.classList.remove('cursor-hide-transition','pt-disable-scroll','pt-no-events')}function onClick(e){var t=e.target;if(!t||!t.closest)return;var a=t.closest('a[href]');if(!isInternal(a))return;document.body.classList.add('cursor-hide-transition','pt-disable-scroll','pt-no-events')}document.addEventListener('click',onClick,true)}catch(_){}})();`}</script>
       </head>

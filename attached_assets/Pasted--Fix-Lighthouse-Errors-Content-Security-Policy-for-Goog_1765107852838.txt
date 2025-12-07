@@ -1,0 +1,152 @@
+# Fix Lighthouse Errors - Content Security Policy for Google Fonts
+
+## Problem:
+The site is blocking Google Fonts (Open Sans) due to Content Security Policy (CSP) restrictions. The CSP allows `https://use.typekit.net` and `https://p.typekit.net` but blocks `https://fonts.googleapis.com`.
+
+## Solution: Update Content Security Policy
+
+### Step 1: Find the CSP Configuration
+
+Look for Content Security Policy in these locations:
+
+**A. Check `next.config.js` or `next.config.mjs`:**
+```bash
+cat next.config.js
+# or
+cat next.config.mjs
+```
+
+**B. Check for a `_headers` file in the `public` folder:**
+```bash
+cat public/_headers
+```
+
+**C. Check for Netlify configuration:**
+```bash
+cat netlify.toml
+```
+
+### Step 2: Update the CSP to Allow Google Fonts
+
+Find the `Content-Security-Policy` or CSP configuration and update it:
+
+**If in `next.config.js`:**
+```js
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://use.typekit.net https://p.typekit.net",
+              "font-src 'self' https://fonts.gstatic.com https://use.typekit.net",
+              "img-src 'self' data: https:",
+              "connect-src 'self'"
+            ].join('; ')
+          }
+        ]
+      }
+    ]
+  }
+}
+
+module.exports = nextConfig;
+```
+
+**If in `netlify.toml`:**
+```toml
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://use.typekit.net https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net; img-src 'self' data: https:; connect-src 'self'"
+```
+
+**If in `public/_headers`:**
+```
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://use.typekit.net https://p.typekit.net; font-src 'self' https://fonts.gstatic.com https://use.typekit.net; img-src 'self' data: https:; connect-src 'self'
+```
+
+### Step 3: Key Changes Needed
+
+Add these domains to the CSP:
+
+1. **For `style-src`** (allows loading font CSS):
+   - Add `https://fonts.googleapis.com`
+   - Keep existing: `https://use.typekit.net https://p.typekit.net`
+
+2. **For `font-src`** (allows loading font files):
+   - Add `https://fonts.gstatic.com`
+   - Keep existing: `https://use.typekit.net`
+
+### Step 4: Alternative - Use Next.js Font Optimization
+
+If you prefer not to modify CSP, use Next.js built-in font optimization which doesn't require external domains:
+
+**In `app/layout.tsx`:**
+```tsx
+import { Open_Sans } from 'next/font/google'
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+})
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en" className={openSans.className}>
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+This approach:
+- ✅ Loads fonts at build time (no external requests)
+- ✅ No CSP issues
+- ✅ Better performance
+- ✅ Automatic font optimization by Next.js
+
+**Then remove any Google Fonts link tags from the HTML.**
+
+### Step 5: Verify the Fix
+
+After making changes:
+
+1. **Rebuild the site:**
+```bash
+rm -rf .next
+pnpm build
+pnpm dev
+```
+
+2. **Check browser console** - Should have no CSP errors
+
+3. **Check fonts are loading** - Inspect element and verify Open Sans is applied
+
+4. **Run Lighthouse again** - Errors should be gone
+
+## Recommended Approach:
+
+**Use Next.js Font Optimization (Step 4)** - This is the best practice for Next.js apps and avoids CSP issues entirely.
+
+## Files to Check/Modify:
+
+1. `app/layout.tsx` - Add Next.js font import
+2. `next.config.js` - Update CSP if using external fonts
+3. `netlify.toml` - Update CSP if exists
+4. `public/_headers` - Update CSP if exists
+5. Remove any `<link>` tags loading Google Fonts from HTML
+
+This will fix all CSP errors while maintaining full functionality, text, and layout.
