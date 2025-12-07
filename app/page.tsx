@@ -158,7 +158,7 @@ export default function Page() {
       {/* Order with ACES CTA */}
       <SectionBand>
         <ContainerRow>
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="border-t border-b border-white/10 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <h2 className="text-2xl uc tracking-[0.08em] text-left">Order with ACES</h2>
             <a href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap self-start md:self-auto">
               <span aria-hidden="true" className="reveal-line h top" />
