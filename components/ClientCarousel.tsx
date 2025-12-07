@@ -35,58 +35,19 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block hover:opacity-100 transition-opacity"
+      className="flex-shrink-0 inline-flex items-center justify-center px-8 py-4 border-2 border-white/85 rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[200px] h-16"
     >
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        className="h-[640px] md:h-[720px] w-auto text-white"
-        viewBox="0 0 1900 650"
-        fill="none"
-      >
-        <rect x="5" y="5" width="1890" height="640" rx="70" stroke="currentColor" strokeOpacity="0.85" strokeWidth="10" />
+      <span className="text-white text-sm font-medium text-center leading-tight tracking-wider hover:text-gray-900">
         {isTwoLines ? (
           <>
-            <text
-              x="50%"
-              y="38%"
-              dominantBaseline="middle"
-              textAnchor="middle"
-              fontSize="90"
-              fill="currentColor"
-              fillOpacity="1"
-              style={{ letterSpacing: '0.06em' }}
-            >
-              {line1}
-            </text>
-            <text
-              x="50%"
-              y="62%"
-              dominantBaseline="middle"
-              textAnchor="middle"
-              fontSize="90"
-              fill="currentColor"
-              fillOpacity="1"
-              style={{ letterSpacing: '0.06em' }}
-            >
-              {line2}
-            </text>
+            {line1}
+            <br />
+            {line2}
           </>
         ) : (
-          <text
-            x="50%"
-            y="50%"
-            dominantBaseline="middle"
-            textAnchor="middle"
-            fontSize="54"
-            fill="currentColor"
-            fillOpacity="1"
-            style={{ letterSpacing: '0.06em' }}
-          >
-            {name.toUpperCase()}
-          </text>
+          name.toUpperCase()
         )}
-      </svg>
+      </span>
     </a>
   );
 }
