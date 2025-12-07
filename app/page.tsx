@@ -144,7 +144,7 @@ export default function Page() {
       </SectionBand>
 
       {/* Trusted By - Client Carousel */}
-      <SectionBand>
+      <SectionBand className="!py-2 md:!py-4">
         <ContainerRow>
           <Grid12 data-reveal-stagger>
             <Span cols={12} className="text-center">
@@ -156,7 +156,7 @@ export default function Page() {
       </SectionBand>
 
       {/* Order with ACES CTA */}
-      <SectionBand>
+      <SectionBand className="!pt-2 md:!pt-4">
         <div className="border-t border-b border-white/10">
           <ContainerRow>
             <div className="py-8 flex flex-col items-center text-center md:flex-row md:items-center md:justify-between md:text-left gap-4">
