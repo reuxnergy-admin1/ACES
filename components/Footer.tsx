@@ -22,7 +22,7 @@ export function Footer() {
     return () => window.removeEventListener('pointermove', onMove);
   }, []);
   return (
-    <footer ref={ref} className="relative border-t border-white/10 mt-24">
+    <footer ref={ref} className="relative">
       <div className="footer-sheen" aria-hidden="true" />
       <div className="grid-shell">
         <div className="container-wide py-16 grid-12 gutter text-sm text-white/70">
