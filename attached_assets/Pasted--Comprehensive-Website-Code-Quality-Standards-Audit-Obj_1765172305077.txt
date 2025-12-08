@@ -1,0 +1,695 @@
+# Comprehensive Website Code Quality & Standards Audit
+
+## Objective
+Perform a deep, thorough analysis of the entire website codebase to ensure:
+- Clean, well-formatted backend code
+- No linting errors or warnings
+- Passes all online validation tools
+- Follows best practices and web standards
+- Production-ready code quality
+
+---
+
+## Phase 1: Automated Quality Checks
+
+### 1.1 TypeScript Type Checking
+```bash
+# Run TypeScript compiler in check mode
+npx tsc --noEmit
+
+# Expected: Zero errors
+# If errors found: Fix each one before proceeding
+```
+
+**What to check:**
+- All variables have proper types
+- No `any` types unless absolutely necessary
+- All imports resolve correctly
+- All function signatures are complete
+- No missing return types
+
+### 1.2 ESLint - Code Quality
+```bash
+# Run ESLint on entire codebase
+pnpm lint
+
+# For detailed output:
+npx eslint . --ext .js,.jsx,.ts,.tsx
+
+# Auto-fix what's possible:
+npx eslint . --ext .js,.jsx,.ts,.tsx --fix
+```
+
+**What to check:**
+- No unused variables or imports
+- Consistent code style
+- Proper React hooks usage
+- No deprecated patterns
+- Accessibility rules followed
+
+### 1.3 Prettier - Code Formatting
+```bash
+# Check if code is properly formatted
+npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+
+# Auto-format all files:
+npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
+```
+
+**What to check:**
+- Consistent indentation (2 or 4 spaces)
+- Consistent quote style (single vs double)
+- Proper line breaks
+- Trailing commas consistency
+
+### 1.4 Next.js Build Validation
+```bash
+# Clean build to catch all issues
+rm -rf .next
+pnpm build
+
+# Check for warnings:
+# - Look for console warnings during build
+# - Check for optimization hints
+# - Note any deprecated features
+
+# Test production build:
+pnpm start
+```
+
+**What to check:**
+- Build completes without errors
+- No critical warnings
+- All pages compile successfully
+- No circular dependencies
+
+---
+
+## Phase 2: HTML/CSS Validation
+
+### 2.1 HTML Validation
+
+**Actions:**
+1. Build the site: `pnpm build`
+2. Start production server: `pnpm start`
+3. For each page, validate HTML:
+
+**Use these online validators:**
+- W3C Markup Validator: https://validator.w3.org/
+- Nu Html Checker: https://validator.w3.org/nu/
+
+**Check these URLs:**
+- `/` (Homepage)
+- `/about`
+- `/products`
+- `/contact`
+- Any other pages
+
+**What to look for:**
+- Valid HTML5 structure
+- Proper DOCTYPE
+- All tags properly closed
+- Valid attribute values
+- Proper nesting of elements
+- Semantic HTML usage
+- No deprecated tags
+
+**Common issues to fix:**
+```html
+<!-- WRONG -->
+<div class="container">
+  <p>Text
+</div>
+
+<!-- CORRECT -->
+<div className="container">
+  <p>Text</p>
+</div>
+
+<!-- WRONG - Missing alt -->
+<img src="/logo.png">
+
+<!-- CORRECT -->
+<img src="/logo.png" alt="Company Logo">
+
+<!-- WRONG - Invalid attribute -->
+<a href="#" target="_blank">Link</a> <!-- Missing rel -->
+
+<!-- CORRECT -->
+<a href="#" target="_blank" rel="noopener noreferrer">Link</a>
+```
+
+### 2.2 CSS Validation
+
+**Use online validator:**
+- W3C CSS Validator: https://jigsaw.w3.org/css-validator/
+
+**Files to check:**
+- `app/globals.css`
+- Any custom CSS files
+- Inline styles (should be minimal)
+
+**What to look for:**
+- Valid CSS syntax
+- No vendor prefixes needed (PostCSS handles this)
+- Proper property values
+- No duplicate properties
+- Efficient selectors
+
+### 2.3 Accessibility (a11y) Check
+
+**Use these tools:**
+- WAVE: https://wave.webaim.org/
+- axe DevTools: Browser extension
+- Lighthouse Accessibility score
+
+**What to check:**
+```tsx
+// ✅ CORRECT - Accessible button
+<button 
+  onClick={handleClick}
+  aria-label="Close dialog"
+>
+  ×
+</button>
+
+// ❌ WRONG - Non-semantic
+<div onClick={handleClick}>Click me</div>
+
+// ✅ CORRECT - Semantic form
+<form onSubmit={handleSubmit}>
+  <label htmlFor="email">Email</label>
+  <input 
+    id="email" 
+    type="email" 
+    name="email"
+    required
+  />
+</form>
+
+// ❌ WRONG - Missing label
+<input type="email" name="email" />
+
+// ✅ CORRECT - Image with alt
+<Image src="/hero.jpg" alt="Team working together" />
+
+// ❌ WRONG - Decorative image with descriptive alt
+<Image src="/background.jpg" alt="Blue geometric background pattern" />
+// Should be: alt="" for decorative images
+```
+
+**Check:**
+- All images have appropriate `alt` attributes
+- All form inputs have labels
+- Proper heading hierarchy (h1 → h2 → h3, not h1 → h3)
+- Sufficient color contrast
+- Keyboard navigation works
+- ARIA labels where needed
+- No empty links or buttons
+
+---
+
+## Phase 3: Security & Performance Checks
+
+### 3.1 Security Headers
+
+Check the site has proper security headers:
+
+**Use these tools:**
+- Security Headers: https://securityheaders.com/
+- Mozilla Observatory: https://observatory.mozilla.org/
+
+**Expected headers:**
+```
+Content-Security-Policy: (should be present)
+X-Frame-Options: DENY or SAMEORIGIN
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: (camera/microphone/geolocation restrictions)
+```
+
+**Where to configure (if not present):**
+
+In `next.config.js`:
+```js
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
+        ],
+      },
+    ]
+  },
+}
+```
+
+### 3.2 Performance Analysis
+
+**Use these tools:**
+- Google PageSpeed Insights: https://pagespeed.web.dev/
+- GTmetrix: https://gtmetrix.com/
+- WebPageTest: https://www.webpagetest.org/
+
+**Target metrics:**
+- Performance Score: 90+
+- First Contentful Paint: < 1.8s
+- Largest Contentful Paint: < 2.5s
+- Total Blocking Time: < 200ms
+- Cumulative Layout Shift: < 0.1
+
+### 3.3 SEO Check
+
+**Use these tools:**
+- Google Lighthouse SEO audit
+- Ahrefs SEO Checker: https://ahrefs.com/seo-checker
+
+**What to verify:**
+```tsx
+// In app/layout.tsx or page.tsx
+export const metadata = {
+  title: 'ACES Aerodynamics | Aviation Parts & Services',
+  description: 'Leading provider of aviation parts and services in South Africa',
+  openGraph: {
+    title: 'ACES Aerodynamics',
+    description: 'Aviation parts and services',
+    url: 'https://acesaerodynamics.com',
+    siteName: 'ACES Aerodynamics',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ACES Aerodynamics',
+    description: 'Aviation parts and services',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+}
+```
+
+**Check:**
+- All pages have unique titles
+- All pages have meta descriptions
+- robots.txt exists and is correct
+- sitemap.xml exists
+- Structured data (JSON-LD) if applicable
+- Canonical URLs set correctly
+
+---
+
+## Phase 4: Code Quality Deep Dive
+
+### 4.1 Check for Anti-Patterns
+
+**Search and fix these issues:**
+```bash
+# Find console.log statements (should be removed in production)
+grep -r "console.log" app/ components/ --include="*.tsx" --include="*.ts"
+
+# Find commented-out code (should be removed)
+grep -r "// " app/ components/ --include="*.tsx" | grep -E "^[[:space:]]*//[[:space:]]*[a-zA-Z]"
+
+# Find TODO/FIXME comments (should be addressed)
+grep -r "TODO\|FIXME" app/ components/ --include="*.tsx" --include="*.ts"
+
+# Find any remaining test/debug code
+grep -r "debugger" app/ components/
+grep -r "console.warn" app/ components/
+```
+
+### 4.2 Dependency Audit
+```bash
+# Check for security vulnerabilities
+pnpm audit
+
+# If vulnerabilities found:
+pnpm audit --fix
+
+# Check for outdated packages
+pnpm outdated
+
+# Update critical security patches only
+pnpm update --latest <package-name>
+```
+
+### 4.3 File Structure Audit
+
+**Check for:**
+- Unused files (old components, unused assets)
+- Duplicate code that should be refactored
+- Proper file naming (PascalCase for components, kebab-case for utilities)
+- Logical folder organization
+```bash
+# Find large files that might need optimization
+find . -type f -size +100k -not -path "./node_modules/*" -not -path "./.next/*"
+
+# Find duplicate file names
+find app/ components/ -type f | sort | uniq -d
+```
+
+### 4.4 Environment Variables Check
+```bash
+# List all environment variables used
+grep -r "process.env" app/ components/ --include="*.tsx" --include="*.ts"
+
+# Verify all are in .env.example
+cat .env.example
+```
+
+**Ensure:**
+- All required env vars are documented
+- No sensitive data in code
+- Proper validation of env vars
+
+---
+
+## Phase 5: Cross-Browser & Device Testing
+
+### 5.1 Browser Compatibility
+
+**Test on:**
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+- Mobile Safari (iOS)
+- Chrome Mobile (Android)
+
+**What to check:**
+- Layout renders correctly
+- Animations work smoothly
+- Forms submit properly
+- Links navigate correctly
+- No console errors
+
+### 5.2 Responsive Design
+
+**Test these breakpoints:**
+- Mobile: 375px, 414px
+- Tablet: 768px, 1024px
+- Desktop: 1280px, 1440px, 1920px
+
+**Check:**
+- No horizontal scrolling
+- Text is readable
+- Images scale properly
+- Touch targets are adequate (44x44px minimum)
+- Navigation works on mobile
+
+---
+
+## Phase 6: Final Validation Checklist
+
+Run through this comprehensive checklist:
+
+### Code Quality
+- [ ] `pnpm lint` passes with 0 errors, 0 warnings
+- [ ] `npx tsc --noEmit` passes with 0 errors
+- [ ] `pnpm build` completes successfully
+- [ ] Prettier formatting applied to all files
+- [ ] No `console.log` statements in production code
+- [ ] No commented-out code blocks
+- [ ] All TODOs/FIXMEs addressed or documented
+
+### HTML/CSS Standards
+- [ ] W3C HTML validator shows 0 errors
+- [ ] W3C CSS validator shows 0 errors
+- [ ] All images have proper `alt` attributes
+- [ ] All links have proper attributes (`rel="noopener"` for external)
+- [ ] Semantic HTML used throughout
+- [ ] Proper heading hierarchy (h1 → h2 → h3)
+
+### Accessibility
+- [ ] WAVE shows 0 errors
+- [ ] Lighthouse Accessibility score ≥ 90
+- [ ] All form inputs have labels
+- [ ] Color contrast ratios pass WCAG AA
+- [ ] Keyboard navigation works
+- [ ] Screen reader tested (if possible)
+
+### Performance
+- [ ] Lighthouse Performance score ≥ 85
+- [ ] Images optimized (using Next.js Image)
+- [ ] Fonts optimized (font-display: swap)
+- [ ] No render-blocking resources
+- [ ] Bundle size reasonable (<300KB initial JS)
+
+### Security
+- [ ] Security Headers scan passes
+- [ ] `pnpm audit` shows 0 high/critical vulnerabilities
+- [ ] CSP configured properly
+- [ ] No sensitive data exposed
+- [ ] HTTPS enforced
+
+### SEO
+- [ ] All pages have unique titles
+- [ ] All pages have meta descriptions
+- [ ] robots.txt exists and correct
+- [ ] sitemap.xml generated
+- [ ] Lighthouse SEO score ≥ 90
+
+### Functionality
+- [ ] All pages load without errors
+- [ ] Carousel scrolls smoothly
+- [ ] Tooltips display correctly
+- [ ] Forms validate and submit
+- [ ] All links work
+- [ ] Mobile navigation works
+- [ ] No JavaScript errors in console
+
+---
+
+## Phase 7: Generate Reports
+
+### 7.1 Create Quality Report
+
+Document all findings:
+```markdown
+# Code Quality Audit Report - [Date]
+
+## Summary
+- TypeScript Errors: 0
+- ESLint Warnings: 0
+- Prettier Issues: 0
+- Build Status: ✅ Success
+
+## HTML Validation
+- W3C Errors: 0
+- W3C Warnings: 0
+
+## CSS Validation
+- W3C CSS Errors: 0
+
+## Accessibility
+- WAVE Errors: 0
+- Lighthouse Score: XX/100
+
+## Performance
+- Lighthouse Score: XX/100
+- FCP: X.Xs
+- LCP: X.Xs
+- TBT: XXms
+
+## Security
+- Security Headers: ✅ Pass
+- Vulnerabilities: 0 critical, 0 high
+
+## Issues Found
+[List any issues and how they were fixed]
+
+## Recommendations
+[Any future improvements]
+```
+
+### 7.2 Update Documentation
+
+Create or update these files:
+
+**README.md:**
+```markdown
+# ACES Aerodynamics Website
+
+## Code Quality
+- TypeScript: Strict mode
+- ESLint: Enforced
+- Prettier: Auto-format on save
+
+## Testing
+\`\`\`bash
+pnpm lint          # Run linter
+pnpm build         # Test build
+pnpm typecheck     # Check types
+\`\`\`
+
+## Standards Compliance
+- HTML5 Valid
+- WCAG 2.1 AA Compliant
+- Security headers configured
+```
+
+**CONTRIBUTING.md:**
+```markdown
+# Contributing Guidelines
+
+## Before Submitting
+1. Run `pnpm lint` - must pass
+2. Run `pnpm build` - must succeed
+3. Test on mobile and desktop
+4. Check accessibility
+
+## Code Style
+- Use TypeScript strict mode
+- Follow ESLint rules
+- Format with Prettier
+- Add JSDoc comments for complex functions
+```
+
+---
+
+## Phase 8: Continuous Quality
+
+### 8.1 Add Pre-commit Hooks
+```bash
+# Install husky
+pnpm add -D husky lint-staged
+
+# Initialize husky
+npx husky init
+```
+
+**Create `.husky/pre-commit`:**
+```bash
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+pnpm lint-staged
+```
+
+**Add to `package.json`:**
+```json
+{
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  }
+}
+```
+
+### 8.2 Add GitHub Actions (Optional)
+
+Create `.github/workflows/quality-check.yml`:
+```yaml
+name: Quality Check
+
+on: [push, pull_request]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm lint
+      - run: pnpm build
+```
+
+---
+
+## Deliverables
+
+After completing all phases, provide:
+
+1. **Quality Report** - Comprehensive audit results
+2. **Fixed Code** - All issues resolved
+3. **Test Results** - Screenshots from validation tools showing passing scores
+4. **Documentation** - Updated README and contribution guidelines
+5. **Recommendations** - List of future improvements
+
+---
+
+## Online Tools to Use
+
+### Must Pass These:
+
+1. **W3C Markup Validator**
+   - URL: https://validator.w3.org/
+   - Target: 0 errors, 0 warnings
+
+2. **W3C CSS Validator**
+   - URL: https://jigsaw.w3.org/css-validator/
+   - Target: 0 errors
+
+3. **Google Lighthouse**
+   - URL: Built into Chrome DevTools
+   - Target: All scores ≥ 85
+
+4. **Security Headers**
+   - URL: https://securityheaders.com/
+   - Target: A or A+ rating
+
+5. **WAVE Accessibility**
+   - URL: https://wave.webaim.org/
+   - Target: 0 errors
+
+6. **PageSpeed Insights**
+   - URL: https://pagespeed.web.dev/
+   - Target: Performance ≥ 85
+
+---
+
+## Success Criteria
+
+The website audit is complete when:
+
+✅ All automated checks pass (TypeScript, ESLint, Prettier)  
+✅ W3C validators show 0 errors  
+✅ Lighthouse scores ≥ 85 in all categories  
+✅ Security Headers score A or higher  
+✅ WAVE accessibility shows 0 errors  
+✅ Build completes without warnings  
+✅ All functionality preserved (carousel, tooltips, animations)  
+✅ Documentation updated  
+✅ Quality report generated  
+
+---
+
+## Important Notes
+
+- **DO NOT remove or modify any text content**
+- **DO NOT change any layouts or visual designs**
+- **DO NOT alter any animations or interactions**
+- **ONLY fix technical issues, errors, and standards compliance**
+- **Test thoroughly after each fix**
+- **Document all changes made**
+
+---
+
+This comprehensive audit ensures production-ready, standards-compliant code that will pass any validation tool while maintaining 100% of existing functionality.
