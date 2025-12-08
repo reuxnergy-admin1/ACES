@@ -1,6 +1,12 @@
 import ContainerWide from '@/components/layout/ContainerWide';
 import SectionBand from '@/components/layout/SectionBand';
 import { Grid12, Span } from '@/components/layout/Grid12';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Products and Services',
+  description: 'Aircraft transparencies, helicopter windows, motorsport components, and aerospace composite parts. SACAA-approved manufacturing for aviation and racing industries.',
+};
 
 export default function Page() {
   return (

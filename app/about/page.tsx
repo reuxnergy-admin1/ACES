@@ -3,6 +3,12 @@ import SectionBand from '@/components/layout/SectionBand';
 import ContainerRow from '@/components/layout/ContainerRow';
 import ContainerWide from '@/components/layout/ContainerWide';
 import { Grid12, Span } from '@/components/layout/Grid12';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About ACES Aerodynamics',
+  description: 'ACES Aerodynamics was founded in 1994 by aerospace veteran Dirk Uys. We specialize in aircraft windows and composite components for aviation and motorsport industries.',
+};
 
 export default function Page() {
   return (

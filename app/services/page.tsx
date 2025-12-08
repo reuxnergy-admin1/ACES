@@ -1,5 +1,11 @@
 import ContainerRow from '@/components/layout/ContainerRow';
 import { Grid12, Span } from '@/components/layout/Grid12';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Services',
+  description: 'Design for manufacturability, CNC tooling, thermoforming, edge finishing, coatings, and quality assurance for aircraft transparencies and composite components.',
+};
 
 export default function Page() {
   return (
