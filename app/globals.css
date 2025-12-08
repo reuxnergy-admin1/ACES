@@ -604,7 +604,7 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   filter: invert(1) hue-rotate(180deg);
 }
 
-/* Client logo marquee (inspired by Rise spacing; tuned for our grid) */
+/* Client logo marquee - seamless infinite scroll */
 .marquee { position: relative; width: 100%; overflow: hidden; }
 .marquee > * { max-width: 100%; }
 .marquee-track {
@@ -615,13 +615,22 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   white-space: nowrap;
   animation: marquee-linear var(--marquee-duration, 36s) linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
-.marquee-item { flex: 0 0 auto; opacity: 0.85; }
+.marquee-item { 
+  flex: 0 0 auto; 
+  opacity: 0.85;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
 .marquee-item:hover { opacity: 1; }
 
 @keyframes marquee-linear {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
 }
 
 @media (prefers-reduced-motion) {

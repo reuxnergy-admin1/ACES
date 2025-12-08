@@ -12,7 +12,7 @@ const clients: Client[] = [
   { name: 'Aviation Rebuilders', url: 'https://focusedmedia.my.canva.site/aviationrebuilders' },
   { name: 'Skytrim', url: 'https://skytrim.co.za' },
   { name: 'National Airways Corporation', url: 'https://www.nac.co.za' },
-  { name: 'Alton Aero Engineering', url: 'https://www.altonaero.co.za' },
+  { name: 'Alton Aero Engineering', url: 'http://www.altonair.co.za' },
   { name: 'Wingman Aircraft Maintenance', url: 'https://wingmansa.co.za' },
   { name: 'Pablo Clark', url: 'https://www.pabloclark.com' },
   { name: 'WCT Engineering', url: 'https://www.wct.engineering' },
