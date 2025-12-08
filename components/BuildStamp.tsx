@@ -3,8 +3,10 @@ import { useEffect } from 'react';
 
 export default function BuildStamp() {
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('[ACES Build] Client bundle loaded:', new Date().toISOString());
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.log('[ACES Build] Client bundle loaded:', new Date().toISOString());
+    }
   }, []);
   return null;
 }
