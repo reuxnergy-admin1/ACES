@@ -117,8 +117,8 @@ export default function Page() {
               <p className="body max-w-reading text-white text-left mx-auto md:mx-0">If you need aircraft/motorsport windows or composite components made by people who genuinely care about performance and safety, you&apos;re in the right place.</p>
             </Span>
             <Span cols={12}>
-              <div className="mt-8 flex justify-center md:justify-start">
-                <a href="https://staging-aces.netlify.app/contact/" className="button-primary h-11 px-8 whitespace-nowrap">
+              <div className="mt-8 flex justify-center">
+                <a href="/contact/" className="button-primary h-11 px-8 whitespace-nowrap">
                   <span aria-hidden="true" className="reveal-line h top" />
                   <span aria-hidden="true" className="reveal-line h bottom" />
                   <span aria-hidden="true" className="reveal-line v left" />
