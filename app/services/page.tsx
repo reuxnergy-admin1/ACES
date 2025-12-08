@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <section className="grid-shell section-band pt-28">
+    <section className="grid-shell section-band pt-[140px] sm:pt-[150px] lg:pt-[160px]">
       <ContainerRow>
         <Grid12 data-reveal-blur-stagger>
           <Span cols={8}><h1 className="text-4xl md:text-5xl font-light">Services</h1></Span>

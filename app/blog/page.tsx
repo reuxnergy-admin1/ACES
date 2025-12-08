@@ -5,7 +5,7 @@ import { Grid12, Span } from '@/components/layout/Grid12';
 export default function Page(){
   return (
     <>
-      <SectionBand className="!pt-[113px] sm:!pt-[120px] lg:!pt-[126px]">
+      <SectionBand className="!pt-[140px] sm:!pt-[150px] lg:!pt-[160px]">
         <ContainerWide>
           <Grid12>
             <Span cols={12} className="text-center md:text-left">
@@ -31,6 +31,18 @@ export default function Page(){
               </article>
             </Span>
           </Grid12>
+
+          {/* Centered Request a Quote button */}
+          <div className="mt-12 flex justify-center">
+            <a href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
+              <span aria-hidden="true" className="reveal-line h top" />
+              <span aria-hidden="true" className="reveal-line h bottom" />
+              <span aria-hidden="true" className="reveal-line v left" />
+              <span aria-hidden="true" className="reveal-line v right" />
+              <span className="sr-only">Request a Quote</span>
+              <span aria-hidden="true">Request a Quote</span>
+            </a>
+          </div>
         </ContainerWide>
       </SectionBand>
     </>
