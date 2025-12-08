@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 // Simplified cursor dot that always stays white.
 // Previously had invert-on-hover behavior which made cursor appear black on interactive elements.

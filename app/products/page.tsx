@@ -1,11 +1,12 @@
-import ContainerWide from '@/components/layout/ContainerWide';
-import SectionBand from '@/components/layout/SectionBand';
-import { Grid12, Span } from '@/components/layout/Grid12';
-import type { Metadata } from 'next';
+import ContainerWide from "@/components/layout/ContainerWide";
+import SectionBand from "@/components/layout/SectionBand";
+import { Grid12, Span } from "@/components/layout/Grid12";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Products and Services',
-  description: 'Aircraft transparencies, helicopter windows, motorsport components, and aerospace composite parts. SACAA-approved manufacturing for aviation and racing industries.',
+  title: "Products and Services",
+  description:
+    "Aircraft transparencies, helicopter windows, motorsport components, and aerospace composite parts. SACAA-approved manufacturing for aviation and racing industries.",
 };
 
 export default function Page() {
@@ -15,7 +16,9 @@ export default function Page() {
       <SectionBand className="!pt-[140px] sm:!pt-[150px] lg:!pt-[160px]">
         <ContainerWide>
           <Grid12 data-reveal-blur-stagger>
-            <Span cols={12} className="text-center md:text-left"><h1 className="text-4xl font-light">PRODUCTS AND SERVICES</h1></Span>
+            <Span cols={12} className="text-center md:text-left">
+              <h1 className="text-4xl font-light">PRODUCTS AND SERVICES</h1>
+            </Span>
           </Grid12>
         </ContainerWide>
       </SectionBand>
@@ -23,10 +26,15 @@ export default function Page() {
       {/* Product blocks */}
       <SectionBand>
         <ContainerWide>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-reveal-blur-stagger>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            data-reveal-blur-stagger
+          >
             {/* Aircraft Transparencies */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
-              <div className="text-xl font-medium mb-4">Aircraft Transparencies</div>
+              <div className="text-xl font-medium mb-4">
+                Aircraft Transparencies
+              </div>
               <div className="text-white space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Aircraft Types</p>
@@ -36,7 +44,9 @@ export default function Page() {
 
             {/* Helicopter Transparencies */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
-              <div className="text-xl font-medium mb-4">Helicopter Transparencies</div>
+              <div className="text-xl font-medium mb-4">
+                Helicopter Transparencies
+              </div>
               <div className="text-white space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Helicopter Types</p>
@@ -46,7 +56,9 @@ export default function Page() {
 
             {/* Motorsport Components */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
-              <div className="text-xl font-medium mb-4">Motorsport Components</div>
+              <div className="text-xl font-medium mb-4">
+                Motorsport Components
+              </div>
               <div className="text-white space-y-1">
                 <p>Saloon | Rally Racing Windows</p>
                 <p>NACA Ducts</p>
@@ -57,7 +69,9 @@ export default function Page() {
 
             {/* Aerospace Components */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
-              <div className="text-xl font-medium mb-4">Aerospace Components</div>
+              <div className="text-xl font-medium mb-4">
+                Aerospace Components
+              </div>
               <div className="text-white space-y-1">
                 <p>Wing Tips | Elevator Tips</p>
                 <p>Rudder Caps</p>
@@ -78,7 +92,9 @@ export default function Page() {
 
             {/* Retrofitting and Reverse Engineering */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
-              <div className="text-xl font-medium mb-4">Retrofitting and Reverse Engineering</div>
+              <div className="text-xl font-medium mb-4">
+                Retrofitting and Reverse Engineering
+              </div>
               <div className="text-white space-y-1">
                 <p>Discontinued Aircraft Windows and</p>
                 <p>Composite Components to restore</p>
@@ -89,7 +105,10 @@ export default function Page() {
 
           {/* Centered Request a Quote button */}
           <div className="mt-12 flex justify-center">
-            <a href="/contact/" className="button-primary h-11 px-6 whitespace-nowrap">
+            <a
+              href="/contact/"
+              className="button-primary h-11 px-6 whitespace-nowrap"
+            >
               <span aria-hidden="true" className="reveal-line h top" />
               <span aria-hidden="true" className="reveal-line h bottom" />
               <span aria-hidden="true" className="reveal-line v left" />

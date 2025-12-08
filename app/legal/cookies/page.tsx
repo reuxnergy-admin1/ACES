@@ -1,6 +1,6 @@
-import ContainerRow from '@/components/layout/ContainerRow';
-import { Grid12, Span } from '@/components/layout/Grid12';
-import Prose from '@/components/layout/Prose';
+import ContainerRow from "@/components/layout/ContainerRow";
+import { Grid12, Span } from "@/components/layout/Grid12";
+import Prose from "@/components/layout/Prose";
 
 export default function Page() {
   return (
@@ -10,7 +10,11 @@ export default function Page() {
           <Span cols={8}>
             <Prose className="prose prose-invert">
               <h1>Cookies</h1>
-              <p>By default, this site does not set tracking cookies. If analytics are enabled in future, we will present an explicit opt-in banner.</p>
+              <p>
+                By default, this site does not set tracking cookies. If
+                analytics are enabled in future, we will present an explicit
+                opt-in banner.
+              </p>
             </Prose>
           </Span>
         </Grid12>

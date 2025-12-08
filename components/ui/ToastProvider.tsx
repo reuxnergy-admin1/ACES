@@ -1,15 +1,26 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 type Toast = Readonly<{
   id: number;
   message: string;
-  variant?: 'success' | 'error' | 'info';
+  variant?: "success" | "error" | "info";
   duration?: number;
 }>;
 
 type ToastAPI = Readonly<{
-  show: (message: string, opts?: { variant?: Toast['variant']; duration?: number }) => number;
+  show: (
+    message: string,
+    opts?: { variant?: Toast["variant"]; duration?: number },
+  ) => number;
   dismiss: (id: number) => void;
 }>;
 
@@ -17,11 +28,13 @@ const ToastCtx = createContext<ToastAPI | null>(null);
 
 export function useToast() {
   const ctx = useContext(ToastCtx);
-  if (!ctx) throw new Error('useToast must be used within <ToastProvider>');
+  if (!ctx) throw new Error("useToast must be used within <ToastProvider>");
   return ctx;
 }
 
-export default function ToastProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function ToastProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const idRef = useRef(1);
   const timers = useRef<Map<number, number>>(new Map());
@@ -35,18 +48,34 @@ export default function ToastProvider({ children }: Readonly<{ children: React.R
     }
   }, []);
 
-  const show = useCallback<ToastAPI['show']>((message, opts) => {
-    const id = idRef.current++;
-    const toast: Toast = { id, message, variant: opts?.variant ?? 'info', duration: opts?.duration ?? 2800 };
-    setToasts((ts) => [...ts, toast]);
-    // Auto-dismiss
-    const timer = window.setTimeout(() => dismiss(id), toast.duration);
-    timers.current.set(id, timer);
-    return id;
-  }, [dismiss]);
+  const show = useCallback<ToastAPI["show"]>(
+    (message, opts) => {
+      const id = idRef.current++;
+      const toast: Toast = {
+        id,
+        message,
+        variant: opts?.variant ?? "info",
+        duration: opts?.duration ?? 2800,
+      };
+      setToasts((ts) => [...ts, toast]);
+      // Auto-dismiss
+      const timer = window.setTimeout(() => dismiss(id), toast.duration);
+      timers.current.set(id, timer);
+      return id;
+    },
+    [dismiss],
+  );
 
   // Cleanup timers on unmount
-  useEffect(() => () => { timers.current.forEach((t) => { window.clearTimeout(t); }); timers.current.clear(); }, []);
+  useEffect(
+    () => () => {
+      timers.current.forEach((t) => {
+        window.clearTimeout(t);
+      });
+      timers.current.clear();
+    },
+    [],
+  );
 
   const api = useMemo<ToastAPI>(() => ({ show, dismiss }), [show, dismiss]);
 
@@ -60,13 +89,22 @@ export default function ToastProvider({ children }: Readonly<{ children: React.R
         aria-atomic="false"
       >
         {toasts.map((t) => (
-          <div key={t.id} className={"toast" + (t.variant ? ` toast--${t.variant}` : "")}>
+          <div
+            key={t.id}
+            className={"toast" + (t.variant ? ` toast--${t.variant}` : "")}
+          >
             <div className="toast__body">{t.message}</div>
-    <button type="button" className="toast__close" aria-label="Dismiss" onClick={() => dismiss(t.id)}>×</button>
+            <button
+              type="button"
+              className="toast__close"
+              aria-label="Dismiss"
+              onClick={() => dismiss(t.id)}
+            >
+              ×
+            </button>
           </div>
         ))}
-  </output>
+      </output>
     </ToastCtx.Provider>
   );
 }
-

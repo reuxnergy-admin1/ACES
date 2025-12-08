@@ -1,0 +1,225 @@
+# Comprehensive Website Code Quality & Standards Audit
+
+## Objective
+Perform a deep, thorough analysis of the entire website codebase to ensure:
+- Clean, well-formatted backend code
+- No linting errors or warnings
+- Passes all online validation tools
+- Follows best practices and web standards
+- Production-ready code quality
+
+---
+
+## Phase 1: Automated Quality Checks
+
+### 1.1 TypeScript Type Checking
+```bash
+# Run TypeScript compiler in check mode
+npx tsc --noEmit
+
+# Expected: Zero errors
+# If errors found: Fix each one before proceeding
+```
+
+**What to check:**
+- All variables have proper types
+- No `any` types unless absolutely necessary
+- All imports resolve correctly
+- All function signatures are complete
+- No missing return types
+
+### 1.2 ESLint - Code Quality
+```bash
+# Run ESLint on entire codebase
+pnpm lint
+
+# For detailed output:
+npx eslint . --ext .js,.jsx,.ts,.tsx
+
+# Auto-fix what's possible:
+npx eslint . --ext .js,.jsx,.ts,.tsx --fix
+```
+
+**What to check:**
+- No unused variables or imports
+- Consistent code style
+- Proper React hooks usage
+- No deprecated patterns
+- Accessibility rules followed
+
+### 1.3 Prettier - Code Formatting
+```bash
+# Check if code is properly formatted
+npx prettier --check "**/*.{js,jsx,ts,tsx,json,css,md}"
+
+# Auto-format all files:
+npx prettier --write "**/*.{js,jsx,ts,tsx,json,css,md}"
+```
+
+**What to check:**
+- Consistent indentation (2 or 4 spaces)
+- Consistent quote style (single vs double)
+- Proper line breaks
+- Trailing commas consistency
+
+### 1.4 Next.js Build Validation
+```bash
+# Clean build to catch all issues
+rm -rf .next
+pnpm build
+
+# Check for warnings:
+# - Look for console warnings during build
+# - Check for optimization hints
+# - Note any deprecated features
+
+# Test production build:
+pnpm start
+```
+
+**What to check:**
+- Build completes without errors
+- No critical warnings
+- All pages compile successfully
+- No circular dependencies
+
+---
+
+## Phase 2: HTML/CSS Validation
+
+### 2.1 HTML Validation
+
+**Actions:**
+1. Build the site: `pnpm build`
+2. Start production server: `pnpm start`
+3. For each page, validate HTML:
+
+**Use these online validators:**
+- W3C Markup Validator: https://validator.w3.org/
+- Nu Html Checker: https://validator.w3.org/nu/
+
+**Check these URLs:**
+- `/` (Homepage)
+- `/about`
+- `/products`
+- `/contact`
+- Any other pages
+
+**What to look for:**
+- Valid HTML5 structure
+- Proper DOCTYPE
+- All tags properly closed
+- Valid attribute values
+- Proper nesting of elements
+- Semantic HTML usage
+- No deprecated tags
+
+**Common issues to fix:**
+```html
+<!-- WRONG -->
+<div class="container">
+  <p>Text
+</div>
+
+<!-- CORRECT -->
+<div className="container">
+  <p>Text</p>
+</div>
+
+<!-- WRONG - Missing alt -->
+<img src="/logo.png">
+
+<!-- CORRECT -->
+<img src="/logo.png" alt="Company Logo">
+
+<!-- WRONG - Invalid attribute -->
+<a href="#" target="_blank">Link</a> <!-- Missing rel -->
+
+<!-- CORRECT -->
+<a href="#" target="_blank" rel="noopener noreferrer">Link</a>
+```
+
+### 2.2 CSS Validation
+
+**Use online validator:**
+- W3C CSS Validator: https://jigsaw.w3.org/css-validator/
+
+**Files to check:**
+- `app/globals.css`
+- Any custom CSS files
+- Inline styles (should be minimal)
+
+**What to look for:**
+- Valid CSS syntax
+- No vendor prefixes needed (PostCSS handles this)
+- Proper property values
+- No duplicate properties
+- Efficient selectors
+
+### 2.3 Accessibility (a11y) Check
+
+**Use these tools:**
+- WAVE: https://wave.webaim.org/
+- axe DevTools: Browser extension
+- Lighthouse Accessibility score
+
+**What to check:**
+```tsx
+// ✅ CORRECT - Accessible button
+<button 
+  onClick={handleClick}
+  aria-label="Close dialog"
+>
+  ×
+</button>
+
+// ❌ WRONG - Non-semantic
+<div onClick={handleClick}>Click me</div>
+
+// ✅ CORRECT - Semantic form
+<form onSubmit={handleSubmit}>
+  <label htmlFor="email">Email</label>
+  <input 
+    id="email" 
+    type="email" 
+    name="email"
+    required
+  />
+</form>
+
+// ❌ WRONG - Missing label
+<input type="email" name="email" />
+
+// ✅ CORRECT - Image with alt
+<Image src="/hero.jpg" alt="Team working together" />
+
+// ❌ WRONG - Decorative image with descriptive alt
+<Image src="/background.jpg" alt="Blue geometric background pattern" />
+// Should be: alt="" for decorative images
+```
+
+**Check:**
+- All images have appropriate `alt` attributes
+- All form inputs have labels
+- Proper heading hierarchy (h1 → h2 → h3, not h1 → h3)
+- Sufficient color contrast
+- Keyboard navigation works
+- ARIA labels where needed
+- No empty links or buttons
+
+---
+
+## Phase 3: Security & Performance Checks
+
+### 3.1 Security Headers
+
+Check the site has proper security headers:
+
+**Use these tools:**
+- Security Headers: https://securityheaders.com/
+- Mozilla Observatory: https://observatory.mozilla.org/
+
+**Expected headers:**
+```
+Content-Security-Policy: (should be present)
+...

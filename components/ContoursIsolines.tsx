@@ -1,7 +1,7 @@
-'use client';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import * as THREE from 'three';
-import { useEffect, useMemo, useRef } from 'react';
+"use client";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+import { useEffect, useMemo, useRef } from "react";
 
 declare global {
   interface Window {
@@ -132,36 +132,56 @@ function FullscreenQuad(props: Props) {
   const { scene } = useThree();
 
   // Fullscreen triangle positions
-  const positions = useMemo(() => new Float32Array([
-    -1, -1, 0,
-     3, -1, 0,
-    -1,  3, 0
-  ]), []);
+  const positions = useMemo(
+    () => new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]),
+    [],
+  );
 
-  const uniforms = useMemo(() => ({
-    u_resolution:  { value: new THREE.Vector2(size.width * gl.getPixelRatio(), size.height * gl.getPixelRatio()) },
-    u_time:        { value: 0 },
-    u_mouse:       { value: new THREE.Vector2(-1, -1) },
-    u_density:     { value: props.density },
-    u_width:       { value: props.lineWidth },
-    u_intensity:   { value: props.intensity },
-    u_sigma:       { value: props.sigma },
-    u_lineOpacity: { value: props.lineOpacity ?? 0.10 },
-    u_dotR:        { value: 0 },
-    u_dotFeather:  { value: 0 },
-    u_rippleCenter:{ value: new THREE.Vector2(-1, -1) },
-    u_rippleT:     { value: 0 },
-    u_rippleActive:{ value: 0 },
-  }), [size.width, size.height, gl, props.density, props.lineWidth, props.intensity, props.sigma, props.lineOpacity]);
+  const uniforms = useMemo(
+    () => ({
+      u_resolution: {
+        value: new THREE.Vector2(
+          size.width * gl.getPixelRatio(),
+          size.height * gl.getPixelRatio(),
+        ),
+      },
+      u_time: { value: 0 },
+      u_mouse: { value: new THREE.Vector2(-1, -1) },
+      u_density: { value: props.density },
+      u_width: { value: props.lineWidth },
+      u_intensity: { value: props.intensity },
+      u_sigma: { value: props.sigma },
+      u_lineOpacity: { value: props.lineOpacity ?? 0.1 },
+      u_dotR: { value: 0 },
+      u_dotFeather: { value: 0 },
+      u_rippleCenter: { value: new THREE.Vector2(-1, -1) },
+      u_rippleT: { value: 0 },
+      u_rippleActive: { value: 0 },
+    }),
+    [
+      size.width,
+      size.height,
+      gl,
+      props.density,
+      props.lineWidth,
+      props.intensity,
+      props.sigma,
+      props.lineOpacity,
+    ],
+  );
 
-  const material = useMemo(() => new THREE.ShaderMaterial({
-    vertexShader: VERT,
-    fragmentShader: FRAG,
-    transparent: true,
-    depthWrite: false,
-    depthTest: false,
-    uniforms
-  }), [uniforms]);
+  const material = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        vertexShader: VERT,
+        fragmentShader: FRAG,
+        transparent: true,
+        depthWrite: false,
+        depthTest: false,
+        uniforms,
+      }),
+    [uniforms],
+  );
 
   // Pointer handling - only for contour line bump, no ripple effects
   useEffect(() => {
@@ -172,9 +192,12 @@ function FullscreenQuad(props: Props) {
 
     const onPointerMove = (e: PointerEvent) => {
       updateLast(e.clientX, e.clientY);
-      if (process.env.NODE_ENV !== 'production' && window.__BG_DEBUG_ONCE !== 1) {
+      if (
+        process.env.NODE_ENV !== "production" &&
+        window.__BG_DEBUG_ONCE !== 1
+      ) {
         // eslint-disable-next-line no-console
-        console.log('[BG] pointermove');
+        console.log("[BG] pointermove");
         window.__BG_DEBUG_ONCE = 1;
       }
     };
@@ -187,34 +210,36 @@ function FullscreenQuad(props: Props) {
     };
 
     const opts: AddEventListenerOptions = { passive: true, capture: true };
-    window.addEventListener('pointermove', onPointerMove, opts);
-    window.addEventListener('mousemove', onMouseMove, opts);
-    window.addEventListener('touchmove', onTouchMove, opts);
+    window.addEventListener("pointermove", onPointerMove, opts);
+    window.addEventListener("mousemove", onMouseMove, opts);
+    window.addEventListener("touchmove", onTouchMove, opts);
     return () => {
-      window.removeEventListener('pointermove', onPointerMove);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
     };
   }, []);
-
 
   useFrame(({ clock, size, gl }) => {
     const dpr = gl.getPixelRatio();
     const tsec = clock.getElapsedTime();
     material.uniforms.u_time.value = tsec;
-    material.uniforms.u_resolution.value.set(size.width * dpr, size.height * dpr);
+    material.uniforms.u_resolution.value.set(
+      size.width * dpr,
+      size.height * dpr,
+    );
     // Smooth mouse easing - direct tracking without magnet offset
     const u = material.uniforms.u_mouse.value as THREE.Vector2;
     const lastX = last.current.x ?? size.width / 2;
     const lastY = last.current.y ?? size.height / 2;
     const targetUV = new THREE.Vector2(
       lastX / size.width,
-      1 - lastY / size.height
+      1 - lastY / size.height,
     );
     u.lerp(targetUV, 0.12);
 
     // Debug publish
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       window.__bg = window.__bg || {};
       window.__bg.lastX = last.current.x;
       window.__bg.lastY = last.current.y;
@@ -229,7 +254,7 @@ function FullscreenQuad(props: Props) {
   // Imperative mesh creation to avoid JSX material/geometry typing/attach issues
   useEffect(() => {
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     const mesh = new THREE.Mesh(geometry, material);
     mesh.frustumCulled = false;
     scene.add(mesh);
@@ -245,7 +270,11 @@ function FullscreenQuad(props: Props) {
 
 export default function ContoursIsolines(props: Props) {
   return (
-    <Canvas gl={{ antialias: true, alpha: true }} dpr={[1, 2]} className="w-full h-full pointer-events-none">
+    <Canvas
+      gl={{ antialias: true, alpha: true }}
+      dpr={[1, 2]}
+      className="w-full h-full pointer-events-none"
+    >
       <FullscreenQuad {...props} />
     </Canvas>
   );

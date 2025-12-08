@@ -1,11 +1,14 @@
-'use client';
-import { useEffect } from 'react';
+"use client";
+import { useEffect } from "react";
 
 export default function BuildStamp() {
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       // eslint-disable-next-line no-console
-      console.log('[ACES Build] Client bundle loaded:', new Date().toISOString());
+      console.log(
+        "[ACES Build] Client bundle loaded:",
+        new Date().toISOString(),
+      );
     }
   }, []);
   return null;

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 export default function SkipLink({ targetId }: Readonly<{ targetId: string }>) {
   return (
@@ -9,10 +9,12 @@ export default function SkipLink({ targetId }: Readonly<{ targetId: string }>) {
         const el = document.getElementById(targetId);
         if (el) {
           e.preventDefault();
-          const hadTab = el.hasAttribute('tabindex');
-          if (!hadTab) el.setAttribute('tabindex', '-1');
+          const hadTab = el.hasAttribute("tabindex");
+          if (!hadTab) el.setAttribute("tabindex", "-1");
           el.focus();
-          setTimeout(() => { if (!hadTab) el.removeAttribute('tabindex'); }, 0);
+          setTimeout(() => {
+            if (!hadTab) el.removeAttribute("tabindex");
+          }, 0);
         }
       }}
     >

@@ -1,1 +1,3 @@
-export default function CursorOverlayGate() { return null; }
+export default function CursorOverlayGate() {
+  return null;
+}

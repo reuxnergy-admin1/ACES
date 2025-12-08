@@ -12,8 +12,10 @@ export default function CursorTrailOverlay() {
   const ripplesRef = useRef<Ripple[]>([]);
 
   useEffect(() => {
-    const isReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-    
+    const isReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    )?.matches;
+
     const canvas = document.createElement("canvas");
     canvasRef.current = canvas;
     Object.assign(canvas.style, {
@@ -48,38 +50,48 @@ export default function CursorTrailOverlay() {
       // Hide native cursor only after first movement (so users always see a cursor)
       if (!hasMovedRef.current) {
         hasMovedRef.current = true;
-        document.body.classList.add('cursor-hidden');
+        document.body.classList.add("cursor-hidden");
       }
     };
-    
+
     // Click ripple effect - centered on cursor position, snappy and responsive
     // Skip ripple when clicking on text/links (white text elements)
     const onPointerDown = (e: PointerEvent) => {
       if (isReducedMotion) return;
-      
+
       const target = e.target as HTMLElement;
       if (target) {
         const tagName = target.tagName?.toLowerCase();
-        const isTextElement = tagName === 'a' || tagName === 'button' || 
-                              tagName === 'span' || tagName === 'p' || 
-                              tagName === 'h1' || tagName === 'h2' || 
-                              tagName === 'h3' || tagName === 'h4' || 
-                              tagName === 'h5' || tagName === 'h6' ||
-                              tagName === 'li' || tagName === 'label';
-        const isNavOrLink = target.closest('a') || target.closest('button') || target.closest('nav');
-        
+        const isTextElement =
+          tagName === "a" ||
+          tagName === "button" ||
+          tagName === "span" ||
+          tagName === "p" ||
+          tagName === "h1" ||
+          tagName === "h2" ||
+          tagName === "h3" ||
+          tagName === "h4" ||
+          tagName === "h5" ||
+          tagName === "h6" ||
+          tagName === "li" ||
+          tagName === "label";
+        const isNavOrLink =
+          target.closest("a") ||
+          target.closest("button") ||
+          target.closest("nav");
+
         if (isTextElement || isNavOrLink) {
           return;
         }
       }
-      
+
       const now = performance.now();
       ripplesRef.current.push({ x: e.clientX, y: e.clientY, t: now });
       if (ripplesRef.current.length > 3) {
         ripplesRef.current.shift();
       }
     };
-    
+
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerdown", onPointerDown, { passive: true });
 
@@ -95,7 +107,7 @@ export default function CursorTrailOverlay() {
         rafRef.current = requestAnimationFrame(render);
       }
     };
-    document.addEventListener('visibilitychange', onVisibilityChange);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     // Render loop - pauses when tab is hidden
     const render = () => {
@@ -104,32 +116,38 @@ export default function CursorTrailOverlay() {
         rafRef.current = null;
         return;
       }
-      
+
       const now = performance.now();
-      
+
       // Clean up expired ripples
-      ripplesRef.current = ripplesRef.current.filter((r) => now - r.t <= rippleDurationMs);
-      
+      ripplesRef.current = ripplesRef.current.filter(
+        (r) => now - r.t <= rippleDurationMs,
+      );
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw ripples first (behind cursor) - always white, 4 concentric circles per click
       for (const ripple of ripplesRef.current) {
         const age = (now - ripple.t) / rippleDurationMs;
-        
+
         const rx = Math.round(ripple.x * dpr) / dpr;
         const ry = Math.round(ripple.y * dpr) / dpr;
-        
+
         // Draw 4 concentric ripple circles with staggered timing
         const circleCount = 4;
         for (let i = 0; i < circleCount; i++) {
           const delay = i * 0.08; // Stagger each circle
           const circleAge = Math.max(0, age - delay);
           if (circleAge <= 0) continue;
-          
-          const circleEase = 1 - Math.pow(1 - Math.min(circleAge / (1 - delay), 1), 2.5);
+
+          const circleEase =
+            1 - Math.pow(1 - Math.min(circleAge / (1 - delay), 1), 2.5);
           const radius = circleEase * (rippleMaxRadius + i * 15);
-          const alpha = Math.max(0, (0.5 - i * 0.1) * (1 - circleAge / (1 - delay)));
-          
+          const alpha = Math.max(
+            0,
+            (0.5 - i * 0.1) * (1 - circleAge / (1 - delay)),
+          );
+
           ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
           ctx.lineWidth = 1.5 - i * 0.2;
           ctx.beginPath();
@@ -142,7 +160,7 @@ export default function CursorTrailOverlay() {
       const { x, y } = posRef.current;
       if (x > 0 || y > 0) {
         const r = 5.0;
-        ctx.fillStyle = 'rgba(255,255,255,0.94)';
+        ctx.fillStyle = "rgba(255,255,255,0.94)";
         const ax = Math.round(x * dpr) / dpr;
         const ay = Math.round(y * dpr) / dpr;
         ctx.beginPath();
@@ -157,13 +175,13 @@ export default function CursorTrailOverlay() {
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      document.removeEventListener('visibilitychange', onVisibilityChange);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("resize", resize);
       canvas.remove();
       canvasRef.current = null;
-      document.body.classList.remove('cursor-hidden');
+      document.body.classList.remove("cursor-hidden");
     };
   }, []);
 
