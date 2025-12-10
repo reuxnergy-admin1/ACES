@@ -35,7 +35,7 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">
                 Aircraft Transparencies
               </div>
-              <div className="text-white space-y-1">
+              <div className="text-white text-sm space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Aircraft Types</p>
                 <p className="mt-2">Windows | Windshields | Side Windows</p>
@@ -47,7 +47,7 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">
                 Helicopter Transparencies
               </div>
-              <div className="text-white space-y-1">
+              <div className="text-white text-sm space-y-1">
                 <p>All Certified and Uncertified</p>
                 <p>Unpressurised Helicopter Types</p>
                 <p className="mt-2">Canopy | Bubble | Side Windows</p>
@@ -59,7 +59,7 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">
                 Motorsport Components
               </div>
-              <div className="text-white space-y-1">
+              <div className="text-white text-sm space-y-1">
                 <p>Saloon | Rally Racing Windows</p>
                 <p>NACA Ducts</p>
                 <p>Headlight Lenses</p>
@@ -72,7 +72,7 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">
                 Aerospace Components
               </div>
-              <div className="text-white space-y-1">
+              <div className="text-white text-sm space-y-1">
                 <p>Wing Tips | Elevator Tips</p>
                 <p>Rudder Caps</p>
                 <p>Wheel Spats | Strut-Cuffs</p>
@@ -83,7 +83,7 @@ export default function Page() {
             {/* Prototyping */}
             <div className="border border-white/10 rounded-2xl p-7 hover:border-white/30 transition-colors text-center md:text-left">
               <div className="text-xl font-medium mb-4">Prototyping</div>
-              <div className="text-white space-y-1">
+              <div className="text-white text-sm space-y-1">
                 <p>Prototype Component Development to</p>
                 <p>meet your needs & specifications</p>
                 <p className="mt-2">Project Advice & Consultation Services</p>
@@ -95,7 +95,7 @@ export default function Page() {
               <div className="text-xl font-medium mb-4">
                 Retrofitting and Reverse Engineering
               </div>
-              <div className="text-white space-y-1">
+              <div className="text-white text-sm space-y-1">
                 <p>Discontinued Aircraft Windows and</p>
                 <p>Composite Components to restore</p>
                 <p>with Precision and Certification.</p>
@@ -106,7 +106,7 @@ export default function Page() {
           {/* Centered Request a Quote button */}
           <div className="mt-12 flex justify-center">
             <a
-              href="/contact/"
+              href="https://staging-aces.netlify.app/contact/"
               className="button-primary h-11 px-6 whitespace-nowrap"
             >
               <span aria-hidden="true" className="reveal-line h top" />

@@ -62,6 +62,7 @@ export default function ClientCarousel({
   const looped = [
     ...clients.map((c) => ({ ...c, id: `${c.name}-a` })),
     ...clients.map((c) => ({ ...c, id: `${c.name}-b` })),
+    ...clients.map((c) => ({ ...c, id: `${c.name}-c` })),
   ];
   const trackStyle: React.CSSProperties & { ["--marquee-duration"]?: string } =
     {

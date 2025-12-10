@@ -630,7 +630,7 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 
 @keyframes marquee-linear {
   0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(-33.333%, 0, 0); }
 }
 
 @media (prefers-reduced-motion) {

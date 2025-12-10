@@ -5,7 +5,6 @@ import SectionBand from "@/components/layout/SectionBand";
 import ContainerRow from "@/components/layout/ContainerRow";
 import ContainerWide from "@/components/layout/ContainerWide";
 import { Grid12, Span } from "@/components/layout/Grid12";
-import Prose from "@/components/layout/Prose";
 
 const ClientCarousel = dynamic(() => import("@/components/ClientCarousel"), {
   loading: () => <div className="h-32 animate-pulse bg-white/5 rounded-lg" />,
@@ -102,7 +101,7 @@ export default function Page() {
             <Span cols={12}>
               <div className="mt-8 flex justify-center">
                 <a
-                  href="/contact/"
+                  href="https://staging-aces.netlify.app/contact/"
                   className="button-primary h-11 px-6 whitespace-nowrap"
                 >
                   <span aria-hidden="true" className="reveal-line h top" />
@@ -172,15 +171,15 @@ export default function Page() {
       <SectionBand>
         <ContainerRow>
           <Grid12 data-reveal-stagger>
-            <Span cols={12} className="text-left">
-              <Prose className="md:mx-0 md:ml-0">
-                <h2 className="text-left mb-4">Compliance and QA</h2>
-                <p className="text-left">
-                  Documented process control with full traceability and optical
-                  inspection. Our release documentation (CA21-19 airworthiness
-                  approval tag) accompanies every shipment.
-                </p>
-              </Prose>
+            <Span cols={12} className="text-center md:text-left">
+              <h2 className="text-2xl uc tracking-[0.08em]">Compliance and QA</h2>
+            </Span>
+            <Span cols={12}>
+              <p className="body max-w-reading text-white text-left mx-auto md:mx-0">
+                Documented process control with full traceability and optical
+                inspection. Our release documentation (CA21-19 airworthiness
+                approval tag) accompanies every shipment.
+              </p>
             </Span>
             <SheenCard className="md:col-span-6" data-reveal>
               <div className="block border border-white/10 rounded-2xl p-7 text-left">
@@ -221,7 +220,7 @@ export default function Page() {
             <div className="py-8 flex flex-col items-center text-center md:flex-row md:items-center md:justify-between md:text-left gap-4">
               <h2 className="text-2xl uc tracking-[0.08em]">Order with ACES</h2>
               <a
-                href="/contact/"
+                href="https://staging-aces.netlify.app/contact/"
                 className="button-primary h-11 px-6 whitespace-nowrap"
               >
                 <span aria-hidden="true" className="reveal-line h top" />
