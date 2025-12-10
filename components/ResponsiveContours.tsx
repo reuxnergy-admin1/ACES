@@ -114,7 +114,7 @@ export default function ResponsiveContours() {
   }
 
   const base = {
-    lineOpacity: 0.22,
+    lineOpacity: 0.35,
     sigma: 0.28,
   };
 
@@ -126,10 +126,10 @@ export default function ResponsiveContours() {
       <BackgroundPortal>
         <DynamicIsolines
           density={debugOn ? 24 : 22}
-          lineWidth={debugOn ? 0.014 : 0.012}
+          lineWidth={debugOn ? 0.018 : 0.016}
           intensity={debugOn ? 0.9 : 0.7}
           sigma={debugOn ? 0.26 : 0.3}
-          lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
+          lineOpacity={debugOn ? 0.28 : base.lineOpacity}
           dotRadiusUV={dotR}
           dotFeatherUV={dotF}
           showDotContinuously={false}
@@ -144,10 +144,10 @@ export default function ResponsiveContours() {
     <BackgroundPortal>
       <DynamicIsolines
         density={debugOn ? 22 : 20}
-        lineWidth={debugOn ? 0.015 : 0.013}
+        lineWidth={debugOn ? 0.018 : 0.016}
         intensity={debugOn ? 0.8 : 0.6}
         sigma={debugOn ? 0.28 : 0.3}
-        lineOpacity={debugOn ? 0.1936 : base.lineOpacity}
+        lineOpacity={debugOn ? 0.28 : base.lineOpacity}
         dotRadiusUV={dotR}
         dotFeatherUV={dotF}
         showDotContinuously={false}
