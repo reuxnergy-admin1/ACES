@@ -176,9 +176,10 @@ export default function Page() {
             </Span>
             <Span cols={12}>
               <p className="body max-w-reading text-white text-left mx-auto md:mx-0">
-                Documented process control with full traceability and optical
-                inspection. Our release documentation (CA21-19 airworthiness
-                approval tag) accompanies every shipment.
+                Documented process control with full traceability and optical inspection.
+              </p>
+              <p className="body max-w-reading text-white text-left mx-auto md:mx-0 mt-1">
+                Our release documentation (CA21-19 airworthiness approval tag) accompanies every shipment.
               </p>
             </Span>
             <SheenCard className="md:col-span-6" data-reveal>
