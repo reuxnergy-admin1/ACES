@@ -183,7 +183,7 @@ export default function Page() {
               </p>
             </Span>
             <SheenCard className="md:col-span-6" data-reveal>
-              <div className="block border border-white/10 rounded-2xl p-7 text-left">
+              <div className="block p-7 text-left">
                 <div className="text-xl">MP39 - SACAA Approved</div>
                 <div className="mt-2 text-white">
                   Proven Quality - 99.9% First Pass Yield Rate
@@ -191,7 +191,7 @@ export default function Page() {
               </div>
             </SheenCard>
             <SheenCard className="md:col-span-6" data-reveal>
-              <div className="block border border-white/10 rounded-2xl p-7 text-left">
+              <div className="block p-7 text-left">
                 <div className="text-xl">
                   CA21-19 Airworthiness Approval Tag
                 </div>
