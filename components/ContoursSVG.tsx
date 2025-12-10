@@ -7,7 +7,7 @@ export default function ContoursSVG() {
       viewBox="0 0 1600 900"
       aria-hidden="true"
     >
-      <g stroke="white" strokeOpacity="0.4" fill="none" strokeWidth="2.2">
+      <g stroke="white" strokeOpacity="0.25" fill="none" strokeWidth="1.8">
         {Array.from({ length: 28 }).map((_, i) => {
           const y = 30 + i * 30;
           return (

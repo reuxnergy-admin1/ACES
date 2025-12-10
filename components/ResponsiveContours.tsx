@@ -114,7 +114,7 @@ export default function ResponsiveContours() {
   }
 
   const base = {
-    lineOpacity: 0.35,
+    lineOpacity: 0.22,
     sigma: 0.28,
   };
 
