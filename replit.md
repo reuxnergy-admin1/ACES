@@ -112,15 +112,16 @@ aces-aerodynamics/
 
 ## Recent Changes (Dec 10, 2025 - Visual & UX Improvements)
 
-### Background Contour Lines
-- Increased SVG stroke opacity from 0.15 to 0.25 and stroke width from 1.2 to 1.4
-- Increased WebGL line opacity from 0.1452 to 0.22
-- Contour lines now more visible for better visual impact
+### Background Contour Lines (Enhanced)
+- SVG fallback: strokeOpacity increased to 0.4, strokeWidth to 2.2
+- WebGL: lineOpacity increased to 0.35, lineWidth to 0.016
+- Lines are now thicker, brighter, and less pixelated
 
-### Carousel Infinite Loop
-- Fixed seamless looping by tripling carousel items instead of doubling
-- Changed animation keyframe from -50% to -33.333% for proper seamless loop
-- Client logos now scroll continuously without any pause or hiccup
+### Carousel Infinite Loop (Fixed)
+- Tripled carousel items for seamless looping
+- Changed from `gap` to `margin-right` on items for precise animation math
+- Animation translates exactly -33.333% for perfect loop continuity
+- No more stopping or resetting - truly continuous smooth motion
 
 ### Request a Quote Buttons
 - All CTA buttons now link to staging URL: https://staging-aces.netlify.app/contact/
