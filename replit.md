@@ -110,6 +110,32 @@ aces-aerodynamics/
 - **[README-LAYOUT.md](README-LAYOUT.md)** — Layout system and design tokens
 - **[UI-UX-PATTERNS.md](UI-UX-PATTERNS.md)** — Design system and UI patterns
 
+## Recent Changes (Dec 10, 2025 - Visual & UX Improvements)
+
+### Background Contour Lines
+- Increased SVG stroke opacity from 0.15 to 0.25 and stroke width from 1.2 to 1.4
+- Increased WebGL line opacity from 0.1452 to 0.22
+- Contour lines now more visible for better visual impact
+
+### Carousel Infinite Loop
+- Fixed seamless looping by tripling carousel items instead of doubling
+- Changed animation keyframe from -50% to -33.333% for proper seamless loop
+- Client logos now scroll continuously without any pause or hiccup
+
+### Request a Quote Buttons
+- All CTA buttons now link to staging URL: https://staging-aces.netlify.app/contact/
+- Updated across Nav.tsx, page.tsx, products/page.tsx, about/page.tsx, blog/page.tsx
+
+### Compliance Section Formatting
+- Standardized typography to match rest of site
+- Removed Prose wrapper, using consistent h2 and body text styling
+
+### Code Cleanup
+- Removed unused Prose import from app/page.tsx
+- All lint checks passing
+
+---
+
 ## Recent Changes (Nov 28, 2025 - Performance Optimizations)
 
 ### Animation Loop Optimization
