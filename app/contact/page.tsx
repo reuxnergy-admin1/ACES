@@ -17,15 +17,21 @@ export default function Page() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
+    const data = {
+      name: formData.get("name") as string,
+      company: formData.get("company") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      details: formData.get("details") as string,
+    };
+
     try {
-      const response = await fetch("/__forms.html", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
         },
-        body: new URLSearchParams(
-          formData as unknown as Record<string, string>,
-        ).toString(),
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {
@@ -71,12 +77,7 @@ export default function Page() {
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} method="POST" className="w-full">
-              {/* Hidden input for Netlify form name */}
-              <input type="hidden" name="form-name" value="contact" />
-
-              {/* Honeypot field for spam protection - hidden from humans */}
-              <input name="bot-field" type="text" style={{ display: "none" }} />
+            <form onSubmit={handleSubmit} className="w-full">
 
               <Grid12 data-reveal-blur-stagger>
                 <Span cols={6}>
