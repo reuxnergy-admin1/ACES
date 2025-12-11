@@ -613,12 +613,15 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   gap: 0;
   width: max-content;
   white-space: nowrap;
-  animation: marquee-linear var(--marquee-duration, 36s) linear infinite;
+  animation: marquee-linear 10s linear infinite;
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   perspective: 1000px;
   -webkit-perspective: 1000px;
+}
+@media (min-width: 768px) {
+  .marquee-track { animation-duration: 18s; }
 }
 .marquee-item { 
   flex: 0 0 auto; 
