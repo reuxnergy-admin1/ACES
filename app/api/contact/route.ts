@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     await client.emails.send({
       from: fromEmail,
-      to: 'info@acesaerodynamics.com',
+      to: 'lukas@reuxnergy.co.za',
       replyTo: email,
       subject,
       html: `
