@@ -7,6 +7,7 @@ type Client = {
 };
 
 const clients: Client[] = [
+  { name: "Aero Parts Africa", url: "https://aeropartsafrica.com/" },
   { name: "Lanseria Flight Centre", url: "https://www.flylfc.com" },
   { name: "Absolute Aircraft Parts", url: "https://absoluteaviation.co.za" },
   {
