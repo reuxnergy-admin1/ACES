@@ -39,7 +39,7 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex-shrink-0 inline-flex items-center justify-center px-3 py-1.5 md:px-7 md:py-3.5 border-2 border-white/85 rounded-lg hover:border-white transition-colors min-w-[126px] md:min-w-[180px] h-[43px] md:h-[58px]"
+      className="flex-shrink-0 inline-flex items-center justify-center px-4 py-1.5 md:px-7 md:py-3.5 border-2 border-white/85 rounded-lg hover:border-white transition-colors min-w-[140px] md:min-w-[200px] h-[43px] md:h-[58px]"
     >
       <span className="text-white text-xs md:text-sm font-medium text-center leading-tight tracking-wider">
         {isTwoLines ? (
@@ -63,12 +63,7 @@ export default function ClientCarousel({
   const looped = [
     ...clients.map((c) => ({ ...c, id: `${c.name}-a` })),
     ...clients.map((c) => ({ ...c, id: `${c.name}-b` })),
-    ...clients.map((c) => ({ ...c, id: `${c.name}-c` })),
   ];
-  const trackStyle: React.CSSProperties & { ["--marquee-duration"]?: string } =
-    {
-      ["--marquee-duration"]: "30s",
-    };
   return (
     <section
       aria-label="Our clients and partners"
@@ -77,7 +72,7 @@ export default function ClientCarousel({
     >
       <div className="overflow-hidden py-12">
         <div className="marquee" aria-hidden="true">
-          <ul className="marquee-track" style={trackStyle}>
+          <ul className="marquee-track">
             {looped.map((c) => (
               <li key={c.id} className="marquee-item">
                 <ClientBlock name={c.name} url={c.url} />
