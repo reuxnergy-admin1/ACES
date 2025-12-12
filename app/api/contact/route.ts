@@ -123,7 +123,7 @@ ${details}
 Reply directly to this email to respond to ${name}.
     `.trim();
 
-    await client.emails.send({
+    const result = await client.emails.send({
       from: fromEmail,
       to: toEmail,
       replyTo: email,
@@ -132,7 +132,17 @@ Reply directly to this email to respond to ${name}.
       text: textEmail
     });
 
-    return NextResponse.json({ success: true });
+    console.log('Resend result:', JSON.stringify(result));
+
+    if (result.error) {
+      console.error('Resend error:', result.error);
+      return NextResponse.json(
+        { error: result.error.message || 'Failed to send email' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true, id: result.data?.id });
   } catch (error) {
     console.error('Contact form error:', error);
     return NextResponse.json(
