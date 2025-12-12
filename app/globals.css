@@ -638,6 +638,10 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   100% { transform: translateX(-50%); }
 }
 
+.marquee-paused {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion) {
   .marquee-inner { animation-play-state: paused; }
 }

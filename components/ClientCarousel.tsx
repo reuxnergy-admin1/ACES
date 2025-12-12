@@ -1,5 +1,6 @@
 "use client";
 import clsx from "clsx";
+import { useEffect, useRef, useState } from "react";
 
 type Client = {
   name: string;
@@ -72,15 +73,46 @@ export default function ClientCarousel({
   className,
   reveal = false,
 }: Readonly<{ className?: string; reveal?: boolean }>) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        setShouldAnimate(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible]);
+
   return (
     <section
+      ref={sectionRef}
       aria-label="Our clients and partners"
       className={clsx("w-full", className)}
       {...(reveal ? { "data-reveal": true } : {})}
     >
       <div className="py-12">
         <div className="marquee" aria-hidden="true">
-          <div className="marquee-inner">
+          <div className={clsx("marquee-inner", !shouldAnimate && "marquee-paused")}>
             <MarqueeContent />
             <MarqueeContent />
           </div>
