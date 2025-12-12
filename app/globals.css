@@ -624,6 +624,7 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   display: flex;
   align-items: center;
   gap: clamp(1.5rem, 4vw, 3rem);
+  padding-left: clamp(1rem, 3vw, 2rem);
   padding-right: clamp(1.5rem, 4vw, 3rem);
 }
 .marquee-item { 
