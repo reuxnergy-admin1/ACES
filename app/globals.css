@@ -618,7 +618,7 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   animation: marquee-scroll 25s linear infinite;
 }
 @media (min-width: 768px) {
-  .marquee-inner { animation-duration: 40s; }
+  .marquee-inner { animation-duration: 60s; }
 }
 .marquee-content {
   display: flex;
