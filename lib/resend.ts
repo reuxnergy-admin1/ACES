@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 const FROM_EMAIL = 'Contact Form <onboarding@resend.dev>';
-const TO_EMAIL = 'info@reuxnergy.co.za';
+const TO_EMAIL = 'lukas@reuxnergy.co.za';
 
 export function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
