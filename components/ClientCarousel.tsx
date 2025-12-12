@@ -98,7 +98,7 @@ export default function ClientCarousel({
     if (isVisible) {
       const timer = setTimeout(() => {
         setShouldAnimate(true);
-      }, 1000);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [isVisible]);
