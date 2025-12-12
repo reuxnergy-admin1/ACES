@@ -39,9 +39,9 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex-shrink-0 inline-flex items-center justify-center px-4 py-1.5 md:px-7 md:py-3.5 border-2 border-white/85 rounded-lg hover:border-white transition-colors min-w-[140px] md:min-w-[200px] h-[43px] md:h-[58px]"
+      className="inline-flex items-center justify-center px-4 py-1.5 md:px-6 md:py-3 border-2 border-white/85 rounded-lg hover:border-white transition-colors min-w-[130px] md:min-w-[180px] h-[42px] md:h-[56px]"
     >
-      <span className="text-white text-xs md:text-sm font-medium text-center leading-tight tracking-wider">
+      <span className="text-white text-[10px] md:text-xs font-medium text-center leading-tight tracking-wider whitespace-nowrap">
         {isTwoLines ? (
           <>
             {line1}
@@ -56,29 +56,34 @@ function ClientBlock({ name, url }: Readonly<{ name: string; url: string }>) {
   );
 }
 
+function MarqueeContent() {
+  return (
+    <div className="marquee-content">
+      {clients.map((c) => (
+        <div key={c.name} className="marquee-item">
+          <ClientBlock name={c.name} url={c.url} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ClientCarousel({
   className,
   reveal = false,
 }: Readonly<{ className?: string; reveal?: boolean }>) {
-  const looped = [
-    ...clients.map((c) => ({ ...c, id: `${c.name}-a` })),
-    ...clients.map((c) => ({ ...c, id: `${c.name}-b` })),
-  ];
   return (
     <section
       aria-label="Our clients and partners"
       className={clsx("w-full", className)}
       {...(reveal ? { "data-reveal": true } : {})}
     >
-      <div className="overflow-hidden py-12">
+      <div className="py-12">
         <div className="marquee" aria-hidden="true">
-          <ul className="marquee-track">
-            {looped.map((c) => (
-              <li key={c.id} className="marquee-item">
-                <ClientBlock name={c.name} url={c.url} />
-              </li>
-            ))}
-          </ul>
+          <div className="marquee-inner">
+            <MarqueeContent />
+            <MarqueeContent />
+          </div>
         </div>
       </div>
 

@@ -605,40 +605,41 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 }
 
 /* Client logo marquee - seamless infinite scroll */
-.marquee { position: relative; width: 100%; overflow: hidden; }
-.marquee > * { max-width: 100%; }
-.marquee-track {
+.marquee { 
+  position: relative; 
+  width: 100%; 
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+.marquee-inner {
   display: flex;
-  align-items: center;
-  gap: 0;
-  width: max-content;
-  white-space: nowrap;
-  animation: marquee-linear 20s linear infinite;
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
+  width: fit-content;
+  animation: marquee-scroll 25s linear infinite;
 }
 @media (min-width: 768px) {
-  .marquee-track { animation-duration: 35s; }
+  .marquee-inner { animation-duration: 40s; }
+}
+.marquee-content {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-right: clamp(1.5rem, 4vw, 3rem);
 }
 .marquee-item { 
-  flex: 0 0 auto; 
+  flex-shrink: 0;
   opacity: 0.85;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  padding-right: clamp(2rem, 5vw, 5rem);
+  transition: opacity 0.2s ease;
 }
 .marquee-item:hover { opacity: 1; }
 
-@keyframes marquee-linear {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 @media (prefers-reduced-motion) {
-  .marquee-track { animation: none; }
+  .marquee-inner { animation-play-state: paused; }
 }
 
 /* SVG blob overlay container */
