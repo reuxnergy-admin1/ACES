@@ -615,17 +615,15 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 .marquee-inner {
   display: flex;
   width: fit-content;
-  animation: marquee-scroll 55s linear infinite;
+  animation: marquee-scroll 28s linear infinite;
 }
 @media (min-width: 768px) {
-  .marquee-inner { animation-duration: 360s; }
+  .marquee-inner { animation-duration: 180s; }
 }
 .marquee-content {
   display: flex;
   align-items: center;
   gap: clamp(1.5rem, 4vw, 3rem);
-  padding-left: clamp(1rem, 3vw, 2rem);
-  padding-right: clamp(1.5rem, 4vw, 3rem);
 }
 .marquee-item { 
   flex-shrink: 0;
