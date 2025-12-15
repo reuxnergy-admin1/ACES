@@ -615,6 +615,7 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
 .marquee-inner {
   display: flex;
   width: fit-content;
+  gap: clamp(1.5rem, 4vw, 3rem);
   animation: marquee-scroll 28s linear infinite;
 }
 @media (min-width: 768px) {
