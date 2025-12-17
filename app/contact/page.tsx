@@ -16,36 +16,22 @@ export default function Page() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    
-    const data = {
-      access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "",
-      name: formData.get("name"),
-      company: formData.get("company"),
-      email: formData.get("email"),
-      phone: formData.get("phone") || "Not provided",
-      message: formData.get("details"),
-      subject: `Website Lead – ${formData.get("company")}`,
-      from_name: "ACES Aerodynamics Website",
-    };
+    formData.append("access_key", "02b2196f-f365-4748-a917-6869d17490f3");
+    formData.append("subject", `Website Lead – ${formData.get("company")}`);
+    formData.append("from_name", "ACES Aerodynamics Website");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify(data),
+        body: formData,
       });
 
       const result = await response.json();
-      console.log("Web3Forms response:", result);
       
       if (result.success) {
         setStatus("success");
         form.reset();
       } else {
-        console.error("Web3Forms error:", result);
         setStatus("error");
       }
     } catch (err) {
