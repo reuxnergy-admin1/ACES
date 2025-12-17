@@ -17,7 +17,8 @@ export default function Page() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     formData.append("access_key", "02b2196f-f365-4748-a917-6869d17490f3");
-    formData.append("subject", `Website Lead – ${formData.get("company")}`);
+    const company = formData.get("company") as string;
+    formData.append("subject", `Website Lead – ${company}`);
     formData.append("from_name", "ACES Aerodynamics Website");
 
     try {
@@ -140,14 +141,14 @@ export default function Page() {
                 </Span>
                 <Span cols={12}>
                   <label
-                    htmlFor="details"
+                    htmlFor="message"
                     className="block text-white/60 text-sm mb-2"
                   >
                     Project details *
                   </label>
                   <textarea
-                    id="details"
-                    name="details"
+                    id="message"
+                    name="message"
                     required
                     className="w-full bg-black border border-white/20 rounded px-4 py-3"
                     rows={6}
