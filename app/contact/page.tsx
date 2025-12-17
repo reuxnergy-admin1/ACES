@@ -87,6 +87,8 @@ export default function Page() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="w-full">
+              {/* Honeypot field for spam prevention - hidden from users */}
+              <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
               <Grid12 data-reveal-blur-stagger>
                 <Span cols={6}>
                   <label
