@@ -84,19 +84,19 @@ export function Footer() {
             <div className="mt-2 space-y-2">
               <a
                 className="link-underline text-white/85 hover:text-white block"
-                href="/about/"
+                href="https://www.acesaerodynamics.com/about/"
               >
                 About
               </a>
               <a
                 className="link-underline text-white/85 hover:text-white block"
-                href="/products/"
+                href="https://www.acesaerodynamics.com/products/"
               >
                 Products and Services
               </a>
               <a
                 className="link-underline text-white/85 hover:text-white block"
-                href="/blog/"
+                href="https://www.acesaerodynamics.com/blog/"
               >
                 Insights
               </a>

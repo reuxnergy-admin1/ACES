@@ -106,7 +106,7 @@ export default function Page() {
           {/* Centered Request a Quote button */}
           <div className="mt-12 flex justify-center">
             <a
-              href="/contact/"
+              href="https://www.acesaerodynamics.com/contact/"
               className="button-primary h-11 px-6 whitespace-nowrap"
             >
               <span aria-hidden="true" className="reveal-line h top" />

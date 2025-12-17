@@ -174,10 +174,10 @@ export function Nav() {
 
   const items: NavItem[] = useMemo(
     () => [
-      { id: "home", href: "/", label: "HOME" },
-      { id: "about", href: "/about/", label: "ABOUT" },
-      { id: "products", href: "/products/", label: "PRODUCTS" },
-      { id: "insights", href: "/blog/", label: "INSIGHTS" },
+      { id: "home", href: "https://www.acesaerodynamics.com/", label: "HOME" },
+      { id: "about", href: "https://www.acesaerodynamics.com/about/", label: "ABOUT" },
+      { id: "products", href: "https://www.acesaerodynamics.com/products/", label: "PRODUCTS" },
+      { id: "insights", href: "https://www.acesaerodynamics.com/blog/", label: "INSIGHTS" },
     ],
     [],
   );
@@ -322,7 +322,7 @@ export function Nav() {
               <div className="grid-12 gutter items-center">
                 <div className="md:col-span-4 flex items-center flex-shrink-0">
                   <Link
-                    href="/"
+                    href="https://www.acesaerodynamics.com/"
                     aria-label="ACES home"
                     className="flex items-center"
                   >
@@ -396,7 +396,7 @@ export function Nav() {
                 </nav>
                 <div className="hidden md:flex md:col-span-3 justify-self-end">
                   <a
-                    href="/contact/"
+                    href="https://www.acesaerodynamics.com/contact/"
                     className="button-primary uc tracking-[0.08em] h-11 px-5 whitespace-nowrap text-sm flex-shrink-0"
                   >
                     <span aria-hidden="true" className="reveal-line h top" />
@@ -413,7 +413,7 @@ export function Nav() {
             {/* Mobile layout: logo left, menu button right */}
             <div className="flex items-center justify-between md:hidden">
               <Link
-                href="/"
+                href="https://www.acesaerodynamics.com/"
                 aria-label="ACES home"
                 className="flex items-center"
               >
@@ -610,7 +610,7 @@ export function Nav() {
               );
             })}
             <a
-              href="/contact/"
+              href="https://www.acesaerodynamics.com/contact/"
               className="button-primary uc tracking-[0.08em] h-11 px-6 whitespace-nowrap"
             >
               <span aria-hidden="true" className="reveal-line h top" />

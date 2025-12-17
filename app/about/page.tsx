@@ -190,7 +190,7 @@ export default function Page() {
             <Span cols={12}>
               <div className="mt-8 flex justify-center">
                 <a
-                  href="/contact/"
+                  href="https://www.acesaerodynamics.com/contact/"
                   className="button-primary h-11 px-8 whitespace-nowrap"
                 >
                   <span aria-hidden="true" className="reveal-line h top" />
