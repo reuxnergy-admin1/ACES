@@ -101,7 +101,7 @@ export default function Page() {
             <Span cols={12}>
               <div className="mt-8 flex justify-center">
                 <a
-                  href="https://staging-aces.netlify.app/contact/"
+                  href="/contact/"
                   className="button-primary h-11 px-6 whitespace-nowrap"
                 >
                   <span aria-hidden="true" className="reveal-line h top" />
@@ -221,7 +221,7 @@ export default function Page() {
             <div className="py-8 flex flex-col items-center text-center md:flex-row md:items-center md:justify-between md:text-left gap-4">
               <h2 className="text-2xl uc tracking-[0.08em]">Order with ACES</h2>
               <a
-                href="https://staging-aces.netlify.app/contact/"
+                href="/contact/"
                 className="button-primary h-11 px-6 whitespace-nowrap"
               >
                 <span aria-hidden="true" className="reveal-line h top" />

@@ -39,7 +39,7 @@ export default function Page() {
           {/* Centered Request a Quote button */}
           <div className="mt-12 flex justify-center">
             <a
-              href="https://staging-aces.netlify.app/contact/"
+              href="/contact/"
               className="button-primary h-11 px-6 whitespace-nowrap"
             >
               <span aria-hidden="true" className="reveal-line h top" />

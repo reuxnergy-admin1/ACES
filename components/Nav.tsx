@@ -396,7 +396,7 @@ export function Nav() {
                 </nav>
                 <div className="hidden md:flex md:col-span-3 justify-self-end">
                   <a
-                    href="https://staging-aces.netlify.app/contact/"
+                    href="/contact/"
                     className="button-primary uc tracking-[0.08em] h-11 px-5 whitespace-nowrap text-sm flex-shrink-0"
                   >
                     <span aria-hidden="true" className="reveal-line h top" />
@@ -610,7 +610,7 @@ export function Nav() {
               );
             })}
             <a
-              href="https://staging-aces.netlify.app/contact/"
+              href="/contact/"
               className="button-primary uc tracking-[0.08em] h-11 px-6 whitespace-nowrap"
             >
               <span aria-hidden="true" className="reveal-line h top" />

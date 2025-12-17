@@ -11,7 +11,7 @@ const Footer = () => {
         <span className="tooltip w-24">WhatsApp</span>
       </div>
       <div className="content">
-        <p className="text px-4">Learn more about us at https://staging-aces.netlify.app/about/</p>
+        <p className="text px-4">Learn more about us at /about/</p>
       </div>
     </footer>
   );
