@@ -39,11 +39,13 @@ export default function Page() {
       });
 
       const result = await response.json();
+      console.log("Web3Forms response:", result);
       
       if (result.success) {
         setStatus("success");
         form.reset();
       } else {
+        console.error("Web3Forms error:", result.message);
         setStatus("error");
       }
     } catch (err) {
