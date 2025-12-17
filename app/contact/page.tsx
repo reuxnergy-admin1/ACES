@@ -17,14 +17,25 @@ export default function Page() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    formData.append("access_key", "8c1708b6-6279-4d51-9b5c-9406a00e0d22");
-    formData.append("subject", `Website Lead – ${formData.get("company")}`);
-    formData.append("from_name", "ACES Aerodynamics Website");
+    const data = {
+      access_key: "8c1708b6-6279-4d51-9b5c-9406a00e0d22",
+      name: formData.get("name"),
+      company: formData.get("company"),
+      email: formData.get("email"),
+      phone: formData.get("phone") || "Not provided",
+      message: formData.get("details"),
+      subject: `Website Lead – ${formData.get("company")}`,
+      from_name: "ACES Aerodynamics Website",
+    };
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
@@ -76,7 +87,6 @@ export default function Page() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="w-full">
-              <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
               <Grid12 data-reveal-blur-stagger>
                 <Span cols={6}>
                   <label
