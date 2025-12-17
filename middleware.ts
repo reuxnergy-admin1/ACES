@@ -57,7 +57,7 @@ export function middleware(req: NextRequest) {
     "font-src 'self' https://use.typekit.net https://p.typekit.net",
     "style-src 'self' 'unsafe-inline' https://use.typekit.net https://p.typekit.net",
     `script-src 'self' 'unsafe-inline' ${isProd ? '' : "'unsafe-eval'"} blob: data: https: http:`.trim(),
-    isProd ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
+    isProd ? "connect-src 'self' https://api.web3forms.com" : "connect-src 'self' ws: wss: https://api.web3forms.com",
   ];
 
 
