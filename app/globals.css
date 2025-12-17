@@ -248,7 +248,7 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
   color: black;
   background-color: white;
 }
-.button-primary:active { transform: scale(0.99); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); }
+.button-primary:active { transform: scale(0.99); }
 .button-primary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* Solid button variant: same geometry and sharp corners; visually aligned with primary */
@@ -268,7 +268,7 @@ button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary
 }
 .button-solid:focus { outline: none; }
 .button-solid:hover { color: black; background-color: white; }
-.button-solid:active { transform: scale(0.99); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12); }
+.button-solid:active { transform: scale(0.99); }
 .button-solid:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 /* View Transitions (guard for support) */
