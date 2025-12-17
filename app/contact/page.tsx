@@ -18,7 +18,7 @@ export default function Page() {
     const formData = new FormData(form);
     
     const data = {
-      access_key: "8c1708b6-6279-4d51-9b5c-9406a00e0d22",
+      access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "",
       name: formData.get("name"),
       company: formData.get("company"),
       email: formData.get("email"),
