@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     // Send email via Resend
     const result = await resend.emails.send({
       from: "contactform@acesaerodynamics.co.za",
-      to: "lukas@reuxnergy.co.za",
+      to: "info@acesaerodynamics.com",
       replyTo: email,
       subject: `Website Lead – ${company}`,
       html: `
