@@ -13,7 +13,7 @@ const nextConfig = {
     // Use Next Image optimizer in server/edge runtime
   },
   trailingSlash: true,
-  allowedDevOrigins: ['*'],
+  allowedDevOrigins: ['*.replit.dev', '*.replit.app', '*.picard.replit.dev'],
   turbopack: {
     // Optional: configure Turbopack here.
   },
