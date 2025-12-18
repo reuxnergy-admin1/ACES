@@ -18,12 +18,12 @@ export async function POST(request: NextRequest) {
 
     // Send email via Resend
     const result = await resend.emails.send({
-      from: "contactform@acesaerodynamics.co.za",
+      from: "onboarding@resend.dev",
       to: "lukas@reuxnergy.co.za",
       replyTo: email,
       subject: `Website Lead – ${company}`,
       html: `
-        <h2>New Contact Form Submission</h2>
+        <h2>New Contact Form Submission from ACES Aerodynamics</h2>
         <p><strong>Name:</strong> ${escapeHtml(name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(email)}</p>
         <p><strong>Company:</strong> ${escapeHtml(company)}</p>
