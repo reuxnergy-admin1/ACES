@@ -616,10 +616,10 @@ img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
   display: flex;
   width: fit-content;
   gap: clamp(1.5rem, 4vw, 3rem);
-  animation: marquee-scroll 32s linear infinite;
+  animation: marquee-scroll 36.8s linear infinite;
 }
 @media (min-width: 768px) {
-  .marquee-inner { animation-duration: 83s; }
+  .marquee-inner { animation-duration: 55.3s; }
 }
 .marquee-content {
   display: flex;

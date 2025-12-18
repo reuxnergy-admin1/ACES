@@ -16,36 +16,35 @@ export default function Page() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    
-    const data = {
-      access_key: "02b2196f-f365-4748-a917-6869d17490f3",
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      company: formData.get("company") as string,
-      phone: formData.get("phone") as string || "Not provided",
-      message: formData.get("message") as string,
-      subject: `Website Lead – ${formData.get("company")}`,
-      from_name: "ACES Aerodynamics Website",
-    };
+
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const company = formData.get("company") as string;
+    const phone = (formData.get("phone") as string) || "Not provided";
+    const message = formData.get("message") as string;
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          phone,
+          message,
+        }),
       });
 
       const result = await response.json();
-      console.log("Web3Forms response:", result);
-      
-      if (result.success) {
+
+      if (response.ok) {
         setStatus("success");
         form.reset();
       } else {
-        console.error("Web3Forms error:", result.message);
+        console.error("Form submission error:", result.message);
         setStatus("error");
       }
     } catch (err) {
