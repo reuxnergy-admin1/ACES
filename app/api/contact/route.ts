@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     if (result.error) {
       console.error("Resend error:", result.error);
       return NextResponse.json(
-        { message: "Failed to send email" },
+        { message: "Failed to send email", error: result.error },
         { status: 500 }
       );
     }
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(
-      { message: "An error occurred while processing your request" },
+      { message: "An error occurred while processing your request", error: String(error) },
       { status: 500 }
     );
   }
