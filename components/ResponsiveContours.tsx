@@ -59,25 +59,57 @@ export default function ResponsiveContours() {
     // Allow GL and enable cursor-driven interactivity on fine pointers
     setCanUseGL(Boolean(fine));
 
-    // Wait significantly longer before enabling WebGL to let the main thread settle.
-    // This is critical for Lighthouse scores: WebGL init causes massive TBT spikes.
-    const DEFER_GL_MS = 3500; // 3.5s after mount — well after LCP window
+    // Enable WebGL after LCP completes (observed) or a fallback timer, whichever
+    // fires first. This keeps Lighthouse happy (WebGL init after LCP window)
+    // while eliminating the fixed 3.5s wait on fast connections where LCP
+    // finishes in ~1-1.5s.
+    const MIN_DEFER_MS = 1500; // absolute minimum: never before 1.5s
+    const MAX_DEFER_MS = 3500; // fallback if PerformanceObserver is unavailable
 
     const w = window as unknown as {
       requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
       cancelIdleCallback?: (h: number) => void;
     };
 
-    // Use a two-stage deferral: setTimeout first, then requestIdleCallback
-    const timerId = window.setTimeout(() => {
+    let cancelled = false;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
+    let lcpObserver: PerformanceObserver | null = null;
+
+    const enableGL = () => {
+      if (cancelled) return;
+      cancelled = true; // only fire once
       const schedule: (cb: () => void) => number = w.requestIdleCallback
-        ? (cb) => w.requestIdleCallback!(cb, { timeout: 2000 })
-        : (cb) => window.setTimeout(cb, 200);
+        ? (cb) => w.requestIdleCallback!(cb, { timeout: 1000 })
+        : (cb) => window.setTimeout(cb, 100);
       idleHandle.current = schedule(() => setAllowGL(true));
-    }, DEFER_GL_MS);
+    };
+
+    // Strategy 1: Observe LCP, then defer at least MIN_DEFER_MS from mount
+    const mountTime = performance.now();
+    try {
+      lcpObserver = new PerformanceObserver((list) => {
+        // LCP may fire multiple times; each entry supersedes the last
+        const entries = list.getEntries();
+        if (entries.length === 0) return;
+        const elapsed = performance.now() - mountTime;
+        const remaining = Math.max(0, MIN_DEFER_MS - elapsed);
+        // Schedule enableGL after the minimum floor
+        if (timerId != null) clearTimeout(timerId);
+        timerId = setTimeout(enableGL, remaining);
+      });
+      lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
+    } catch {
+      // PerformanceObserver not supported — fall through to fallback
+    }
+
+    // Strategy 2: Fallback timer in case LCP observer never fires
+    const fallbackId = setTimeout(enableGL, MAX_DEFER_MS);
 
     return () => {
-      window.clearTimeout(timerId);
+      cancelled = true;
+      if (timerId != null) clearTimeout(timerId);
+      clearTimeout(fallbackId);
+      lcpObserver?.disconnect();
       if (idleHandle.current != null) {
         if (w.cancelIdleCallback) {
           w.cancelIdleCallback(idleHandle.current);
