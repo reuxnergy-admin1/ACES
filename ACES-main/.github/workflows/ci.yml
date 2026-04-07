@@ -1,0 +1,31 @@
+name: ci
+permissions:
+  contents: read
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm@10
+      - name: Verify pnpm
+        run: pnpm -v
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck and Build
+        run: |
+          pnpm -s build
+      - name: Lighthouse CI (collect + assert)
+        run: |
+          pnpm -s lh:ci

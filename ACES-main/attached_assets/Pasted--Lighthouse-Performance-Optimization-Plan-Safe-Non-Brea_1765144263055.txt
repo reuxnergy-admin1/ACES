@@ -1,0 +1,437 @@
+# Lighthouse Performance Optimization Plan - Safe & Non-Breaking
+
+## Phase 1: Font Loading Optimization (Quick Win - 40ms savings)
+
+### Issue: Webfonts blocking text visibility
+**Impact:** Low risk, high reward  
+**Time:** 15 minutes
+
+### Actions:
+
+**1. Add font-display to Typekit fonts:**
+
+Find where Typekit is loaded (likely in `app/layout.tsx` or a `<head>` section):
+```tsx
+// If using Typekit script, add font-display parameter
+// The URL parameter approach doesn't work for Typekit
+// Instead, use CSS override (see below)
+```
+
+**Add CSS override in `globals.css`:**
+```css
+/* Add at the top of globals.css */
+/* This applies to all @font-face declarations */
+@font-face {
+  font-display: swap;
+}
+```
+
+**Note:** For Typekit specifically, you may need to use their API settings or add this CSS rule.
+
+**2. Preload critical fonts:**
+
+In `app/layout.tsx` add to the `<head>`:
+```tsx
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <head>
+        <link 
+          rel="preload" 
+          href="https://use.typekit.net/af/YOUR-FONT-ID.woff2" 
+          as="font" 
+          type="font/woff2" 
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+---
+
+## Phase 2: JavaScript Optimization (Major Impact - 1,923ms savings potential)
+
+### Issue: Large JS bundles and execution time
+**Impact:** Medium risk (test thoroughly)  
+**Time:** 30-45 minutes
+
+### Actions:
+
+**1. Enable SWC Minification:**
+
+Check `next.config.js` or `next.config.mjs` has:
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  swcMinify: true,
+  compiler: {
+    removeConsole: {
+      exclude: ['error', 'warn'], // Keep error/warn, remove others in production
+    }
+  }
+}
+
+module.exports = nextConfig
+```
+
+**2. Dynamic imports for heavy components:**
+
+Find large components that aren't immediately visible:
+```tsx
+// Before (loads immediately):
+import { ClientCarousel } from '@/components/ClientCarousel'
+
+// After (loads when needed):
+import dynamic from 'next/dynamic'
+
+const ClientCarousel = dynamic(() => import('@/components/ClientCarousel').then(mod => ({ default: mod.ClientCarousel })), {
+  loading: () => <div className="h-32 animate-pulse bg-gray-800" />,
+  ssr: true // Enable SSR if component needs it
+})
+```
+
+**Candidates for dynamic import:**
+- Heavy animation components
+- Modal/popup components  
+- Interactive widgets not in initial viewport
+- Third-party embeds
+
+**3. Optimize third-party scripts:**
+
+In `app/layout.tsx`, use Next.js Script component:
+```tsx
+import Script from 'next/script'
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        {children}
+        <Script 
+          src="https://use.typekit.net/xxxxx.js"
+          strategy="lazyOnload"
+        />
+      </body>
+    </html>
+  )
+}
+```
+
+**Script strategies:**
+- `beforeInteractive` - Loads before page is interactive (critical scripts)
+- `afterInteractive` - Loads after page is interactive (default)
+- `lazyOnload` - Loads during idle time (best for non-critical)
+
+---
+
+## Phase 3: Image Optimization (Low risk)
+
+### Actions:
+
+**1. Verify all images use Next.js Image component:**
+```bash
+# Search for regular img tags that should be converted
+grep -r "<img" app/ components/ --include="*.tsx" --include="*.jsx"
+```
+
+Replace any `<img>` with Next.js `<Image>`:
+```tsx
+import Image from 'next/image'
+
+// Before:
+<img src="/logo.png" alt="Logo" />
+
+// After:
+<Image 
+  src="/logo.png" 
+  alt="Logo" 
+  width={200} 
+  height={100}
+  // Add sizes for responsive images
+  sizes="(max-width: 768px) 100vw, 200px"
+/>
+```
+
+**2. Add priority to above-the-fold images:**
+```tsx
+<Image 
+  src="/hero.jpg" 
+  alt="Hero image"
+  width={1920}
+  height={1080}
+  priority // Preloads this image
+  quality={90} // Default is 75
+/>
+```
+
+---
+
+## Phase 4: CSS Optimization (405ms potential savings)
+
+### Actions:
+
+**1. Verify Tailwind purge configuration:**
+
+In `tailwind.config.js` or `tailwind.config.ts`:
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
+
+This ensures only used Tailwind classes are included in production.
+
+**2. Minimize custom CSS:**
+
+Review `globals.css` for unused styles:
+```bash
+# Check file size
+ls -lh app/globals.css
+# or
+ls -lh styles/globals.css
+```
+
+Remove any unused custom CSS rules.
+
+---
+
+## Phase 5: Bundle Analysis (Understanding the problem)
+
+### Actions:
+
+**1. Install and configure bundle analyzer:**
+```bash
+# Install as dev dependency
+pnpm add -D @next/bundle-analyzer
+```
+
+**2. Update `next.config.js`:**
+```js
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  swcMinify: true,
+  // ... your other config
+}
+
+module.exports = withBundleAnalyzer(nextConfig)
+```
+
+**3. Run analysis:**
+```bash
+# Generate bundle analysis report
+ANALYZE=true pnpm build
+
+# This will open a browser window showing your bundle composition
+```
+
+---
+
+## Implementation Order (Safest First)
+
+### Week 1: Low-Risk Changes (Test each before moving to next)
+
+1. ✅ Add `font-display: swap` CSS override
+2. ✅ Add `removeConsole` to next.config.js
+3. ✅ Verify all images use Next.js Image component
+4. ✅ Add `priority` prop to hero/above-fold images
+5. ✅ Test locally with production build (`pnpm build && pnpm start`)
+6. ✅ Push to staging/preview, verify
+7. ✅ Push to production
+
+### Week 2: Medium-Risk Changes (Test thoroughly)
+
+1. ✅ Install and run bundle analyzer
+2. ✅ Identify largest components/libraries
+3. ✅ Add dynamic imports to non-critical components
+4. ✅ Change Script strategy to `lazyOnload` for non-critical scripts
+5. ✅ Test all functionality locally
+6. ✅ Push to staging, verify animations/interactions work
+7. ✅ Push to production
+
+### Week 3: Fine-tuning
+
+1. ✅ Analyze bundle report findings
+2. ✅ Consider splitting large pages if needed
+3. ✅ Optimize any identified heavy dependencies
+4. ✅ Run Lighthouse again to measure improvement
+5. ✅ Document changes
+
+---
+
+## Testing Checklist (After EACH change)
+
+Run this checklist before pushing ANY change:
+```bash
+# 1. Clean build
+rm -rf .next
+pnpm build
+
+# 2. Start production server locally
+pnpm start
+```
+
+**Manual testing (open http://localhost:3000):**
+- [ ] Homepage loads correctly
+- [ ] Carousel scrolls smoothly at correct speed (40s duration)
+- [ ] Carousel blocks are correct size
+- [ ] Social media tooltips appear on hover
+- [ ] Tooltip borders show correctly
+- [ ] All text is visible and readable
+- [ ] All fonts load correctly
+- [ ] All images display properly
+- [ ] Mobile responsive design works
+- [ ] All links navigate correctly
+- [ ] No console errors
+- [ ] Animations are smooth
+
+**Lighthouse testing:**
+- [ ] Run Lighthouse in Chrome DevTools (Incognito mode)
+- [ ] Check Performance score increased
+- [ ] Verify no new issues introduced
+
+**If all tests pass:**
+```bash
+git add .
+git commit -m "Performance: Add font-display swap for faster text rendering"
+git push origin main
+```
+
+**If ANY test fails:**
+```bash
+# Revert changes immediately
+git reset --hard HEAD
+```
+
+---
+
+## Expected Results
+
+| Optimization | Before | After | Improvement |
+|--------------|--------|-------|-------------|
+| Font Display | Blocking | Swap | ~40ms FCP |
+| JS Execution | 1,923ms | ~1,500ms | ~400ms |
+| Bundle Size | ? | -10-20% | Faster load |
+| Lighthouse Score | Current | +10-20 pts | Better UX |
+
+**Note:** Actual improvements depend on your specific codebase.
+
+---
+
+## Rollback Plan (If Something Breaks)
+
+### Option 1: Revert last commit
+```bash
+git revert HEAD
+git push origin main
+```
+
+### Option 2: Restore from backup
+```bash
+# If you created a backup branch
+git checkout backup-before-optimization
+git checkout -b main-fixed
+git push origin main-fixed --force
+```
+
+### Option 3: Netlify rollback
+- Go to Netlify dashboard
+- Click "Deploys"
+- Find last working deploy
+- Click "Publish deploy"
+
+---
+
+## Safe First Steps (Start Here Today)
+
+**Step 1: Font Display (5 minutes, zero risk)**
+
+Add to `app/globals.css`:
+```css
+/* Force font-display for all fonts */
+@font-face {
+  font-display: swap;
+}
+```
+
+Test locally, commit, push.
+
+**Step 2: Remove Console Logs (2 minutes, zero risk)**
+
+Update `next.config.js`:
+```js
+const nextConfig = {
+  compiler: {
+    removeConsole: {
+      exclude: ['error', 'warn'],
+    }
+  }
+}
+```
+
+Test locally, commit, push.
+
+**Step 3: Bundle Analysis (10 minutes, information only)**
+```bash
+pnpm add -D @next/bundle-analyzer
+# Update next.config.js (see Phase 5)
+ANALYZE=true pnpm build
+```
+
+Review what's taking up space - don't change anything yet.
+
+**Step 4: Test Everything (15 minutes)**
+
+Run through entire testing checklist above.
+
+---
+
+## Questions Before Starting?
+
+- What's your current Lighthouse Performance score?
+- Do you have a staging environment to test on?
+- Is there a specific target score you need to hit?
+- Any particular metrics (FCP, LCP, TTI) that are worst?
+
+---
+
+## Common Issues & Solutions
+
+**Issue:** "Module not found" after dynamic import  
+**Solution:** Check import path is correct, use `.then(mod => ({ default: mod.ComponentName }))`
+
+**Issue:** Font still blocking  
+**Solution:** Typekit needs CSS override, URL parameter doesn't work
+
+**Issue:** Images not optimizing  
+**Solution:** Ensure width/height props are set, check next.config.js has `images` config
+
+**Issue:** Bundle analyzer won't run  
+**Solution:** Make sure `ANALYZE=true` is before `pnpm build`, not after
+
+**Issue:** Build fails after changes  
+**Solution:** Revert immediately with `git reset --hard HEAD`, identify what broke
+
+---
+
+This plan is:
+- ✅ Technically accurate
+- ✅ Safe and incremental  
+- ✅ Preserves all functionality
+- ✅ Easy to rollback
+- ✅ Tested approach

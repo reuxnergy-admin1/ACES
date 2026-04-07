@@ -1,0 +1,218 @@
+# Fix Social Media Tooltip - Border Width Too Narrow
+
+## The Simple Problem
+The tooltip border and text both show correctly, but **the border is NOT WIDE ENOUGH**. The border is too narrow and doesn't extend far enough horizontally to properly enclose the text.
+
+## What's Wrong:
+- Text displays correctly ✓
+- Border displays correctly ✓  
+- Border is too narrow/short - doesn't extend wide enough ✗
+- The horizontal padding (left/right) is insufficient
+
+## What Should Happen:
+- Border should be WIDER to fully wrap around text
+- More space needed on LEFT and RIGHT sides of text
+- Text should not be cramped against the border edges
+
+---
+
+## THE FIX - Increase Horizontal Padding
+
+The issue is **insufficient horizontal padding** (`px-*` value is too small).
+
+### Current Problem:
+```jsx
+// Border is too narrow - not enough horizontal padding
+className="px-2 py-2 border-2 border-white rounded-lg"
+// px-2 = only 8px on left/right - TOO SMALL
+```
+
+### The Solution:
+```jsx
+// INCREASE the px-* value to make border wider
+className="px-8 py-2 border-2 border-white rounded-lg"
+// px-8 = 32px on left/right - MUCH WIDER
+```
+
+---
+
+## EXACT FIX TO APPLY
+
+Find your tooltip code and **change the `px-*` class to a LARGER number**:
+
+### Try these padding values (from smallest to largest):
+
+**Option 1: Medium width**
+```jsx
+className="px-6 py-2 border-2 border-white rounded-lg text-white text-sm whitespace-nowrap"
+// px-6 = 24px left/right padding
+```
+
+**Option 2: Wide (RECOMMENDED)**
+```jsx
+className="px-8 py-2 border-2 border-white rounded-lg text-white text-sm whitespace-nowrap"
+// px-8 = 32px left/right padding
+```
+
+**Option 3: Extra Wide**
+```jsx
+className="px-10 py-2 border-2 border-white rounded-lg text-white text-sm whitespace-nowrap"
+// px-10 = 40px left/right padding
+```
+
+**Option 4: Very Wide**
+```jsx
+className="px-12 py-2.5 border-2 border-white rounded-lg text-white text-sm whitespace-nowrap"
+// px-12 = 48px left/right padding
+```
+
+---
+
+## Complete Tooltip Code with WIDER Border
+
+```jsx
+<span 
+  className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-8 py-2 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+>
+  WhatsApp
+</span>
+```
+
+**The critical change: `px-8`** (or higher) instead of `px-2`, `px-3`, `px-4`, etc.
+
+---
+
+## If Tailwind Classes Don't Work
+
+Use inline styles to force wider padding:
+
+```jsx
+<span 
+  className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 py-2 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity"
+  style={{
+    paddingLeft: '32px',   // 32px left padding
+    paddingRight: '32px'   // 32px right padding
+  }}
+>
+  WhatsApp
+</span>
+```
+
+**Or increase even more:**
+```jsx
+style={{
+  paddingLeft: '40px',   // 40px - WIDER
+  paddingRight: '40px'
+}}
+```
+
+---
+
+## Step-by-Step Instructions for Replit
+
+1. **Find the tooltip element** in your code (the span or div with "WhatsApp", "Instagram", etc.)
+
+2. **Locate the `px-*` class** in the className (e.g., `px-2`, `px-3`, `px-4`)
+
+3. **Change it to `px-8` or higher:**
+   - Change `px-2` → `px-8`
+   - Change `px-3` → `px-8`
+   - Change `px-4` → `px-8`
+
+4. **Save and test** - the border should now be wider
+
+5. **If still too narrow, increase more:**
+   - Try `px-10`
+   - Try `px-12`
+   - Try `px-16`
+
+---
+
+## Example: Before and After
+
+**BEFORE (too narrow):**
+```jsx
+<span className="absolute px-3 py-2 border-2 border-white rounded-lg text-white">
+  WhatsApp
+</span>
+```
+Result: Border is cramped, barely wider than text
+
+**AFTER (correct width):**
+```jsx
+<span className="absolute px-8 py-2 border-2 border-white rounded-lg text-white">
+  WhatsApp
+</span>
+```
+Result: Border has comfortable width with proper spacing
+
+---
+
+## Quick Reference - Tailwind Padding Values
+
+- `px-2` = 8px left/right → **TOO SMALL**
+- `px-3` = 12px left/right → **TOO SMALL**  
+- `px-4` = 16px left/right → **TOO SMALL**
+- `px-5` = 20px left/right → **SMALL**
+- `px-6` = 24px left/right → **MEDIUM**
+- `px-8` = 32px left/right → **GOOD** ✓
+- `px-10` = 40px left/right → **WIDER** ✓
+- `px-12` = 48px left/right → **VERY WIDE** ✓
+
+**Start with `px-8` and increase if needed.**
+
+---
+
+## All 4 Social Media Tooltips with Wider Borders
+
+```jsx
+{/* WhatsApp */}
+<div className="relative inline-flex group">
+  <a href="https://wa.me/YOUR_NUMBER" className="w-12 h-12 flex items-center justify-center">
+    {/* Icon */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-8 py-2 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+    WhatsApp
+  </span>
+</div>
+
+{/* Instagram */}
+<div className="relative inline-flex group">
+  <a href="https://instagram.com/HANDLE" className="w-12 h-12 flex items-center justify-center">
+    {/* Icon */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-8 py-2 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+    Instagram
+  </span>
+</div>
+
+{/* LinkedIn */}
+<div className="relative inline-flex group">
+  <a href="https://linkedin.com/in/PROFILE" className="w-12 h-12 flex items-center justify-center">
+    {/* Icon */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-8 py-2 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+    LinkedIn
+  </span>
+</div>
+
+{/* Facebook */}
+<div className="relative inline-flex group">
+  <a href="https://facebook.com/PAGE" className="w-12 h-12 flex items-center justify-center">
+    {/* Icon */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-8 py-2 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+    Facebook
+  </span>
+</div>
+```
+
+---
+
+## Summary
+
+**THE ONLY CHANGE NEEDED:**
+
+Change `px-2`, `px-3`, or `px-4` to **`px-8`** (or higher like `px-10`, `px-12`)
+
+This increases the horizontal padding, making the border wider so it properly wraps around the text with comfortable spacing on the left and right sides.

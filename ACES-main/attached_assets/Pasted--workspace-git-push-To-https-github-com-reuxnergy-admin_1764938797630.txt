@@ -1,0 +1,59 @@
+~/workspace$ git push
+To https://github.com/reuxnergy-admin1/ACES
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/reuxnergy-admin1/ACES'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+~/workspace$ git push main
+fatal: 'main' does not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+~/workspace$ # Check what files have changed
+git status
+
+# Stage all changes
+git add .
+
+# Create a commit with a message
+git commit -m "Update carousel blocks and center heading"
+
+# Push to GitHub
+git push origin main
+On branch main
+Your branch is ahead of 'origin/main' by 9 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+On branch main
+Your branch is ahead of 'origin/main' by 9 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+To https://github.com/reuxnergy-admin1/ACES
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/reuxnergy-admin1/ACES'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+~/workspace$ git add . && git commit -m "Update carousel blocks and center heading" && git push origin main
+On branch main
+Your branch is ahead of 'origin/main' by 9 commits.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+~/workspace$ git push
+To https://github.com/reuxnergy-admin1/ACES
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/reuxnergy-admin1/ACES'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.

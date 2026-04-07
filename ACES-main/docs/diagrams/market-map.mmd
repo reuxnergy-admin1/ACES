@@ -1,0 +1,71 @@
+flowchart TB
+  A[ACES Aerodynamics<br/>Unpressurised Aviation Transparencies &amp; Motorsport Windows]
+
+  %% Pillars
+  subgraph AV["Aviation (Unpressurised)"]
+    direction TB
+
+    subgraph AV1["Maintenance & Operators"]
+      AV1a[AMOs / MROs]
+      AV1b["Flight schools (ATOs)"]
+      AV1c[Fleet operators / Charter / Aerial work]
+      AV1d[General & civil aviation]
+      AV1e[Private owners’ groups]
+    end
+
+    subgraph AV2["Rotary-wing Operations"]
+      AV2a[HEMS / Air Ambulance]
+      AV2b[Fire-fighting / SAR]
+      AV2c[Law enforcement / Conservation]
+      AV2d[Utility / Survey / Agri-aviation]
+    end
+
+    subgraph AV3["OEMs & Engineering"]
+      AV3a["OEMs (light aircraft & helicopters)"]
+      AV3b[STC holders / Design organisations]
+      AV3c[Reverse-engineering for legacy airframes]
+      AV3d[Custom sensor windows / gimbal enclosures]
+      AV3e[Batch runs & upgrade programmes]
+    end
+  end
+
+  subgraph MS["Motorsport"]
+    direction TB
+
+    subgraph MS1["Teams & Ecosystem"]
+      MS1a["Pro & semi-pro teams (circuit / rally / off-road)"]
+      MS1b[Driver training schools]
+      MS1c[Track-day / Clubs]
+  MS1d["Vehicle builders / Fabricators (kit, race prep, restomod)"]
+      MS1e[Race series organisers / Scrutineering bodies]
+    end
+
+    subgraph MS2["Use-cases & Needs"]
+      MS2a[Race-day clarity; low-distortion sightlines]
+      MS2b[Rapid swaps / Serviceability]
+      MS2c[Edge durability / Crack resistance]
+      MS2d[Weight considerations]
+      MS2e[Regulatory / Series compliance]
+    end
+  end
+
+  %% Buying centres (apply across all segments)
+  subgraph BC["Buying Centres Across Segments"]
+    direction LR
+    BC1[Procurement / Commercial]
+    BC2[Finance / Owners]
+    BC3[Engineering / QA]
+    BC4[Maintenance / Crew Chiefs]
+    BC5[Operations / Scheduling]
+    BC6[Safety / Compliance]
+  end
+
+  %% Connections
+  A --> AV
+  A --> MS
+  AV --> BC
+  MS --> BC
+
+  %% Helper note (rendered as a node)
+  NOTE[Use this organogram to target messages:<br/>Outcome → Proof → Method → Single CTA per audience.]
+  BC --> NOTE

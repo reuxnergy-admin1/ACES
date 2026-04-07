@@ -1,0 +1,11 @@
+# Protect sensitive background rendering code from accidental edits.
+# Changes to these files will request review from the designated owners.
+
+# Background stack (WebGL + SVG + portal)
+/components/ResponsiveContours.tsx  @IAmJonoBo
+/components/ContoursIsolines.tsx    @IAmJonoBo
+/components/ContoursSVG.tsx         @IAmJonoBo
+/components/BackgroundPortal.tsx    @IAmJonoBo
+
+# Layout entry where background is wired
+/app/layout.tsx                      @IAmJonoBo

@@ -1,0 +1,143 @@
+# Fix Carousel - Double Size and Continuous Scrolling
+
+## Current Issues:
+1. Block size too small - needs to be **DOUBLE the current size**
+2. Text size too small - needs to be **DOUBLE the current size**
+3. Animation might not be smooth/continuous
+
+## Required Changes:
+
+### 1. Double the Block Dimensions
+
+**Current SVG dimensions:**
+- Height: `h-32` (128px) mobile, `h-36` (144px) desktop
+- ViewBox: `0 0 380 130`
+- Rect Size: `378 x 128`
+
+**Change to (DOUBLE):**
+```jsx
+// Change Tailwind classes
+<svg className="h-64 md:h-72 w-auto"> {/* was h-32 md:h-36 */}
+
+// Change viewBox
+viewBox="0 0 760 260" {/* was 0 0 380 130 - doubled */}
+
+// Change rect dimensions
+<rect 
+  x="1" 
+  y="1" 
+  width="756"  {/* was 378 - doubled */}
+  height="256" {/* was 128 - doubled */}
+  rx="28"      {/* was 14 - doubled for proportional corners */}
+  stroke="white"
+  strokeWidth="4" {/* was 2 - doubled */}
+  strokeOpacity="0.85"
+  fill="none"
+/>
+```
+
+### 2. Double the Text Size
+
+**Current text:**
+- Font size: `18` (SVG units)
+- Letter spacing: `0.06em`
+
+**Change to (DOUBLE):**
+```jsx
+<text
+  fontSize="36"  {/* was 18 - doubled */}
+  letterSpacing="0.06em"
+  fill="white"
+  fillOpacity="1"
+  textAnchor="middle"
+>
+```
+
+**Update text positioning (for doubled viewBox):**
+```jsx
+// For single-line text (centered)
+<tspan x="380" y="50%"> {/* x was 190, now 380 (doubled) */}
+  {client.name}
+</tspan>
+
+// For two-line text
+<tspan x="380" y="38%"> {/* x was 190, now 380 */}
+  {firstLine}
+</tspan>
+<tspan x="380" y="62%"> {/* x was 190, now 380 */}
+  {secondLine}
+</tspan>
+```
+
+### 3. Ensure Smooth Continuous Scrolling
+
+**Verify the animation is set up correctly:**
+```jsx
+// The container should have animation
+<div className="flex gap-6 animate-scroll">
+  {/* First set of 14 clients */}
+  {clients.map((client) => (
+    <a href={client.url}>
+      <svg>...</svg>
+    </a>
+  ))}
+  
+  {/* DUPLICATE: Second set of 14 clients for seamless loop */}
+  {clients.map((client) => (
+    <a href={client.url}>
+      <svg>...</svg>
+    </a>
+  ))}
+</div>
+```
+
+**Ensure CSS animation exists:**
+
+Check if this is in your `globals.css` or `tailwind.config.js`:
+```css
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 60s linear infinite;
+}
+```
+
+If not present, add it to `globals.css` or add to `tailwind.config.js`:
+```js
+module.exports = {
+  theme: {
+    extend: {
+      keyframes: {
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' }
+        }
+      },
+      animation: {
+        scroll: 'scroll 60s linear infinite'
+      }
+    }
+  }
+}
+```
+
+## Summary of Changes:
+
+1. **SVG container**: Change `h-32 md:h-36` → `h-64 md:h-72`
+2. **ViewBox**: Change `0 0 380 130` → `0 0 760 260`
+3. **Rect dimensions**: `378 x 128` → `756 x 256`
+4. **Border radius**: `rx="14"` → `rx="28"`
+5. **Stroke width**: `2px` → `4px`
+6. **Font size**: `18` → `36`
+7. **Text x position**: `190` → `380`
+8. **Verify**: Items are duplicated (28 total) for seamless loop
+9. **Verify**: `animate-scroll` class and CSS keyframes exist
+
+This will make the blocks and text exactly **DOUBLE** the current size and ensure smooth, continuous scrolling with no stops.

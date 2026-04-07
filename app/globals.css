@@ -1,0 +1,658 @@
+@import "tailwindcss";
+
+/* Force font-display swap for ALL external fonts including Typekit */
+@font-face {
+  font-display: swap;
+}
+
+/* Theme tokens (moved from @theme to :root to avoid unknown at-rule warnings) */
+:root {
+  color-scheme: dark;
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  --color-muted: #101010;
+  --color-subtle: #1a1a1a;
+  --color-line: #2a2a2a;
+  --font-articulat: "articulat-cf", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-open-sans: "Open Sans", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --ease-premium: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --easing-ui: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-normal: 420ms;
+  --duration-slow: 900ms;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --surface-border: rgba(255,255,255,0.20);
+  --surface-border-strong: rgba(255,255,255,0.30);
+  --shadow-sm: 0 8px 20px rgba(0,0,0,0.35);
+  --shadow-md: 0 18px 50px rgba(0,0,0,0.40);
+  --shadow-lg: 0 28px 70px rgba(0,0,0,0.45);
+  --container-max: 80rem; /* ~1280px */
+  --container-max-wide: 96rem; /* ~1536px */
+  /* Container side padding clamp to mirror reference spacing */
+  --container-pad: clamp(1rem, 4vw, 2rem);
+  /* Grid gutters tuned to Rise-like rhythm (approx 24 → 80px) */
+  --grid-gutter: 1.5rem;    /* ~24px base */
+  /* Fluid type steps (Utopia-style) */
+  --font-step--2: clamp(0.79rem, 0.72rem + 0.3vw, 0.9rem);
+  --font-step--1: clamp(0.89rem, 0.79rem + 0.4vw, 1.0rem);
+  --font-step-0:  clamp(1.00rem, 0.90rem + 0.5vw, 1.125rem);
+  --font-step-1:  clamp(1.25rem, 1.05rem + 0.8vw, 1.5rem);
+  --font-step-2:  clamp(1.56rem, 1.20rem + 1.0vw, 1.95rem);
+  --font-step-3:  clamp(1.95rem, 1.50rem + 1.4vw, 2.45rem);
+  /* Fluid vertical stacks */
+  --stack-sm: clamp(1.0rem, 0.6rem + 1.2vw, 1.6rem);
+  --stack-md: clamp(1.4rem, 0.9rem + 1.6vw, 2.2rem);
+  --stack-lg: clamp(2.0rem, 1.2rem + 2.2vw, 3.2rem);
+}
+
+/* Widen gutters and container padding progressively to reflect reference site */
+@media (min-width: 640px) {
+  :root {
+    --grid-gutter: 2rem;       /* ~32px */
+    --container-pad: clamp(1rem, 4.5vw, 2.25rem);
+  }
+}
+@media (min-width: 768px) {
+  :root {
+    --grid-gutter: 2.5rem;     /* ~40px */
+    --container-pad: clamp(1rem, 5vw, 2.5rem);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --grid-gutter: 3rem;       /* ~48px */
+    --container-pad: clamp(1rem, 5vw, 3rem);
+  }
+}
+@media (min-width: 1280px) {
+  :root {
+    --grid-gutter: 4rem;       /* ~64px */
+    --container-pad: clamp(1rem, 5.5vw, 3.5rem);
+  }
+}
+@media (min-width: 1536px) {
+  :root {
+    --grid-gutter: 5rem;       /* ~80px */
+    --container-pad: clamp(1rem, 6vw, 4rem);
+  }
+}
+
+/* Ensure predictable sizing across the app */
+*, *::before, *::after { box-sizing: border-box; }
+
+@keyframes wipe {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+
+
+html, body { 
+  background-color: black; 
+  color: white; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* Clip minor subpixel overflow and stabilize scrollbar gutter to prevent stray horizontal scrollbars */
+html { overflow-x: clip; scrollbar-gutter: stable both-edges; }
+
+/* Promote fixed/composited layers efficiently */
+.fixed { contain: layout style; }
+/* Prevent horizontal scroll at the root without clipping fixed descendants attached to body */
+/* Avoid forcing a permanent gutter; rely on element-level fixes instead */
+/* Reserve gutter space to avoid 100vw including the scrollbar width on platforms that show it */
+/* Robust text wrapping to avoid forcing inline overflow */
+:where(p, h1, h2, h3, h4, h5, h6, li, blockquote, a, code, figcaption) { overflow-wrap: anywhere; word-break: break-word; max-inline-size: 100%; }
+pre { overflow-x: auto; }
+
+/* Prevent overflow in common flex patterns */
+:where(.flex, .inline-flex, .grid) { min-width: 0; }
+:where(.flex > *, .inline-flex > *, .grid > *) { min-width: 0; max-width: 100%; }
+
+/* Hide the system cursor only when overlay gate enables it */
+body.cursor-hidden { cursor: none; }
+
+h1, h2 { text-transform: uppercase; }
+h1 { letter-spacing: 0.08em; line-height: 1.14; }
+h2 { letter-spacing: 0.06em; line-height: 1.18; }
+
+/* Heading utilities aligning with fluid steps (opt-in) */
+.h1 { font-size: var(--font-step-3); line-height: 1.1; letter-spacing: 0.02em; }
+.h2 { font-size: var(--font-step-2); line-height: 1.15; letter-spacing: 0.02em; }
+.h3 { font-size: var(--font-step-1); line-height: 1.2; }
+.body { font-size: var(--font-step-0); line-height: 1.55; }
+
+/* Native cursor is hidden via inline style on <body> in layout.tsx to avoid !important warnings */
+
+/* Articulat CF for headings and navigation, Open Sans for body text */
+body { font-family: "Open Sans", system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
+h1, h2, h3, h4, h5, h6, .font-heading, nav, .uc, .button-primary, .button-solid { font-family: articulat-cf, system-ui, -apple-system, Segoe UI, Helvetica Neue, Arial, sans-serif; }
+
+/* Always use default arrow cursor for interactive elements (no hand pointer) */
+:where(a, button, [role="button"], summary) { cursor: default; }
+/* During wipes, hide cursor everywhere */
+body.cursor-hidden, body.cursor-hidden * { cursor: none; }
+/* Separate class used only during page wipe so we don't fight CursorTrailGate */
+body.cursor-hide-transition, body.cursor-hide-transition * { cursor: none; }
+
+/* Uppercase utilities */
+.uc { text-transform: uppercase; }
+.no-uc { text-transform: none; }
+
+/* Screen reader-only utility (in case Tailwind's sr-only isn't available) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Hover wipe utility (inverse colour wipe) */
+.wipe-link {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  isolation: isolate;
+}
+.wipe-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: white;
+  opacity: 0.08;
+  z-index: -1;
+  transition: transform 700ms var(--ease-premium);
+}
+.wipe-link:hover::before, .wipe-link:focus-visible::before {
+  transform: translateX(0);
+}
+
+/* Tail composition used in tests to ensure arrow and label share row */
+.btn-tail { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.btn-tail > span { display: inline-block; line-height: 1; }
+.btn-tail .arrow { line-height: 1; display: inline-block; }
+
+/* Link and button microinteractions */
+/* Avoid layout-shifting hover effects; keep transitions to color/opacity only */
+a, button {
+  transition: color 600ms var(--ease-premium), opacity 600ms var(--ease-premium);
+}
+/* Remove active scaling to prevent text shift: no extra rule needed */
+
+/* Underline slide-in hover effect (white on dark) */
+/* Opt-in via .link-underline to avoid unintended usage (e.g., modals) */
+.link-underline {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px; /* underline thickness */
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 700ms var(--ease-premium), color 420ms var(--ease-premium), opacity 420ms var(--ease-premium);
+}
+
+/* Title-like small headings */
+.text-xl.uc { letter-spacing: 0.06em; }
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 2px;
+  color: #fff; /* ensure white on hover */
+}
+
+/* Persistent underline for active links */
+.link-underline.is-active {
+  background-size: 100% 2px;
+}
+
+@media (prefers-reduced-motion) {
+  a, button, .link-underline {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* Cursor will be hidden globally via body.cursor-hidden; don't force-hide on all interactive elements */
+
+/* Accessible focus-visible ring */
+*:focus-visible { outline: 2px solid rgba(255,255,255,0.9); outline-offset: 3px; }
+/* Ensure focused anchors aren't obscured under sticky headers */
+*:target { scroll-margin-top: 6rem; }
+
+/* WCAG 2.2 touch target size safeguard */
+button, [role="button"], input[type="checkbox"], input[type="radio"], a, summary {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.button-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Chronicle-like geometry: sharp corners, measured paddings */
+  padding: 0.625rem 1rem; /* ~10px v, 16px h */
+  min-height: 2.75rem; /* ~44px */
+  line-height: 1; /* tight line height, centered via flex */
+  border-radius: 0; /* sharp corners */
+  border: 1px solid var(--surface-border);
+  color: white;
+  text-transform: uppercase;
+  transition: color var(--duration-slow) var(--ease-premium), background-color var(--duration-slow) var(--ease-premium);
+}
+.button-primary:focus {
+  outline: none;
+}
+.button-primary:hover {
+  color: black;
+  background-color: white;
+}
+.button-primary:active { transform: scale(0.99); }
+.button-primary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* Solid button variant: same geometry and sharp corners; visually aligned with primary */
+.button-solid {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+  min-height: 2.75rem;
+  line-height: 1;
+  border-radius: 0;
+  border: 1px solid var(--surface-border);
+  color: white;
+  text-transform: uppercase;
+  transition: color var(--duration-slow) var(--ease-premium), background-color var(--duration-slow) var(--ease-premium);
+}
+.button-solid:focus { outline: none; }
+.button-solid:hover { color: black; background-color: white; }
+.button-solid:active { transform: scale(0.99); }
+.button-solid:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* View Transitions (guard for support) */
+/* View Transitions: keep disabled to avoid parser warnings until broader support */
+
+/* Contour backdrop: container that hosts layered SVGs for parallax */
+.contour-host {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  background: #000;
+  contain: strict;
+}
+[data-bg-fallback] { opacity: 1; transition: opacity 400ms var(--ease-premium); contain: strict; }
+.bg-gl-ready [data-bg-fallback] { opacity: 0; transition: opacity 400ms var(--ease-premium); }
+.contour-layer {
+  position: absolute;
+  inset: -10% -10% -10% -10%;
+  opacity: 0.21;
+  contain: layout paint;
+}
+@media (prefers-reduced-motion) {
+  .contour-layer { transform: none; }
+}
+
+/* Stacking utilities (align app-wide z-index usage) */
+.z-bg { z-index: 0; }
+.z-content { z-index: 10; }
+.z-header { z-index: 90; }
+.z-overlay { z-index: 100; }
+
+/* Let header pass pointer events through except on interactive elements */
+.header-interactive { pointer-events: none; }
+.header-interactive :is(a, button, [role="button"], input, select, textarea, summary, [tabindex]) {
+  pointer-events: auto;
+}
+
+/* Grid/container utilities (lightweight, non-intrusive) */
+.grid-shell {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.grid-12 { display: grid; grid-template-columns: 1fr; grid-auto-columns: minmax(0, 1fr); min-width: 0; }
+.grid-12 > * { min-width: 0; max-width: 100%; }
+/* On small screens, force each child to take the single column (win over any span utilities) */
+@media (max-width: 767px) { .grid-12.grid-12 > * { grid-column: 1 / -1; } }
+@media (min-width: 768px) {
+  .grid-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+}
+
+/* Apply standard gutters separately so pages can opt-in and not fight per-component gap utilities */
+.gutter { gap: calc(var(--grid-gutter) / 1.5); }
+@media (min-width: 768px) { .gutter { gap: var(--grid-gutter); } }
+
+/* Simple column span helpers for common patterns (md+ only) */
+@media (min-width: 768px) {
+  .span-12 { grid-column: span 12 / span 12; }
+  .span-8 { grid-column: span 8 / span 8; }
+  .span-6 { grid-column: span 6 / span 6; }
+  .span-4 { grid-column: span 4 / span 4; }
+}
+
+/* Content wrapper that sits inside grid-shell to provide consistent lateral rhythm */
+
+/* Safe-area-aware containers so content never touches/crops at device edges */
+.container-row {
+  width: 100%;
+  max-width: var(--container-max);
+  /* Align to the same left grid edge as wide containers so header/hero/pages share a baseline */
+  margin-inline-start: max(0px, calc((100% - var(--container-max-wide)) / 2));
+  margin-inline-end: 0;
+  /* Side padding aligned to token */
+  padding-inline: var(--container-pad);
+}
+/* Let immediate children shrink instead of forcing overflow */
+.container-row > * { min-width: 0; }
+@supports (padding-left: max(0px, env(safe-area-inset-left))) {
+  .container-row {
+    padding-left: max(var(--container-pad), env(safe-area-inset-left));
+    padding-right: max(var(--container-pad), env(safe-area-inset-right));
+  }
+}
+
+/* Fluid container: full-viewport width with safe side padding (no max-width) */
+.container-fluid {
+  width: 100%;
+  margin-inline: 0;
+  padding-inline: var(--container-pad);
+}
+/* Let immediate children shrink */
+.container-fluid > * { min-width: 0; }
+@supports (padding-left: max(0px, env(safe-area-inset-left))) {
+  .container-fluid {
+    padding-left: max(var(--container-pad), env(safe-area-inset-left));
+    padding-right: max(var(--container-pad), env(safe-area-inset-right));
+  }
+}
+
+/* Wider max container for select pages/sections */
+.container-wide {
+  width: 100%;
+  max-width: var(--container-max-wide);
+  /* Align to left grid edge at wide viewports */
+  margin-inline-start: max(0px, calc((100% - var(--container-max-wide)) / 2));
+  margin-inline-end: 0;
+  padding-inline: var(--container-pad);
+}
+/* Let immediate children shrink */
+.container-wide > * { min-width: 0; }
+@supports (padding-left: max(0px, env(safe-area-inset-left))) {
+  .container-wide {
+    padding-left: max(var(--container-pad), env(safe-area-inset-left));
+    padding-right: max(var(--container-pad), env(safe-area-inset-right));
+  }
+}
+
+/* Section bands: generous vertical rhythm consistent across pages */
+/* Use :where() to keep specificity at 0 so utility classes (e.g., pt-28) can override */
+:where(.section-band) { padding-block: var(--stack-md); }
+@media (min-width: 1024px) { :where(.section-band) { padding-block: var(--stack-lg); } }
+
+/* Fluid spacing utilities for consistent vertical rhythm */
+.mt-stack-sm { margin-top: var(--stack-sm); }
+.mt-stack-md { margin-top: var(--stack-md); }
+.mt-stack-lg { margin-top: var(--stack-lg); }
+.mb-stack-sm { margin-bottom: var(--stack-sm); }
+.mb-stack-md { margin-bottom: var(--stack-md); }
+.mb-stack-lg { margin-bottom: var(--stack-lg); }
+.gap-stack-sm { gap: var(--stack-sm); }
+.gap-stack-md { gap: var(--stack-md); }
+.gap-stack-lg { gap: var(--stack-lg); }
+
+/* Auto-fit grid helpers for cards/logos/posts (min track size customizable) */
+.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--auto-grid-min, 16rem), 1fr));
+  gap: var(--auto-grid-gap, 1.5rem);
+}
+@media (min-width: 768px) { .auto-grid { gap: var(--auto-grid-gap-md, 2rem); } }
+@media (min-width: 1280px) { .auto-grid { gap: var(--auto-grid-gap-lg, 2.5rem); } }
+
+/* Full-bleed media helper: edge-to-edge without transform rounding or 100vw traps */
+.full-bleed {
+  inline-size: 100vw;
+  margin-inline: calc(50% - 50vw);
+  max-inline-size: 100vw;
+}
+@supports (width: 100svw) {
+  .full-bleed { inline-size: 100svw; margin-inline: calc(50% - 50svw); max-inline-size: 100svw; }
+}
+@supports (width: 100dvw) {
+  .full-bleed { inline-size: 100dvw; margin-inline: calc(50% - 50dvw); max-inline-size: 100dvw; }
+}
+
+/* Premium: Inversion wipe card */
+.sheen-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  overflow: hidden;
+  isolation: isolate;
+  transition: box-shadow var(--duration-slow) var(--easing-ui), border-color var(--duration-slow) var(--easing-ui), transform var(--duration-slow) var(--easing-ui);
+}
+.sheen-card::before {
+  /* Wipe effect disabled - keeping element for structure */
+  display: none;
+}
+.sheen-card:hover,
+.sheen-card:focus-within {
+  border-color: rgba(255,255,255,0.25);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.sheen-card > * { position: relative; z-index: 1; }
+@media (prefers-reduced-motion) {
+  .sheen-card { transition: none; }
+  .sheen-card::before { transition: none; }
+}
+
+/* Nav sheen styles are defined under 'Chronicle-style feature flagged effects' below */
+
+/* Grid overlay debug removed for production */
+
+/* Page transitions and element fade-ins */
+@keyframes pageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+.page-fade { animation: pageFadeIn 700ms cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Blob page-transition overlay */
+.pt-blob-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100; /* .z-overlay */
+  background: var(--blob-color, #ffffff);
+  opacity: 1;
+  /* Start as tiny circle at bottom center; JS updates --cx/--cy/--r */
+  --cx: 50%;
+  --cy: 90%;
+  --r: 0%;
+  clip-path: circle(var(--r) at var(--cx) var(--cy));
+  transition: clip-path 520ms var(--easing-ui), opacity var(--duration-normal) var(--easing-ui);
+  contain: strict;
+  pointer-events: none;
+}
+.pt-blob-overlay[data-active="0"] { opacity: 0; }
+.pt-blob-overlay[data-active="1"] { opacity: 1; }
+@media (prefers-reduced-motion) {
+  .pt-blob-overlay { transition: opacity 120ms linear; clip-path: none; }
+}
+
+.fade-stagger > * {
+  opacity: 0;
+  animation: fadeUp 1100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.fade-stagger > *:nth-child(1) { animation-delay: 80ms; }
+.fade-stagger > *:nth-child(2) { animation-delay: 160ms; }
+.fade-stagger > *:nth-child(3) { animation-delay: 240ms; }
+.fade-stagger > *:nth-child(4) { animation-delay: 320ms; }
+.fade-stagger > *:nth-child(5) { animation-delay: 400ms; }
+.fade-stagger > *:nth-child(6) { animation-delay: 480ms; }
+.fade-stagger > *:nth-child(7) { animation-delay: 560ms; }
+.fade-stagger > *:nth-child(8) { animation-delay: 640ms; }
+
+@media (prefers-reduced-motion) {
+  .page-fade, .fade-stagger > * { animation: none; filter: none; transform: none; }
+}
+
+/* In-view reveal (premium subtle motion) */
+[data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity var(--duration-slow) var(--easing-ui), transform var(--duration-slow) var(--easing-ui); }
+[data-reveal].is-inview { opacity: 1; transform: none; }
+[data-reveal-stagger] > * { opacity: 0; transform: translateY(14px); transition: opacity var(--duration-slow) var(--easing-ui), transform var(--duration-slow) var(--easing-ui); }
+[data-reveal-stagger].is-inview > * { opacity: 1; transform: none; }
+[data-reveal-stagger].is-inview > *:nth-child(1) { transition-delay: 80ms; }
+[data-reveal-stagger].is-inview > *:nth-child(2) { transition-delay: 200ms; }
+[data-reveal-stagger].is-inview > *:nth-child(3) { transition-delay: 320ms; }
+[data-reveal-stagger].is-inview > *:nth-child(4) { transition-delay: 440ms; }
+[data-reveal-stagger].is-inview > *:nth-child(5) { transition-delay: 560ms; }
+[data-reveal-stagger].is-inview > *:nth-child(6) { transition-delay: 680ms; }
+@media (prefers-reduced-motion) {
+  [data-reveal], [data-reveal-stagger] > * { transition: none; transform: none; opacity: 1; }
+}
+
+/* Progressive: CSS Scroll Timeline for reveal when supported (no custom at-rules to avoid lint errors) */
+@supports (animation-timeline: scroll()) {
+  .reveal-scroll { opacity: 0; transform: translateY(16px); animation: fadeSlide 1 both; animation-timeline: scroll(); animation-range: entry 20% cover 30%; }
+}
+@keyframes fadeSlide { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+
+/* Media should never exceed their container width by default */
+img, video, canvas, svg { display: block; max-width: 100%; height: auto; }
+
+/* Utility: show only when pointer is fine (e.g., mouse); default hidden */
+.show-on-pointer-fine { display: none; }
+@media (pointer: fine) {
+  .show-on-pointer-fine { display: inline; }
+}
+
+/* Surfaces: consistent overlays/panels/tooltips */
+.surface { background: rgba(0,0,0,0.85); border: 1px solid var(--surface-border); }
+.surface-opaque { background: rgba(0,0,0,1); border: 1px solid var(--surface-border); }
+
+/* --- Chronicle-style feature flagged effects --- */
+/* Enable by adding class .feature-chronicle-ui on <html> (set via ?ui=chronicle) */
+.feature-chronicle-ui .nav-sheen {
+  --x: 50%;
+  --y: 50%;
+  --size: 280px;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle var(--size) at var(--x) var(--y), rgba(255,255,255,0.14), rgba(255,255,255,0) 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+}
+.feature-chronicle-ui header:hover .nav-sheen { opacity: 1; }
+@media (prefers-reduced-motion) {
+  .feature-chronicle-ui .nav-sheen { display: none; }
+}
+
+/* Button border-draw reveal using four spans inside .button-primary/.button-solid */
+.feature-chronicle-ui .button-primary,
+.feature-chronicle-ui .button-solid { isolation: isolate; overflow: hidden; border-color: rgba(255,255,255,0.28); }
+.feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line { position: absolute; background: linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0)); transform-origin: left center; }
+.feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line.h { height: 1px; left: 8px; right: 8px; }
+.feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line.v { width: 1px; top: 8px; bottom: 8px; background: linear-gradient(0deg, rgba(255,255,255,0.35), rgba(255,255,255,0)); transform-origin: top center; }
+.feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line.top { top: 8px; transform: scaleX(0.2); }
+.feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line.bottom { bottom: 8px; transform: scaleX(0.2); }
+.feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line.left { left: 8px; transform: scaleY(0.2); }
+.feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line.right { right: 8px; transform: scaleY(0.2); }
+.feature-chronicle-ui :is(.button-primary, .button-solid):hover > .reveal-line.top,
+.feature-chronicle-ui :is(.button-primary, .button-solid):hover > .reveal-line.bottom { transform: scaleX(1); transition: transform 420ms var(--easing-ui); }
+.feature-chronicle-ui :is(.button-primary, .button-solid):hover > .reveal-line.left,
+.feature-chronicle-ui :is(.button-primary, .button-solid):hover > .reveal-line.right { transform: scaleY(1); transition: transform 420ms var(--easing-ui); }
+@media (prefers-reduced-motion) {
+  .feature-chronicle-ui :is(.button-primary, .button-solid) > .reveal-line { display: none; }
+}
+.surface-90 { background: rgba(0,0,0,0.90); border: 1px solid var(--surface-border); }
+.surface-strong { border-color: var(--surface-border-strong); }
+.radius-sm { border-radius: var(--radius-sm); }
+.radius-md { border-radius: var(--radius-md); }
+.radius-lg { border-radius: var(--radius-lg); }
+.elevate-sm { box-shadow: var(--shadow-sm); }
+.elevate { box-shadow: var(--shadow-md); }
+.elevate-lg { box-shadow: var(--shadow-lg); }
+@supports (backdrop-filter: blur(0)) {
+  .surface--sm { backdrop-filter: blur(4px); }
+  .surface--md { backdrop-filter: blur(8px); }
+  .surface--lg { backdrop-filter: blur(12px); }
+}
+
+/* Listbox (custom dropdown) */
+.ui-lb__button { border-radius: var(--radius-md); }
+.ui-lb__button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.ui-lb__panel { border-radius: var(--radius-md); transform: translateY(-2px) scale(0.98); opacity: 0; transition: transform var(--duration-normal) var(--easing-ui), opacity var(--duration-normal) var(--easing-ui); }
+.ui-lb__panel[data-open="1"] { transform: translateY(0) scale(1); opacity: 1; }
+.ui-lb__option { font-size: 0.95rem; }
+
+/* Scoped palette inversion for sections (e.g., blog). */
+/* Inverts all colors within scope, then cancels inversion on media to keep assets natural. */
+.theme-invert {
+  filter: invert(1) hue-rotate(180deg);
+}
+.theme-invert :is(img, picture, video, canvas, svg) {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Client logo marquee - seamless infinite scroll */
+.marquee { 
+  position: relative; 
+  width: 100%; 
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+.marquee-inner {
+  display: flex;
+  width: fit-content;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  animation: marquee-scroll 36.8s linear infinite;
+}
+@media (min-width: 768px) {
+  .marquee-inner { animation-duration: 55.3s; }
+}
+.marquee-content {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+.marquee-item { 
+  flex-shrink: 0;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+.marquee-item:hover { opacity: 1; }
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-paused {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion) {
+  .marquee-inner { animation-play-state: paused; }
+}
+
+/* SVG blob overlay container */
+.pt-blob-svg { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
+/* optional: contour warp when wipe runs (disabled in code by default) */
+.pt-warp .contour-layer { transform: translateY(1.5%) scale(1.03); transition: transform var(--duration-slow) var(--easing-ui); }
+@media (prefers-reduced-motion) { .pt-warp .contour-layer { transform: none; } }
+.pt-blob-svg[data-active="1"] { pointer-events: auto; }
+/* Lock body scrolling during page wipe */
+body.pt-disable-scroll { overflow: hidden; }
+/* Disable pointer events on app content during wipe */
+body.pt-no-events [data-app-content] { pointer-events: none; }

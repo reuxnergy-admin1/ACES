@@ -1,0 +1,145 @@
+# Fix Social Media Tooltip - Two Issues
+
+## Problem 1: Text NOT Centered Inside Border
+The text "WhatsApp" is not centered vertically and/or horizontally inside the bordered box.
+
+## Problem 2: Horizontal Padding Too Small
+The border needs MORE horizontal padding (left/right) to comfortably fit the text with proper spacing.
+
+---
+
+## THE COMPLETE FIX
+
+Replace your tooltip code with this:
+
+```jsx
+<span 
+  className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-10 py-2.5 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+>
+  WhatsApp
+</span>
+```
+
+**Key changes:**
+1. **`px-10`** - Much wider horizontal padding (40px left/right) for comfortable spacing
+2. **`py-2.5`** - Balanced vertical padding (10px top/bottom)
+3. **`flex items-center justify-center`** - Centers text both horizontally and vertically inside the box
+
+---
+
+## Alternative: Even More Padding
+
+If you want EXTRA comfortable spacing:
+
+```jsx
+<span 
+  className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-12 py-3 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
+>
+  WhatsApp
+</span>
+```
+
+**Changes:**
+- **`px-12`** - 48px left/right padding (very comfortable)
+- **`py-3`** - 12px top/bottom padding (more vertical space)
+
+---
+
+## If Text is Still Not Centered
+
+Add inline styles to force centering:
+
+```jsx
+<span 
+  className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+  style={{
+    paddingLeft: '40px',
+    paddingRight: '40px',
+    paddingTop: '10px',
+    paddingBottom: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center'
+  }}
+>
+  WhatsApp
+</span>
+```
+
+---
+
+## Complete Implementation for All 4 Icons
+
+```jsx
+{/* WhatsApp */}
+<div className="relative inline-flex group">
+  <a href="https://wa.me/YOUR_NUMBER" className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+    {/* WhatsApp Icon SVG */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-10 py-2.5 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+    WhatsApp
+  </span>
+</div>
+
+{/* Instagram */}
+<div className="relative inline-flex group">
+  <a href="https://instagram.com/YOUR_HANDLE" className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+    {/* Instagram Icon SVG */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-10 py-2.5 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+    Instagram
+  </span>
+</div>
+
+{/* LinkedIn */}
+<div className="relative inline-flex group">
+  <a href="https://linkedin.com/in/YOUR_PROFILE" className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+    {/* LinkedIn Icon SVG */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-10 py-2.5 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+    LinkedIn
+  </span>
+</div>
+
+{/* Facebook */}
+<div className="relative inline-flex group">
+  <a href="https://facebook.com/YOUR_PAGE" className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+    {/* Facebook Icon SVG */}
+  </a>
+  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-10 py-2.5 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+    Facebook
+  </span>
+</div>
+```
+
+---
+
+## Summary of Changes
+
+### To Fix Horizontal Padding (Make Border Wider):
+- Change to **`px-10`** (40px) or **`px-12`** (48px)
+
+### To Center Text Inside Border:
+- Add **`flex items-center justify-center`** to the tooltip span
+
+### Complete className for tooltip:
+```jsx
+className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-10 py-2.5 text-sm font-medium text-white rounded-lg border-2 border-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+```
+
+---
+
+## Verification Checklist
+
+After implementing, hover over each icon and verify:
+
+- [ ] Text is centered horizontally inside the border
+- [ ] Text is centered vertically inside the border
+- [ ] There is comfortable padding on LEFT side (lots of space)
+- [ ] There is comfortable padding on RIGHT side (lots of space)
+- [ ] There is even padding on TOP and BOTTOM
+- [ ] Border fully wraps around text with room to spare
+- [ ] Text is not cramped or touching border edges
+
+This should give you perfectly centered text with comfortable spacing inside the bordered tooltip.

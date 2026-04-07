@@ -1,0 +1,282 @@
+# Fix "Trusted By" Carousel - Increase Block Size and Text Size
+
+## Problem Description
+The carousel section with company names (showing "TRUSTED BY" at the top) has blocks with company names that are linked to their respective websites. The blocks need to be larger with more padding, and the text needs to be bigger for better visibility.
+
+## Current Issues:
+1. Blocks are too small - need more vertical and horizontal padding
+2. Text is too small - needs to be a few pixels bigger
+3. Multi-word company names should wrap to 2 lines inside the box
+
+---
+
+## Required Changes
+
+### 1. Make Carousel Move Smoothly and Continuously
+
+The carousel must scroll in a **smooth, continuous motion** without stopping or restarting. It should loop infinitely.
+
+**Current Problem:**
+- Carousel likely stops at the end and jumps back to start
+- Not continuous/infinite scrolling
+
+**Solution: Implement Infinite Smooth Scrolling**
+
+Use CSS animations or JavaScript for infinite loop carousel:
+
+**Method 1: CSS Animation (Recommended)**
+```jsx
+<div className="relative overflow-hidden">
+  {/* Carousel track with animation */}
+  <div className="flex gap-6 animate-scroll">
+    {/* First set of items */}
+    {companies.map((company) => (
+      <a href={company.url} className="flex-shrink-0 ...">
+        {company.name}
+      </a>
+    ))}
+    {/* Duplicate set for seamless loop */}
+    {companies.map((company) => (
+      <a href={company.url} className="flex-shrink-0 ...">
+        {company.name}
+      </a>
+    ))}
+  </div>
+</div>
+```
+
+**Add to your CSS file (globals.css or tailwind.config.js):**
+```css
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+/* Pause on hover (optional) */
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+```
+
+**Or add to tailwind.config.js:**
+```js
+module.exports = {
+  theme: {
+    extend: {
+      keyframes: {
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' }
+        }
+      },
+      animation: {
+        scroll: 'scroll 30s linear infinite'
+      }
+    }
+  }
+}
+```
+
+**Key points:**
+- **Duplicate the items** - Show items twice so there's no gap when looping
+- **`translateX(-50%)`** - Moves exactly half the width (one full set)
+- **`linear`** - Smooth, constant speed (no easing)
+- **`infinite`** - Loops forever
+- **Adjust `30s`** - Change duration to control speed (20s = faster, 40s = slower)
+
+---
+
+### 2. Increase Block Padding (Make Blocks Bigger)
+
+Find the carousel item/block element and increase padding:
+
+**Current (likely something like):**
+```jsx
+className="px-4 py-2 border rounded"
+```
+
+**Change to (MUCH larger):**
+```jsx
+className="px-8 py-4 border rounded"
+// or even bigger:
+className="px-10 py-5 border rounded"
+```
+
+**Padding recommendations:**
+- **Horizontal (left/right):** `px-8` (32px) or `px-10` (40px) or `px-12` (48px)
+- **Vertical (top/bottom):** `py-4` (16px) or `py-5` (20px) or `py-6` (24px)
+
+---
+
+### 2. Increase Text Size
+
+**Current (likely):**
+```jsx
+className="text-xs"  // or text-sm
+```
+
+**Change to (bigger):**
+```jsx
+className="text-base"  // 16px - good size
+// or
+className="text-lg"    // 18px - larger
+```
+
+---
+
+### 3. Allow Text to Wrap on Multiple Lines
+
+Add text wrapping for multi-word company names:
+
+**Remove or don't use:**
+```jsx
+className="whitespace-nowrap"  // REMOVE THIS - prevents wrapping
+```
+
+**Add instead:**
+```jsx
+className="text-center"  // Center multi-line text
+// and optionally:
+className="leading-snug"  // Tighter line spacing for 2-line text
+```
+
+---
+
+## Complete Solution
+
+### Find the carousel item element and update it:
+
+```jsx
+<a 
+  href="https://company-website.com"
+  className="flex items-center justify-center px-10 py-5 border-2 border-white rounded-lg text-white text-base font-medium text-center leading-snug hover:bg-white hover:text-gray-900 transition-colors"
+>
+  Company Name Here
+</a>
+```
+
+**Key classes explained:**
+- `px-10 py-5` - Large padding (40px horizontal, 20px vertical)
+- `border-2 border-white` - Visible border
+- `rounded-lg` - Rounded corners
+- `text-base` - 16px font size (or use `text-lg` for 18px)
+- `font-medium` - Medium font weight for better visibility
+- `text-center` - Centers text (important for 2-line names)
+- `leading-snug` - Tighter line height for multi-line text
+- **NO `whitespace-nowrap`** - Allows text to wrap naturally
+
+---
+
+## Alternative: Even Larger Blocks
+
+For extra large, comfortable blocks:
+
+```jsx
+<a 
+  href="https://company-website.com"
+  className="flex items-center justify-center px-12 py-6 border-2 border-white rounded-xl text-white text-lg font-semibold text-center leading-tight hover:bg-white hover:text-gray-900 transition-colors"
+>
+  Company Name Here
+</a>
+```
+
+**Changes:**
+- `px-12 py-6` - Extra large padding (48px horizontal, 24px vertical)
+- `text-lg` - 18px text
+- `font-semibold` - Bolder text
+- `rounded-xl` - Larger rounded corners
+- `leading-tight` - Compact line height for wrapped text
+
+---
+
+## With Inline Styles (If Tailwind Doesn't Work)
+
+```jsx
+<a 
+  href="https://company-website.com"
+  className="flex items-center justify-center border-2 border-white rounded-lg text-white font-medium text-center hover:bg-white hover:text-gray-900 transition-colors"
+  style={{
+    paddingLeft: '40px',
+    paddingRight: '40px',
+    paddingTop: '20px',
+    paddingBottom: '20px',
+    fontSize: '16px',
+    lineHeight: '1.375'
+  }}
+>
+  Company Name Here
+</a>
+```
+
+---
+
+## Example: Complete Carousel Implementation
+
+```jsx
+<div className="w-full overflow-hidden bg-gray-900 py-12">
+  <h2 className="text-center text-white text-2xl font-bold mb-8">TRUSTED BY</h2>
+  
+  <div className="flex gap-6 overflow-x-auto px-4">
+    {/* Company 1 */}
+    <a 
+      href="https://company1.com"
+      className="flex-shrink-0 flex items-center justify-center px-10 py-5 border-2 border-white rounded-lg text-white text-base font-medium text-center leading-snug hover:bg-white hover:text-gray-900 transition-colors min-w-[180px]"
+    >
+      Amazon Web Services
+    </a>
+    
+    {/* Company 2 */}
+    <a 
+      href="https://company2.com"
+      className="flex-shrink-0 flex items-center justify-center px-10 py-5 border-2 border-white rounded-lg text-white text-base font-medium text-center leading-snug hover:bg-white hover:text-gray-900 transition-colors min-w-[180px]"
+    >
+      Microsoft Azure
+    </a>
+    
+    {/* Company 3 */}
+    <a 
+      href="https://company3.com"
+      className="flex-shrink-0 flex items-center justify-center px-10 py-5 border-2 border-white rounded-lg text-white text-base font-medium text-center leading-snug hover:bg-white hover:text-gray-900 transition-colors min-w-[180px]"
+    >
+      Google
+    </a>
+    
+    {/* Add more companies... */}
+  </div>
+</div>
+```
+
+---
+
+## Summary of Changes to Apply
+
+1. **Find the carousel item/link elements** in your code
+2. **Increase padding**: Change to `px-10 py-5` (or `px-12 py-6` for extra large)
+3. **Increase text size**: Change to `text-base` or `text-lg`
+4. **Remove `whitespace-nowrap`** if present
+5. **Add `text-center`** to center multi-line text
+6. **Add `leading-snug`** for better line spacing on wrapped text
+
+---
+
+## Verification Checklist
+
+After implementing, check:
+
+- [ ] Blocks are noticeably larger (more padding visible)
+- [ ] Text is bigger and more readable
+- [ ] Multi-word company names wrap to 2 lines naturally
+- [ ] Text is centered when it wraps
+- [ ] Blocks look comfortable, not cramped
+- [ ] Links still work correctly
+- [ ] Hover effects still work (if any)
+
+This will make your carousel blocks much more prominent and readable!

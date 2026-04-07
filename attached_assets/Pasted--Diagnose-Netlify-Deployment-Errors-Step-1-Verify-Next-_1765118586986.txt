@@ -1,0 +1,105 @@
+# Diagnose Netlify Deployment Errors
+
+## Step 1: Verify Next.js Version Was Actually Updated
+```bash
+# Check what version is in package.json
+cat package.json | grep '"next"'
+
+# Check what version is actually installed
+pnpm list next
+
+# Check the lockfile
+cat pnpm-lock.yaml | grep "next@" | head -5
+```
+
+**What version does it show?** It needs to be 15.1.6 or higher.
+
+## Step 2: Check if Changes Were Actually Pushed to GitHub
+```bash
+# Check git status
+git status
+
+# Check last commit
+git log -1
+
+# Verify package.json was committed
+git show HEAD:package.json | grep next
+```
+
+## Step 3: Common Causes of Continued Errors
+
+### Cause A: Changes Not Committed/Pushed
+```bash
+# Make sure everything is committed
+git add package.json pnpm-lock.yaml
+git commit -m "Update Next.js to 15.1.6"
+git push origin main
+```
+
+### Cause B: Netlify is Using Cached Old Version
+- Go to Netlify dashboard
+- Click "Site settings"
+- Click "Build & deploy"
+- Click "Clear cache and deploy site"
+
+### Cause C: Wrong Next.js Version Still in Lockfile
+```bash
+# Force update
+pnpm remove next
+pnpm add next@15.1.6
+git add package.json pnpm-lock.yaml
+git commit -m "Force update Next.js to 15.1.6"
+git push origin main
+```
+
+### Cause D: Build Command Issue
+Check if Netlify is using the right build command:
+- Should be: `pnpm build` or `npm run build`
+- Check in Netlify dashboard → Site settings → Build & deploy → Build settings
+
+## Step 4: Get More Information
+
+Run these commands and share the output:
+```bash
+# 1. What's in package.json?
+cat package.json | grep -A 2 -B 2 "next"
+
+# 2. What's actually installed?
+pnpm list next
+
+# 3. What was the last commit?
+git log -1 --oneline
+
+# 4. Is everything pushed?
+git status
+```
+
+## Step 5: Nuclear Option - Force Fresh Install
+
+If nothing else works:
+```bash
+# Delete everything
+rm -rf node_modules
+rm -rf .next
+rm pnpm-lock.yaml
+
+# Manually edit package.json - set next to "15.1.6" exactly (no ^)
+# Then:
+pnpm install
+pnpm build
+
+# If build works locally:
+git add .
+git commit -m "Force Next.js 15.1.6 update"
+git push origin main --force
+```
+
+## What to Share:
+
+Please run these and share the results:
+1. `cat package.json | grep next`
+2. `pnpm list next`
+3. `git log -1`
+4. The exact error from Netlify (copy the full error message)
+
+This will help identify exactly what's wrong.

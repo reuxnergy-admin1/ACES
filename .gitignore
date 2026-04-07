@@ -1,0 +1,41 @@
+node_modules
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Intelligent merge temporary files
+intelligent-merge.sh
+merge-analysis-report.json
+intelligent-merge-report.json
+
+# Next.js
+.next/
+out/
+.vercel/
+
+# TypeScript
+*.tsbuildinfo
+
+# Editor
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Coverage
+coverage/
+
+# Test results
+test-results/
+playwright-report/
+
+# Replit
+.replit
+replit.md
+.cache/replit/

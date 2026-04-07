@@ -1,0 +1,245 @@
+# Fix Carousel - Make Blocks Actually Bigger (Not Just Padding)
+
+## The Problem:
+The blocks are still small. We need to increase the ACTUAL block dimensions, not just container padding.
+
+## Solution - Increase Block Size Only:
+
+### 1. Revert Container Padding to Normal
+```tsx
+// Change from:
+<div className="w-full overflow-hidden py-32 md:py-40">
+
+// Back to:
+<div className="w-full overflow-hidden py-12">
+```
+
+### 2. Remove Excessive Min-Height
+```tsx
+// Change from:
+<div className="relative overflow-hidden min-h-[500px] md:min-h-[600px]">
+
+// Back to:
+<div className="relative overflow-hidden">
+```
+
+### 3. MASSIVELY Increase SVG Block Size
+
+The real fix - make the SVG dimensions MUCH LARGER:
+```tsx
+// Change from:
+<svg 
+  className="h-96 md:h-[432px] w-auto" 
+  viewBox="0 0 1140 390"
+>
+
+// To (MUCH BIGGER - 5X original):
+<svg 
+  className="h-[640px] md:h-[720px] w-auto" 
+  viewBox="0 0 1900 650"
+>
+```
+
+### 4. Update Rect Dimensions to Match
+```tsx
+<rect 
+  x="5" 
+  y="5" 
+  width="1890"   // 5X original (378 x 5)
+  height="640"   // 5X original (128 x 5)
+  rx="70"        // 5X original (14 x 5)
+  stroke="white" 
+  strokeWidth="10"  // 5X original (2 x 5)
+  strokeOpacity="0.85" 
+  fill="none"
+/>
+```
+
+### 5. Update Text Size
+```tsx
+<text 
+  fontSize="90"  // 5X original (18 x 5)
+  fontWeight="500"
+  letterSpacing="0.06em" 
+  fill="white" 
+  fillOpacity="1" 
+  textAnchor="middle"
+>
+```
+
+### 6. Update Text Position (Center in New ViewBox)
+```tsx
+// For single line (x should be half of viewBox width: 1900/2 = 950)
+<tspan x="950" y="50%">{client.name}</tspan>
+
+// For two lines:
+<tspan x="950" y="38%">{firstLine}</tspan>
+<tspan x="950" y="62%">{secondLine}</tspan>
+```
+
+## Complete Fixed Component:
+```tsx
+'use client';
+
+const clients = [
+  { name: 'Lanseria Flight Centre', url: 'https://flylfc.co.za' },
+  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaircraftparts.com' },
+  { name: 'Aviation Rebuilders', url: 'https://aviationrebuilders.co.za' },
+  { name: 'Skytrim', url: 'https://skytrim.co.za' },
+  { name: 'NAC', url: 'https://nac.co.za' },
+  { name: 'Alton Aero Engineering', url: 'https://altonaero.co.za' },
+  { name: 'Wingman Aircraft Maintenance', url: 'https://wingman.co.za' },
+  { name: 'Pablo Clark', url: 'https://pabloclark.com' },
+  { name: 'WCT Engineering', url: 'https://wctengineering.co.za' },
+  { name: '208 Aviation', url: 'https://208aviation.com' },
+  { name: 'Acher Aviation', url: 'https://archeraviation.co.za' },
+  { name: 'Skyhawk Aviation', url: 'https://skyhawkaviation.co.za' },
+  { name: 'Orion Aircraft', url: 'https://orioncub.com' },
+  { name: 'Emperor Aviation', url: 'https://emperoraviation.co.za' },
+];
+
+export function ClientCarousel() {
+  return (
+    <div className="w-full overflow-hidden py-12">
+      <h2 className="text-center text-white text-4xl font-bold mb-12">
+        TRUSTED BY
+      </h2>
+      
+      <div className="relative overflow-hidden">
+        <div className="flex gap-8 animate-scroll">
+          {/* First set */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0"
+              >
+                <svg 
+                  className="h-[640px] md:h-[720px] w-auto" 
+                  viewBox="0 0 1900 650"
+                >
+                  <rect 
+                    x="5" 
+                    y="5" 
+                    width="1890" 
+                    height="640" 
+                    rx="70"
+                    stroke="white" 
+                    strokeWidth="10" 
+                    strokeOpacity="0.85" 
+                    fill="none"
+                  />
+                  
+                  <text 
+                    fontSize="90"
+                    fontWeight="500"
+                    letterSpacing="0.06em" 
+                    fill="white" 
+                    fillOpacity="1" 
+                    textAnchor="middle"
+                  >
+                    {isTwoLines ? (
+                      <>
+                        <tspan x="950" y="38%">{firstLine}</tspan>
+                        <tspan x="950" y="62%">{secondLine}</tspan>
+                      </>
+                    ) : (
+                      <tspan x="950" y="50%">{client.name}</tspan>
+                    )}
+                  </text>
+                </svg>
+              </a>
+            );
+          })}
+          
+          {/* Duplicate for seamless loop */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-dup-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0"
+              >
+                <svg 
+                  className="h-[640px] md:h-[720px] w-auto" 
+                  viewBox="0 0 1900 650"
+                >
+                  <rect 
+                    x="5" 
+                    y="5" 
+                    width="1890" 
+                    height="640" 
+                    rx="70"
+                    stroke="white" 
+                    strokeWidth="10" 
+                    strokeOpacity="0.85" 
+                    fill="none"
+                  />
+                  
+                  <text 
+                    fontSize="90"
+                    fontWeight="500"
+                    letterSpacing="0.06em" 
+                    fill="white" 
+                    fillOpacity="1" 
+                    textAnchor="middle"
+                  >
+                    {isTwoLines ? (
+                      <>
+                        <tspan x="950" y="38%">{firstLine}</tspan>
+                        <tspan x="950" y="62%">{secondLine}</tspan>
+                      </>
+                    ) : (
+                      <tspan x="950" y="50%">{client.name}</tspan>
+                    )}
+                  </text>
+                </svg>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Size Comparison (5X Original):
+
+| Property | Original | Now (5X) |
+|----------|----------|----------|
+| SVG Height | 128px | **640px** |
+| SVG Height (desktop) | 144px | **720px** |
+| ViewBox Width | 380 | **1900** |
+| ViewBox Height | 130 | **650** |
+| Rect Width | 378 | **1890** |
+| Rect Height | 128 | **640** |
+| Border Radius | 14 | **70** |
+| Stroke Width | 2 | **10** |
+| Font Size | 18 | **90** |
+| Text X Position | 190 | **950** |
+
+This will make blocks HUGE - you should see only 3-4 blocks at once on desktop.
+
+After applying:
+1. Save the file
+2. Clear `.next` folder: `rm -rf .next`
+3. Restart: `pnpm dev`
+4. Hard refresh browser

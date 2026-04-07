@@ -1,0 +1,20 @@
+// IMPORTANT: Static SVG fallback used for instant paint and as a safety net if WebGL is disabled.
+// Do not change geometry or attributes lightly; subtle tweaks can affect perceived contrast and performance.
+export default function ContoursSVG() {
+  return (
+    <svg
+      className="w-full h-full pointer-events-none"
+      viewBox="0 0 1600 900"
+      aria-hidden="true"
+    >
+      <g stroke="white" strokeOpacity="0.25" fill="none" strokeWidth="1.8">
+        {Array.from({ length: 14 }).map((_, i) => {
+          const y = 30 + i * 60;
+          return (
+            <path key={`contour-line-${y}`} d={`M-200 ${y} L 1800 ${y}`} />
+          );
+        })}
+      </g>
+    </svg>
+  );
+}

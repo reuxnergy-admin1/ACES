@@ -1,0 +1,276 @@
+# Lighthouse Performance Optimization Plan - Safe & Non-Breaking
+
+## Phase 1: Font Loading Optimization (Quick Win - 40ms savings)
+
+### Issue: Webfonts blocking text visibility
+**Impact:** Low risk, high reward
+**Time:** 15 minutes
+
+### Actions:
+
+**1. Add font-display to Typekit fonts:**
+
+Find where Typekit is loaded (likely in `app/layout.tsx` or a `<head>` section):
+```tsx
+// If using Typekit script, add this parameter to the URL:
+// Change from:
+https://use.typekit.net/XXXXX.css
+
+// To:
+https://use.typekit.net/XXXXX.css?display=swap
+```
+
+**Or add CSS override in `globals.css`:**
+```css
+/* Add at the top of globals.css */
+@font-face {
+  font-display: swap;
+}
+```
+
+**2. Preload critical fonts:**
+
+In `app/layout.tsx` or `next.config.js` headers:
+```tsx
+<link 
+  rel="preload" 
+  href="https://use.typekit.net/af/YOUR-FONT-ID.woff2" 
+  as="font" 
+  type="font/woff2" 
+  crossOrigin="anonymous"
+/>
+```
+
+---
+
+## Phase 2: JavaScript Optimization (Major Impact - 1,923ms savings potential)
+
+### Issue: Large JS bundles and execution time
+**Impact:** Medium risk (test thoroughly)
+**Time:** 30-45 minutes
+
+### Actions:
+
+**1. Enable SWC Minification (already in Next.js):**
+
+Check `next.config.js` has:
+```js
+module.exports = {
+  swcMinify: true, // Should already be true
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' // Remove console.logs in production
+  }
+}
+```
+
+**2. Dynamic imports for heavy components:**
+
+Find large components that aren't immediately visible (like modals, heavy animations):
+```tsx
+// Before (loads immediately):
+import HeavyComponent from './HeavyComponent'
+
+// After (loads when needed):
+import dynamic from 'next/dynamic'
+const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
+  loading: () => <div>Loading...</div>
+})
+```
+
+**Candidates for dynamic import:**
+- Carousel component (if not in viewport initially)
+- Animation libraries (GSAP, Framer Motion heavy features)
+- Any modal/popup components
+- Complex SVG animations
+
+**3. Optimize third-party scripts:**
+
+In `app/layout.tsx`, defer non-critical scripts:
+```tsx
+<Script 
+  src="https://use.typekit.net/xxx.js"
+  strategy="lazyOnload" // Instead of "beforeInteractive"
+/>
+```
+
+---
+
+## Phase 3: Image Optimization (Low risk)
+
+### Actions:
+
+**1. Verify all images use Next.js Image component:**
+```bash
+# Search for regular img tags
+grep -r "<img" app/ components/
+```
+
+Replace any `<img>` with Next.js `<Image>`:
+```tsx
+import Image from 'next/image'
+
+// Before:
+<img src="/logo.png" alt="Logo" />
+
+// After:
+<Image src="/logo.png" alt="Logo" width={200} height={100} />
+```
+
+**2. Add priority to above-the-fold images:**
+```tsx
+<Image 
+  src="/hero.jpg" 
+  alt="Hero"
+  priority // Loads immediately
+/>
+```
+
+---
+
+## Phase 4: CSS Optimization (405ms potential savings)
+
+### Actions:
+
+**1. Remove unused Tailwind classes:**
+
+In `tailwind.config.js`:
+```js
+module.exports = {
+  content: [
+    './app/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+  ],
+  // This ensures only used classes are included
+}
+```
+
+**2. Critical CSS inline (advanced):**
+
+For above-the-fold content, inline critical CSS in `app/layout.tsx`:
+```tsx
+<style dangerouslySetInnerHTML={{__html: `
+  /* Only critical above-fold styles */
+  body { margin: 0; background: #000; }
+  .hero { /* hero styles */ }
+`}} />
+```
+
+---
+
+## Phase 5: Bundle Analysis (Understanding the problem)
+
+### Actions:
+
+**1. Analyze bundle size:**
+```bash
+# Install bundle analyzer
+pnpm add -D @next/bundle-analyzer
+
+# Update next.config.js:
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+module.exports = withBundleAnalyzer({
+  // your existing config
+})
+
+# Run analysis
+ANALYZE=true pnpm build
+```
+
+This shows what's taking up space in your JS bundle.
+
+---
+
+## Implementation Order (Safest First)
+
+### Week 1: Low-Risk Changes
+1. ✅ Add `font-display: swap` to fonts
+2. ✅ Enable `removeConsole` in production
+3. ✅ Verify Image component usage
+4. ✅ Add `priority` to hero images
+5. ✅ Test thoroughly
+
+### Week 2: Medium-Risk Changes  
+1. ✅ Add dynamic imports for non-critical components
+2. ✅ Defer third-party scripts
+3. ✅ Run bundle analyzer to identify biggest files
+4. ✅ Test thoroughly
+
+### Week 3: Optimization
+1. ✅ Optimize identified large bundles
+2. ✅ Consider code splitting if needed
+3. ✅ Final testing
+
+---
+
+## Testing Checklist (After EACH change)
+
+Before pushing to production:
+```bash
+# 1. Build successfully
+pnpm build
+
+# 2. Test locally
+pnpm start # (not dev - use production build)
+
+# 3. Check all pages
+- [ ] Homepage loads correctly
+- [ ] Carousel animates smoothly
+- [ ] Tooltips work
+- [ ] All text visible
+- [ ] All images load
+- [ ] Mobile responsive works
+- [ ] All links work
+
+# 4. Run Lighthouse locally
+# Open Chrome DevTools → Lighthouse → Run test
+
+# 5. If all good, deploy to staging first
+git push origin staging
+
+# 6. Test on staging URL
+# 7. Only then push to main
+```
+
+---
+
+## Expected Results
+
+| Metric | Current | Target | Method |
+|--------|---------|--------|--------|
+| Font Load | Blocking | 40ms faster | font-display: swap |
+| JS Execution | 1,923ms | ~1,400ms | Dynamic imports + minification |
+| Style & Layout | 405ms | ~300ms | Unused CSS removal |
+| Overall Score | ? | +15-20 points | Combined optimizations |
+
+---
+
+## Rollback Plan (If Something Breaks)
+```bash
+# Immediate rollback
+git revert HEAD
+git push origin main
+
+# Or restore from backup
+git checkout backup-before-optimization
+git push origin main --force
+```
+
+---
+
+## Safe First Steps (Start Here)
+
+1. **Add font-display to fonts** - 5 minutes, zero risk
+2. **Enable removeConsole** - 2 minutes, zero risk  
+3. **Run bundle analyzer** - 10 minutes, zero risk (just information)
+4. **Test locally** - 15 minutes
+
+These four steps give you:
+- Immediate 40ms improvement from fonts
+- Smaller production bundle
+- Understanding of what's heavy in your JS
+- Zero chance of breaking anything
+
+Want me to create detailed code snippets for any specific optimization?

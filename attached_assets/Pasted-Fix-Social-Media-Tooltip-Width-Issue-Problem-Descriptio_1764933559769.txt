@@ -1,0 +1,63 @@
+Fix Social Media Tooltip Width Issue
+Problem Description
+The social media tooltip section contains 4 icons (WhatsApp, Facebook, Instagram, LinkedIn) with hover tooltips. When hovering over these icons on desktop/web, a popup/tooltip appears showing the platform name, but the container width is too small, causing the text to appear cramped or truncated.
+Current Behavior
+
+Tooltips appear on hover but have insufficient width
+The text block around the social media platform names (WhatsApp, Instagram, LinkedIn, Facebook) is too narrow
+Manual attempts to adjust pixel width have not resolved the issue
+
+Required Fix
+Please locate and fix the tooltip width issue in the social media section of the Next.js/React/Tailwind CSS website. The fix should:
+
+Find the tooltip component - Search for the social media tooltip/popup implementation in the codebase
+Identify the width constraint - The issue could be in:
+
+Tailwind classes (e.g., w-20, max-w-xs, etc.)
+Custom CSS with fixed width
+Parent container constraints
+Padding/spacing issues
+
+
+Implement the solution:
+
+Increase tooltip container width to properly accommodate text
+Use whitespace-nowrap if text should stay on one line
+Consider using w-auto or w-fit with appropriate min-w-* values
+Ensure proper padding (e.g., px-3 py-2 or px-4 py-2)
+Test that longer names like "Instagram" and "LinkedIn" fit comfortably
+
+
+Suggested Tailwind approach:
+
+jsx   className="w-auto min-w-max px-3 py-2 whitespace-nowrap"
+   // or
+   className="w-fit px-4 py-2"
+
+Verify the fix:
+
+All four platform names display fully without truncation
+Tooltips have balanced padding around text
+Hover behavior works correctly
+Responsive behavior is maintained
+
+
+
+Files to Check
+
+Look for files containing social media components, typically in:
+
+/components/SocialMedia.tsx or .jsx
+/components/Footer.tsx or /components/Header.tsx
+/app/ or /pages/ directories
+Any file with "social", "tooltip", or "share" in the name
+
+
+
+Additional Context
+
+Tech stack: Next.js, React, Tailwind CSS
+Issue occurs on web/desktop view with hover interaction
+Four social platforms: WhatsApp, Facebook, Instagram, LinkedIn
+
+Please analyze the code, identify the root cause, implement the fix, and confirm the tooltips now display correctly with proper width.

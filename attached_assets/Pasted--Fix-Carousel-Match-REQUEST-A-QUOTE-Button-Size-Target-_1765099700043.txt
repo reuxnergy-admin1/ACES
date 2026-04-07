@@ -1,0 +1,156 @@
+# Fix Carousel - Match "REQUEST A QUOTE" Button Size
+
+## Target Size Reference:
+The carousel blocks should be approximately the same size as the "REQUEST A QUOTE" button, with text slightly smaller than the button text.
+
+## Step 1: Measure the "REQUEST A QUOTE" Button
+
+First, inspect the "REQUEST A QUOTE" button to get exact dimensions:
+```bash
+# Find the button component
+grep -r "REQUEST A QUOTE" components/
+grep -r "REQUEST A QUOTE" app/
+```
+
+Open the file and note:
+- Button height (likely around `h-14` to `h-16` = 56-64px)
+- Button padding (likely `px-8` to `px-12`)
+- Text size (likely `text-base` or `text-lg` = 16-18px)
+
+## Step 2: Match Carousel Block Size to Button
+
+Update ClientCarousel.tsx with these dimensions:
+```tsx
+'use client';
+
+const clients = [
+  { name: 'Lanseria Flight Centre', url: 'https://flylfc.co.za' },
+  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaircraftparts.com' },
+  { name: 'Aviation Rebuilders', url: 'https://aviationrebuilders.co.za' },
+  { name: 'Skytrim', url: 'https://skytrim.co.za' },
+  { name: 'NAC', url: 'https://nac.co.za' },
+  { name: 'Alton Aero Engineering', url: 'https://altonaero.co.za' },
+  { name: 'Wingman Aircraft Maintenance', url: 'https://wingman.co.za' },
+  { name: 'Pablo Clark', url: 'https://pabloclark.com' },
+  { name: 'WCT Engineering', url: 'https://wctengineering.co.za' },
+  { name: '208 Aviation', url: 'https://208aviation.com' },
+  { name: 'Acher Aviation', url: 'https://archeraviation.co.za' },
+  { name: 'Skyhawk Aviation', url: 'https://skyhawkaviation.co.za' },
+  { name: 'Orion Aircraft', url: 'https://orioncub.com' },
+  { name: 'Emperor Aviation', url: 'https://emperoraviation.co.za' },
+];
+
+export function ClientCarousel() {
+  return (
+    <div className="w-full overflow-hidden py-16">
+      <h2 className="text-center text-white text-3xl font-bold mb-12">
+        TRUSTED BY
+      </h2>
+      
+      <div className="relative overflow-hidden">
+        <div className="flex gap-6 animate-scroll items-center">
+          {/* First set */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center justify-center px-8 py-4 border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[200px] h-16"
+              >
+                <span className="text-white text-sm font-medium text-center leading-tight">
+                  {isTwoLines ? (
+                    <>
+                      {firstLine}
+                      <br />
+                      {secondLine}
+                    </>
+                  ) : (
+                    client.name
+                  )}
+                </span>
+              </a>
+            );
+          })}
+          
+          {/* Duplicate for seamless loop */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-dup-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center justify-center px-8 py-4 border-2 border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors min-w-[200px] h-16"
+              >
+                <span className="text-white text-sm font-medium text-center leading-tight">
+                  {isTwoLines ? (
+                    <>
+                      {firstLine}
+                      <br />
+                      {secondLine}
+                    </>
+                  ) : (
+                    client.name
+                  )}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Key Changes - Using HTML/CSS Instead of SVG:
+
+1. **Replaced SVG with regular HTML elements** - Much simpler and matches button style
+2. **Height**: `h-16` (64px) - matches typical button height
+3. **Padding**: `px-8 py-4` - comfortable padding like buttons
+4. **Border**: `border-2 border-white` - 2px white border
+5. **Rounded corners**: `rounded-lg` - matches button style
+6. **Text size**: `text-sm` (14px) - slightly smaller than button text
+7. **Min width**: `min-w-[200px]` - ensures blocks have good width
+8. **Hover effect**: `hover:bg-white hover:text-gray-900` - inverts colors on hover
+9. **Text wrapping**: Uses `<br />` for multi-line names
+
+## If You Need Bigger Blocks:
+
+Adjust these values:
+```tsx
+// For larger blocks:
+className="... h-20 px-10 py-5 text-base min-w-[240px]"
+// h-20 = 80px height
+// text-base = 16px text
+
+// For even larger:
+className="... h-24 px-12 py-6 text-lg min-w-[280px]"
+// h-24 = 96px height
+// text-lg = 18px text
+```
+
+## Benefits of This Approach:
+
+- ✅ Simple HTML/CSS instead of complex SVG
+- ✅ Matches button styling exactly
+- ✅ Easy to adjust size
+- ✅ Better hover effects
+- ✅ Simpler text handling
+- ✅ Responsive and clean
+
+This will create carousel blocks that look consistent with your "REQUEST A QUOTE" button!

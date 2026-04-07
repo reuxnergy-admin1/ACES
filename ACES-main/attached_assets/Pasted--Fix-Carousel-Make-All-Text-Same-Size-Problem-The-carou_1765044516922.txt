@@ -1,0 +1,128 @@
+# Fix Carousel - Make All Text Same Size
+
+## Problem:
+The carousel blocks are now the correct size, but the text sizes are inconsistent across different client names. All text should be the same size regardless of whether it's on one line or two lines.
+
+## Root Cause:
+The text sizing logic is likely applying different font sizes based on:
+- Whether the name is on 1 line vs 2 lines
+- The length of the client name
+- Dynamic scaling based on content
+
+## Solution:
+
+### 1. Find the Text Rendering Code
+
+Look for the `<text>` or `<tspan>` elements in the ClientCarousel component where client names are rendered.
+
+### 2. Remove Any Dynamic Font Sizing
+
+**WRONG - Dynamic sizing:**
+```jsx
+// Don't do this - different sizes for different conditions
+<text fontSize={clientName.length > 15 ? "30" : "36"}>
+
+// Or this
+<text fontSize={isTwoLines ? "32" : "36"}>
+```
+
+**CORRECT - Fixed size for ALL:**
+```jsx
+// Use the SAME font size for ALL text, regardless of lines or length
+<text fontSize="36" letterSpacing="0.06em" fill="white" fillOpacity="1" textAnchor="middle">
+```
+
+### 3. Apply Consistent Sizing to Both Single and Multi-line Text
+
+**For single-line names:**
+```jsx
+<text fontSize="36" letterSpacing="0.06em" fill="white" fillOpacity="1" textAnchor="middle">
+  <tspan x="380" y="50%">
+    {client.name}
+  </tspan>
+</text>
+```
+
+**For two-line names:**
+```jsx
+<text fontSize="36" letterSpacing="0.06em" fill="white" fillOpacity="1" textAnchor="middle">
+  <tspan x="380" y="38%">
+    {firstLine}
+  </tspan>
+  <tspan x="380" y="62%">
+    {secondLine}
+  </tspan>
+</text>
+```
+
+**Key point: `fontSize="36"` must be IDENTICAL in both cases**
+
+### 4. Check for CSS Overrides
+
+Make sure there's no CSS that's changing text size:
+```css
+/* Remove or modify any rules like: */
+svg text { font-size: ...; }  /* Should not exist */
+.client-name { font-size: ...; }  /* Should not exist */
+```
+
+### 5. Verify Font Weight is Consistent
+```jsx
+// Make sure all text has the same font weight
+<text 
+  fontSize="36" 
+  fontWeight="500"  {/* or "medium" - but same for all */}
+  letterSpacing="0.06em" 
+  fill="white"
+>
+```
+
+## Complete Example:
+```jsx
+// In ClientCarousel.tsx - render function
+{clients.map((client) => {
+  const words = client.name.split(' ');
+  const isTwoLines = words.length > 2;
+  
+  return (
+    <a key={client.name} href={client.url} target="_blank" rel="noopener noreferrer">
+      <svg className="h-64 md:h-72 w-auto" viewBox="0 0 760 260">
+        <rect 
+          x="1" y="1" width="756" height="256" rx="28"
+          stroke="white" strokeWidth="4" strokeOpacity="0.85" fill="none"
+        />
+        
+        {/* SAME fontSize="36" for ALL text */}
+        <text 
+          fontSize="36" 
+          fontWeight="500"
+          letterSpacing="0.06em" 
+          fill="white" 
+          fillOpacity="1" 
+          textAnchor="middle"
+        >
+          {isTwoLines ? (
+            <>
+              <tspan x="380" y="38%">{firstLine}</tspan>
+              <tspan x="380" y="62%">{secondLine}</tspan>
+            </>
+          ) : (
+            <tspan x="380" y="50%">{client.name}</tspan>
+          )}
+        </text>
+      </svg>
+    </a>
+  );
+})}
+```
+
+## Verification:
+
+After fixing, check that:
+- [ ] "Lanseria Flight Centre" has the same text size as "NAC"
+- [ ] "Absolute Aircraft Parts" has the same text size as "Skytrim"  
+- [ ] Two-line names have the same text size as single-line names
+- [ ] All 14 client names look consistent in size
+- [ ] Only the number of lines differs, not the text size
+
+The key is: **`fontSize="36"` must be hardcoded and identical for ALL text elements, regardless of name length or line count.**

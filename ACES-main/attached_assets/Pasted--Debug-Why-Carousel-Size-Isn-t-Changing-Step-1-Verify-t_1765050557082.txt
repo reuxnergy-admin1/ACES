@@ -1,0 +1,229 @@
+# Debug Why Carousel Size Isn't Changing
+
+## Step 1: Verify the File Was Actually Updated
+```bash
+# Show the current ClientCarousel.tsx file
+cat components/ClientCarousel.tsx
+
+# Or search for the specific values to confirm they changed:
+grep -n "viewBox" components/ClientCarousel.tsx
+grep -n "fontSize" components/ClientCarousel.tsx
+grep -n "h-96" components/ClientCarousel.tsx
+```
+
+**What to look for:**
+- viewBox should be `"0 0 1140 390"` (NOT `"0 0 380 130"` or `"0 0 672 212"`)
+- fontSize should be `"54"` (NOT `"18"` or `"30"`)
+- className should include `h-96 md:h-[432px]`
+
+## Step 2: If Values Are WRONG in the File
+
+The file wasn't updated. Manually open `components/ClientCarousel.tsx` and replace the ENTIRE component with this:
+```tsx
+'use client';
+import clsx from 'clsx';
+
+const clients = [
+  { name: 'Lanseria Flight Centre', url: 'https://flylfc.co.za' },
+  { name: 'Absolute Aircraft Parts', url: 'https://absoluteaircraftparts.com' },
+  { name: 'Aviation Rebuilders', url: 'https://aviationrebuilders.co.za' },
+  { name: 'Skytrim', url: 'https://skytrim.co.za' },
+  { name: 'NAC', url: 'https://nac.co.za' },
+  { name: 'Alton Aero Engineering', url: 'https://altonaero.co.za' },
+  { name: 'Wingman Aircraft Maintenance', url: 'https://wingman.co.za' },
+  { name: 'Pablo Clark', url: 'https://pabloclark.com' },
+  { name: 'WCT Engineering', url: 'https://wctengineering.co.za' },
+  { name: '208 Aviation', url: 'https://208aviation.com' },
+  { name: 'Acher Aviation', url: 'https://archeraviation.co.za' },
+  { name: 'Skyhawk Aviation', url: 'https://skyhawkaviation.co.za' },
+  { name: 'Orion Aircraft', url: 'https://orioncub.com' },
+  { name: 'Emperor Aviation', url: 'https://emperoraviation.co.za' },
+];
+
+export function ClientCarousel() {
+  return (
+    <div className="w-full overflow-hidden py-16">
+      <h2 className="text-center text-white text-4xl font-bold mb-12">TRUSTED BY</h2>
+      
+      <div className="relative overflow-hidden">
+        <div className="flex gap-8 animate-scroll">
+          {/* First set */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0"
+              >
+                <svg 
+                  className="h-96 md:h-[432px] w-auto" 
+                  viewBox="0 0 1140 390"
+                >
+                  <rect 
+                    x="3" 
+                    y="3" 
+                    width="1134" 
+                    height="384" 
+                    rx="42"
+                    stroke="white" 
+                    strokeWidth="6" 
+                    strokeOpacity="0.85" 
+                    fill="none"
+                  />
+                  
+                  <text 
+                    fontSize="54"
+                    fontWeight="500"
+                    letterSpacing="0.06em" 
+                    fill="white" 
+                    fillOpacity="1" 
+                    textAnchor="middle"
+                  >
+                    {isTwoLines ? (
+                      <>
+                        <tspan x="570" y="38%">{firstLine}</tspan>
+                        <tspan x="570" y="62%">{secondLine}</tspan>
+                      </>
+                    ) : (
+                      <tspan x="570" y="50%">{client.name}</tspan>
+                    )}
+                  </text>
+                </svg>
+              </a>
+            );
+          })}
+          
+          {/* Duplicate for seamless loop */}
+          {clients.map((client, idx) => {
+            const words = client.name.split(' ');
+            const isTwoLines = words.length > 2;
+            const midpoint = Math.ceil(words.length / 2);
+            const firstLine = words.slice(0, midpoint).join(' ');
+            const secondLine = words.slice(midpoint).join(' ');
+            
+            return (
+              <a 
+                key={`${client.name}-dup-${idx}`}
+                href={client.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-shrink-0"
+              >
+                <svg 
+                  className="h-96 md:h-[432px] w-auto" 
+                  viewBox="0 0 1140 390"
+                >
+                  <rect 
+                    x="3" 
+                    y="3" 
+                    width="1134" 
+                    height="384" 
+                    rx="42"
+                    stroke="white" 
+                    strokeWidth="6" 
+                    strokeOpacity="0.85" 
+                    fill="none"
+                  />
+                  
+                  <text 
+                    fontSize="54"
+                    fontWeight="500"
+                    letterSpacing="0.06em" 
+                    fill="white" 
+                    fillOpacity="1" 
+                    textAnchor="middle"
+                  >
+                    {isTwoLines ? (
+                      <>
+                        <tspan x="570" y="38%">{firstLine}</tspan>
+                        <tspan x="570" y="62%">{secondLine}</tspan>
+                      </>
+                    ) : (
+                      <tspan x="570" y="50%">{client.name}</tspan>
+                    )}
+                  </text>
+                </svg>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+## Step 3: Clear Cache and Rebuild
+```bash
+# Stop the dev server (Ctrl+C)
+
+# Clear Next.js cache
+rm -rf .next
+
+# Restart dev server
+pnpm dev
+```
+
+## Step 4: Hard Refresh Browser
+
+After server restarts:
+- Press **Ctrl+Shift+R** (Windows/Linux) or **Cmd+Shift+R** (Mac)
+- Or open DevTools → Network tab → check "Disable cache" → refresh
+
+## Step 5: Verify in Browser DevTools
+
+1. Right-click on a carousel block → Inspect
+2. Find the `<svg>` element
+3. Check these attributes:
+   - `viewBox` should be `"0 0 1140 390"`
+   - `class` should include `h-96`
+   - Inside, find `<text fontSize="54">`
+
+## Step 6: Check CSS Animation
+
+Make sure this is in `globals.css`:
+```css
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 60s linear infinite;
+}
+```
+
+## Step 7: If STILL Not Working
+
+There might be another ClientCarousel component or the wrong file is being used.
+```bash
+# Search for all files with "ClientCarousel"
+find . -name "*arousel*" -type f
+
+# Search for viewBox="0 0 380" (old size) in all files
+grep -r "viewBox=\"0 0 380" .
+
+# Search for fontSize="18" (old size) in all files
+grep -r "fontSize=\"18\"" .
+```
+
+If you find the old values in ANY file, those need to be updated too.
+
+## Report Back:
+
+1. What does `grep -n "viewBox" components/ClientCarousel.tsx` show?
+2. What does `grep -n "fontSize" components/ClientCarousel.tsx` show?
+3. After hard refresh, what do you see in DevTools for the SVG viewBox attribute?
+4. Are there multiple carousel files found by the `find` command?

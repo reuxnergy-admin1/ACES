@@ -1,0 +1,162 @@
+# Make Carousel 3X Bigger - TRIPLE All Dimensions
+
+## Critical Issue:
+The carousel is not getting bigger despite code changes. We need to TRIPLE everything from the ORIGINAL baseline, not the current state.
+
+## Apply These Exact Changes - TRIPLE from Original:
+
+### 1. SVG Container Height (3X)
+```jsx
+// ORIGINAL was: h-32 md:h-36
+// Change to (3X):
+<svg className="h-96 md:h-[432px] w-auto">
+// h-96 = 384px (3 x 128px)
+// h-[432px] = 432px (3 x 144px)
+```
+
+### 2. ViewBox Dimensions (3X)
+```jsx
+// ORIGINAL was: viewBox="0 0 380 130"
+// Change to (3X):
+viewBox="0 0 1140 390"
+// 380 x 3 = 1140
+// 130 x 3 = 390
+```
+
+### 3. Rect Border Box (3X)
+```jsx
+// ORIGINAL was: width="378" height="128" rx="14" strokeWidth="2"
+// Change to (3X):
+<rect 
+  x="3" 
+  y="3" 
+  width="1134" 
+  height="384"
+  rx="42"
+  stroke="white"
+  strokeWidth="6"
+  strokeOpacity="0.85" 
+  fill="none"
+/>
+// 378 x 3 = 1134
+// 128 x 3 = 384
+// 14 x 3 = 42
+// 2 x 3 = 6
+```
+
+### 4. Text Font Size (3X)
+```jsx
+// ORIGINAL was: fontSize="18"
+// Change to (3X):
+<text 
+  fontSize="54"
+  fontWeight="500"
+  letterSpacing="0.06em" 
+  fill="white" 
+  fillOpacity="1" 
+  textAnchor="middle"
+>
+// 18 x 3 = 54
+```
+
+### 5. Text X Position (3X - for centering)
+```jsx
+// ORIGINAL was: x="190" (half of 380)
+// Change to (3X):
+<tspan x="570" y="50%">{client.name}</tspan>
+// 190 x 3 = 570 (half of 1140)
+
+// For two-line text:
+<tspan x="570" y="38%">{firstLine}</tspan>
+<tspan x="570" y="62%">{secondLine}</tspan>
+```
+
+## Complete Code - TRIPLE SIZE:
+```jsx
+{clients.map((client) => {
+  const words = client.name.split(' ');
+  const isTwoLines = words.length > 2;
+  const midpoint = Math.ceil(words.length / 2);
+  const firstLine = words.slice(0, midpoint).join(' ');
+  const secondLine = words.slice(midpoint).join(' ');
+  
+  return (
+    <a 
+      key={client.name} 
+      href={client.url} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="flex-shrink-0"
+    >
+      <svg 
+        className="h-96 md:h-[432px] w-auto" 
+        viewBox="0 0 1140 390"
+      >
+        <rect 
+          x="3" 
+          y="3" 
+          width="1134" 
+          height="384" 
+          rx="42"
+          stroke="white" 
+          strokeWidth="6" 
+          strokeOpacity="0.85" 
+          fill="none"
+        />
+        
+        <text 
+          fontSize="54"
+          fontWeight="500"
+          letterSpacing="0.06em" 
+          fill="white" 
+          fillOpacity="1" 
+          textAnchor="middle"
+        >
+          {isTwoLines ? (
+            <>
+              <tspan x="570" y="38%">{firstLine}</tspan>
+              <tspan x="570" y="62%">{secondLine}</tspan>
+            </>
+          ) : (
+            <tspan x="570" y="50%">{client.name}</tspan>
+          )}
+        </text>
+      </svg>
+    </a>
+  );
+})}
+```
+
+## Size Comparison Table:
+
+| Property | Original | 2X (Previous) | 3X (Now) |
+|----------|----------|---------------|----------|
+| SVG Height (mobile) | 128px | 256px | **384px** |
+| SVG Height (desktop) | 144px | 288px | **432px** |
+| ViewBox Width | 380 | 760 | **1140** |
+| ViewBox Height | 130 | 260 | **390** |
+| Rect Width | 378 | 756 | **1134** |
+| Rect Height | 128 | 256 | **384** |
+| Border Radius | 14 | 28 | **42** |
+| Stroke Width | 2px | 4px | **6px** |
+| Font Size | 18 | 36 | **54** |
+| Text X Position | 190 | 380 | **570** |
+
+## Debugging Steps:
+
+After making changes:
+
+1. **Clear browser cache** - The old SVG might be cached
+2. **Hard refresh** - Press Ctrl+Shift+R (Windows/Linux) or Cmd+Shift+R (Mac)
+3. **Check the component file** - Make sure `ClientCarousel.tsx` was actually updated
+4. **Verify in browser DevTools** - Inspect an SVG element and check:
+   - Does `viewBox` show `"0 0 1140 390"`?
+   - Does `fontSize` show `"54"`?
+   - Does the rect `width` show `"1134"`?
+
+If the values in DevTools don't match, the file wasn't updated properly. In that case:
+- Save the file again
+- Restart the dev server
+- Clear `.next` cache folder
+
+This will make the carousel blocks **3 TIMES** the original size!
