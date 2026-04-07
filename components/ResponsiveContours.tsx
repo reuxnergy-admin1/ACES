@@ -50,7 +50,6 @@ export default function ResponsiveContours() {
     setCanUseGL(Boolean(fine));
     setAllowGL(true);
   }, [mode, allowGL]);
-  }, [mode, allowGL]);
 
   // Expose debug flags for overlay
   useEffect(() => {
