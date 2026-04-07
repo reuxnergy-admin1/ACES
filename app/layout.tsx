@@ -2,6 +2,7 @@ import "./globals.css";
 import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 import { Open_Sans } from "next/font/google";
+import Script from "next/script";
 import ContoursSVG from "@/components/ContoursSVG";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
@@ -260,6 +261,19 @@ export default async function RootLayout({
           {/* Crisp cursor with very short trail for fine pointers */}
           <CursorTrailGate />
         </ToastProvider>
+        {/* Simple Analytics – manual script (replaces Netlify extension to avoid edge-function build failure) */}
+        <Script
+          src="https://scripts.simpleanalyticscdn.com/latest.js"
+          strategy="afterInteractive"
+        />
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://queue.simpleanalyticscdn.com/noscript.gif"
+            alt=""
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </noscript>
       </body>
     </html>
   );
