@@ -2,7 +2,7 @@
 // Please avoid edits without reviewing with the code owner. If you must change it, run `npm run guard:bg:update` to refresh
 // the background integrity hashes after the change, and manually verify in the browser. See scripts/bg-guard.mjs.
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { detectRenderer } from "@/lib/runtimeCaps";
 import ContoursSVG from "@/components/ContoursSVG";
@@ -21,7 +21,6 @@ export default function ResponsiveContours() {
   const [allowGL, setAllowGL] = useState(false);
   const [canUseGL, setCanUseGL] = useState(false);
   const [debugOn, setDebugOn] = useState(false);
-  const idleHandle = useRef<number | null>(null);
 
   // Decide rendering mode quickly on mount, allow hash overrides for debugging
   useEffect(() => {
@@ -41,84 +40,16 @@ export default function ResponsiveContours() {
     }
   }, []);
 
-  // After deciding that WebGL is suitable, defer enabling it until the main thread is idle
-  // and only AFTER the page has finished critical rendering (LCP + interaction readiness)
+  // After deciding that WebGL is suitable, enable it immediately — no deferral.
   useEffect(() => {
     if (!mode || mode === "svg") return;
     if (allowGL) return;
-    // If forced GL via hash, enable immediately
-    const hash = typeof window !== "undefined" ? window.location.hash : "";
-    if (hash.includes("force-gl")) {
-      setCanUseGL(true);
-      setAllowGL(true);
-      return;
-    }
     const fine =
       typeof window !== "undefined" &&
       window.matchMedia?.("(pointer: fine)")?.matches;
-    // Allow GL and enable cursor-driven interactivity on fine pointers
     setCanUseGL(Boolean(fine));
-
-    // Enable WebGL after LCP completes (observed) or a fallback timer, whichever
-    // fires first. This keeps Lighthouse happy (WebGL init after LCP window)
-    // while eliminating the fixed 3.5s wait on fast connections where LCP
-    // finishes in ~1-1.5s.
-    const MIN_DEFER_MS = 1500; // absolute minimum: never before 1.5s
-    const MAX_DEFER_MS = 3500; // fallback if PerformanceObserver is unavailable
-
-    const w = window as unknown as {
-      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
-      cancelIdleCallback?: (h: number) => void;
-    };
-
-    let cancelled = false;
-    let timerId: ReturnType<typeof setTimeout> | null = null;
-    let lcpObserver: PerformanceObserver | null = null;
-
-    const enableGL = () => {
-      if (cancelled) return;
-      cancelled = true; // only fire once
-      const schedule: (cb: () => void) => number = w.requestIdleCallback
-        ? (cb) => w.requestIdleCallback!(cb, { timeout: 1000 })
-        : (cb) => window.setTimeout(cb, 100);
-      idleHandle.current = schedule(() => setAllowGL(true));
-    };
-
-    // Strategy 1: Observe LCP, then defer at least MIN_DEFER_MS from mount
-    const mountTime = performance.now();
-    try {
-      lcpObserver = new PerformanceObserver((list) => {
-        // LCP may fire multiple times; each entry supersedes the last
-        const entries = list.getEntries();
-        if (entries.length === 0) return;
-        const elapsed = performance.now() - mountTime;
-        const remaining = Math.max(0, MIN_DEFER_MS - elapsed);
-        // Schedule enableGL after the minimum floor
-        if (timerId != null) clearTimeout(timerId);
-        timerId = setTimeout(enableGL, remaining);
-      });
-      lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
-    } catch {
-      // PerformanceObserver not supported — fall through to fallback
-    }
-
-    // Strategy 2: Fallback timer in case LCP observer never fires
-    const fallbackId = setTimeout(enableGL, MAX_DEFER_MS);
-
-    return () => {
-      cancelled = true;
-      if (timerId != null) clearTimeout(timerId);
-      clearTimeout(fallbackId);
-      lcpObserver?.disconnect();
-      if (idleHandle.current != null) {
-        if (w.cancelIdleCallback) {
-          w.cancelIdleCallback(idleHandle.current);
-        } else {
-          clearTimeout(idleHandle.current);
-        }
-        idleHandle.current = null;
-      }
-    };
+    setAllowGL(true);
+  }, [mode, allowGL]);
   }, [mode, allowGL]);
 
   // Expose debug flags for overlay
